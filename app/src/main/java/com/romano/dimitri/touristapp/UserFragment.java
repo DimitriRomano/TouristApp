@@ -2,6 +2,8 @@ package com.romano.dimitri.touristapp;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -30,14 +32,21 @@ public class UserFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_user, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mScore = requireArguments().getInt("score");
         mPseudo = requireArguments().getString("pseudo");
 
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_user, container, false);
         mPseudoView = view.findViewById(R.id.textViewPseudo);
         mScoreView = view.findViewById(R.id.textViewScore);
-        return view;
+
+        mPseudoView.setText(mPseudo);
+        mScoreView.setText(String.valueOf(mScore));
     }
 
     public void setPseudo(){
