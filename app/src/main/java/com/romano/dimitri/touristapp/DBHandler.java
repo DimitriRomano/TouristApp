@@ -128,4 +128,20 @@ public class DBHandler extends SQLiteOpenHelper {
         return retVal;
     }
 
+    //return User from a pseudo ( map activity)
+    public User getUser(String pseudo){
+        SQLiteDatabase db=this.getReadableDatabase();
+        User u = new User();
+
+        String selectQuery = "SELECT " + COL_PSEUDO + " FROM " + TABLE_USER + " WHERE " + COL_PSEUDO + " = '" + pseudo +"' ";
+        Cursor cursor = db.query(TABLE_USER,new String[]{COL_PSEUDO,COL_EMAIL,COL_SCORE},COL_PSEUDO + " =  ? "  ,new String[]{pseudo},null,null,null);
+        cursor.moveToFirst();
+        u.setPseudo(cursor.getString(0));
+        u.setEmail(cursor.getString(1));
+        u.setScore(cursor.getInt(2));
+        cursor.close();
+        db.close();
+        return u;
+    }
+
 }
