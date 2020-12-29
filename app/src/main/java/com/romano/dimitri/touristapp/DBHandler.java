@@ -5,10 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.icu.text.Edits;
 import android.util.Log;
 
 import com.romano.dimitri.touristapp.model.Place;
 import com.romano.dimitri.touristapp.model.User;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class DBHandler extends SQLiteOpenHelper {
 
@@ -56,6 +60,14 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_USER);
         db.execSQL(CREATE_TABLE_PLACE);
+
+        ArrayList<String> places=new ArrayList<String>();
+        places=addPlaces();
+        Iterator iter=places.iterator();
+        while(iter.hasNext()){
+            db.execSQL((String) iter.next());
+        }
+
     }
 
     @Override
@@ -158,7 +170,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
         return u;
     }
-
+/*inutile surement
     public void addPlace(Place place){
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -173,7 +185,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
 
     }
-
+*/
     public Place getPlace(int id){
         SQLiteDatabase db=this.getReadableDatabase();
         Place place = new Place();
@@ -192,5 +204,13 @@ public class DBHandler extends SQLiteOpenHelper {
         return place;
     }
 
+    public ArrayList<String> addPlaces(){
+        ArrayList<String> places=new ArrayList<>();
+        String request;
+        request="INSERT INTO PLACE(" + COL_TITLE + "," + COL_TYPE +"," + COL_LATITUDE + "," + COL_LONGITUDE + "," + COL_DESCRIPTION +") VALUES" +
+                "('Cathédrale Notre-Dame de Paris','Eglise', 48.852968 , 2.349902, 'Cathédrale colossale du XIIIe siècle ornée d'arcs-boutants et de gargouilles, lieu du roman de Victor Hugo.');";
+        places.add(request);
+        return places;
+    }
 
 }
