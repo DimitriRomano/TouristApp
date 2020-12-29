@@ -27,7 +27,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String COL_PASSWORD ="PASSWORD";
 
     //create table
-    private static final String CREATE_BD = "CREATE TABLE " + TABLE_USER + "(" +
+    private static final String CREATE_TABLE_USER = "CREATE TABLE " + TABLE_USER + "(" +
             COL_PSEUDO + " TEXT PRIMARY KEY, " + COL_EMAIL + " TEXT, " + COL_SCORE + " INTEGER, " + COL_PASSWORD + " TEXT " + ")" ;
 
     //singleton pattern
@@ -40,7 +40,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_BD);
+        db.execSQL(CREATE_TABLE_USER);
     }
 
     @Override
