@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity  {
     public static final String PREF_CONNEXION = "PREFS_CONNECTION";
     public static final String PREF_PSEUDO = "PREFS_PSEUDO";
 
-
     private DBHandler db;
 
     @Override
