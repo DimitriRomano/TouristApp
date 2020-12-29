@@ -20,9 +20,8 @@
         android:layout_marginTop="65dp"
         android:layout_marginEnd="125dp"
         android:layout_marginRight="125dp"
-        android:text="Welcome on Tourist Application"
         android:gravity="center"
-        />
+        android:text="Welcome on the Tourist Application" />
 
     <EditText
         android:id="@+id/inputPseudo"
@@ -33,30 +32,29 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginStart="129dp"
-        android:layout_marginLeft="129dp"
-        android:layout_marginTop="83dp"
-        android:layout_marginEnd="119dp"
-        android:layout_marginRight="119dp"
-        android:hint="Pseudo"/>
+        android:layout_marginStart="124dp"
+        android:layout_marginLeft="124dp"
+        android:layout_marginTop="84dp"
+        android:layout_marginEnd="124dp"
+        android:layout_marginRight="124dp"
+        android:hint="Pseudo" />
 
     <EditText
         android:id="@+id/inputPassword"
-        android:layout_width="163dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/inputPseudo"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginStart="130dp"
-        android:layout_marginLeft="130dp"
+        android:layout_marginStart="124dp"
+        android:layout_marginLeft="124dp"
         android:layout_marginTop="38dp"
-        android:layout_marginEnd="118dp"
-        android:layout_marginRight="118dp"
+        android:layout_marginEnd="124dp"
+        android:layout_marginRight="124dp"
         android:hint="Password"
-        android:inputType="textPassword"
-        />
+        android:inputType="textPassword" />
 
     <Button
         android:id="@+id/activity_main_register_btn"
@@ -65,9 +63,11 @@
         android:layout_below="@+id/inputPassword"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
         android:layout_marginTop="113dp"
-        android:layout_marginEnd="76dp"
-        android:layout_marginRight="76dp"
+        android:layout_marginEnd="80dp"
+        android:layout_marginRight="80dp"
+        android:layout_marginBottom="235dp"
         android:text="Register" />
 
     <Button
@@ -75,11 +75,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/inputPassword"
-        android:layout_marginTop="110dp"
-        android:layout_marginEnd="54dp"
-        android:layout_marginRight="54dp"
-        android:layout_toStartOf="@+id/activity_main_register_btn"
-        android:layout_toLeftOf="@+id/activity_main_register_btn"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="90dp"
+        android:layout_marginLeft="90dp"
+        android:layout_marginTop="113dp"
+        android:layout_marginBottom="235dp"
         android:text="Login" />
 
 </RelativeLayout>
