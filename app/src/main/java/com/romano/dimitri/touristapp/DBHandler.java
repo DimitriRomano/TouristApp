@@ -74,7 +74,6 @@ public class DBHandler extends SQLiteOpenHelper {
         db.insert(TABLE_USER,null, cv);
         db.close();
 
-
     }
 
     public boolean verifLog(String pseudo, String password){
