@@ -19,6 +19,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     //table names
     public static final String TABLE_USER="USER";
+    public static final String TABLE_PLACE="PLACE";
 
     //columns names user Table
     private static final String COL_PSEUDO ="PSEUDO";
@@ -26,10 +27,22 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String COL_SCORE ="SCORE";
     private static final String COL_PASSWORD ="PASSWORD";
 
-    //create table
+    //columns names place Table
+    private static final String COL_ID ="ID";
+    private static final String COL_TITLE ="TITLE";
+    private static final String COL_TYPE ="TYPE";
+    private static final String COL_LATITUDE ="LATITUDE";
+    private static final String COL_LONGITUDE ="LONGITUDE";
+    private static final String COL_DESCRIPTION ="DESCRIPTION";
+
+    //create user table
     private static final String CREATE_TABLE_USER = "CREATE TABLE " + TABLE_USER + "(" +
             COL_PSEUDO + " TEXT PRIMARY KEY, " + COL_EMAIL + " TEXT, " + COL_SCORE + " INTEGER, " + COL_PASSWORD + " TEXT " + ")" ;
 
+    //create place table
+    private static final String CREATE_TABLE_PLACE = "CREATE TABLE " + TABLE_PLACE + "(" +
+            COL_ID + " INTEGER PRIMARY KEY, " + COL_TITLE + " TEXT, " + COL_TYPE + " TEXT, " + COL_LATITUDE + " DOUBLE, " +
+            COL_LONGITUDE + " DOUBLE, " + COL_DESCRIPTION +"TEXT " +")" ;
     //singleton pattern
     private static DBHandler sInstance;
 
@@ -41,6 +54,7 @@ public class DBHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_USER);
+        db.execSQL(CREATE_TABLE_PLACE);
     }
 
     @Override
@@ -49,6 +63,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER + ";");
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLACE + ";");
         onCreate(db);
     }
 
