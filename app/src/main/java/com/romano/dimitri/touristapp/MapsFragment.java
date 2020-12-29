@@ -2,12 +2,19 @@ package com.romano.dimitri.touristapp;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -17,6 +24,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsFragment extends Fragment {
+    private Location mCurrentLocalisation = null;
+    private Location mLocation;
+    private String mLocationProvider;
+    private LocationManager mLocationManager;
+
+    private static final int LOCALISATION_REQUEST = 30;
+
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -31,9 +45,9 @@ public class MapsFragment extends Fragment {
          */
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            LatLng sydney = new LatLng(0, 0);
-            googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+            LatLng paris = new LatLng(48.858093, 2.294694);
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(paris, 6));
+
         }
     };
 
@@ -52,6 +66,30 @@ public class MapsFragment extends Fragment {
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(callback);
+        }
+
+
+        //acquire reference to the system Location Manager
+        mLocationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+        //set location provider
+        mLocationProvider = LocationManager.GPS_PROVIDER;
+
+
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case LOCALISATION_REQUEST:{
+                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED ){
+
+                }else{
+                    Toast.makeText(getActivity(),"Permission denied to access device's location",Toast.LENGTH_SHORT).show();
+                }
+            }
+            return;
         }
     }
 }
