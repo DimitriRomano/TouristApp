@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity  {
             String isPseudo = mPreferencesLog.getString(PREF_PSEUDO,null);
             if(isActive == true){
                 //if PREF_CONNEXION = true = session is already active then we log on pseudo associate
-                Intent i = new Intent(MainActivity.this,MapActivity.class);
+                Intent i = new Intent(MainActivity.this, DashboardActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
             }else{
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity  {
                 else{
                     Toast.makeText(getApplicationContext(),"successful log : " + mLoginInput.getText().toString(),Toast.LENGTH_LONG).show();
                     mPreferencesLog.edit().putBoolean(PREF_CONNEXION,true).putString(PREF_PSEUDO,mLoginInput.getText().toString()).commit();
-                    Intent i = new Intent(MainActivity.this,MapActivity.class);
+                    Intent i = new Intent(MainActivity.this, DashboardActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(i);
                 }
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity  {
                 Toast.makeText(getApplicationContext(),resultPseudo + " Successful register",Toast.LENGTH_LONG).show();
                 mPreferencesLog.edit().putBoolean(PREF_CONNEXION,true).putString(PREF_PSEUDO,resultPseudo).commit();
                 //log on the session
-                Intent i = new Intent(MainActivity.this,MapActivity.class);
+                Intent i = new Intent(MainActivity.this, DashboardActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
 

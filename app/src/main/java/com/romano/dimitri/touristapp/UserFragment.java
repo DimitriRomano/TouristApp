@@ -49,9 +49,7 @@ public class UserFragment extends Fragment {
         mScoreView.setText(String.valueOf(mScore));
     }
 
-    public void setPseudo(){
-        mPseudoView.setText(mPseudo);
-    }
+    public void setScore(){ mPseudoView.setText(mScore);}
 
 
     //mPseudoView = (TextView)getView().findViewById(R.id.textViewPseudo);

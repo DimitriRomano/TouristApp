@@ -14,7 +14,7 @@ import static com.romano.dimitri.touristapp.MainActivity.PREF;
 import static com.romano.dimitri.touristapp.MainActivity.PREF_CONNEXION;
 import static com.romano.dimitri.touristapp.MainActivity.PREF_PSEUDO;
 
-public class MapActivity extends AppCompatActivity {
+public class DashboardActivity extends AppCompatActivity {
 
     private SharedPreferences mPreferencesLog;
 
@@ -60,7 +60,6 @@ public class MapActivity extends AppCompatActivity {
                      .add(R.id.fragment_user_container_view,UserFragment.class,bundleUser)
                     .add(R.id.fragment_map_container_view, MapsFragment.class, null)
                     .commit();
-
         }
 
 
