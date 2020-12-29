@@ -11,6 +11,10 @@ import android.util.Log;
 import com.romano.dimitri.touristapp.model.Place;
 import com.romano.dimitri.touristapp.model.User;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -61,11 +65,11 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_USER);
         db.execSQL(CREATE_TABLE_PLACE);
 
-        ArrayList<String> places=new ArrayList<String>();
-        places=addPlaces();
-        Iterator iter=places.iterator();
+        ArrayList<Place> places=new ArrayList<Place>();
+        places=getPlaces();
+        Iterator<Place> iter=places.iterator();
         while(iter.hasNext()){
-            db.execSQL((String) iter.next());
+            addPlace(iter.next());
         }
 
     }
@@ -170,7 +174,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
         return u;
     }
-/*inutile surement
+
     public void addPlace(Place place){
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -178,14 +182,14 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
         cv.put(DBHandler.COL_TITLE,place.getTitle());
         cv.put(DBHandler.COL_TYPE,place.getType());
-        cv.put(DBHandler.COL_LATITUDE,place.getLatitude());
-        cv.put(DBHandler.COL_LONGITUDE,place.getLongitude());
+        cv.put(DBHandler.COL_LATITUDE,Double.toString(place.getLatitude()));
+        cv.put(DBHandler.COL_LONGITUDE,Double.toString(place.getLongitude()));
         cv.put(DBHandler.COL_DESCRIPTION,place.getDescription());
         db.insert(TABLE_PLACE,null, cv);
         db.close();
 
     }
-*/
+/*
     public Place getPlace(int id){
         SQLiteDatabase db=this.getReadableDatabase();
         Place place = new Place();
@@ -203,14 +207,33 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
         return place;
     }
-
-    public ArrayList<String> addPlaces(){
-        ArrayList<String> places=new ArrayList<>();
-        String request;
-        request="INSERT INTO PLACE(" + COL_TITLE + "," + COL_TYPE +"," + COL_LATITUDE + "," + COL_LONGITUDE + "," + COL_DESCRIPTION +") VALUES" +
-                "('Cathédrale Notre-Dame de Paris','Eglise', 48.852968 , 2.349902, 'Cathédrale colossale du XIIIe siècle ornée d'arcs-boutants et de gargouilles, lieu du roman de Victor Hugo.');";
-        places.add(request);
-        return places;
+*/
+    public ArrayList<Place> getPlaces(){
+        ArrayList<Place> places=new ArrayList<Place>();
+        String delimiter=";";
+        Place place=new Place();
+        try {
+            File file = new File("places.txt");
+            FileReader fr = new FileReader(file);
+            BufferedReader br = new BufferedReader(fr);
+            String line;
+            while((line=br.readLine()) != null){
+                String parts[]=line.split(delimiter);
+                place.setTitle(parts[0]);
+                place.setType(parts[1]);
+                place.setLatitude(Double.parseDouble(parts[2]));
+                place.setLongitude(Double.parseDouble(parts[3]));
+                place.setDescription(parts[4]);
+                places.add(place);
+            }
+            br.close();
+            fr.close();
+            return places;
+        }
+        catch (IOException e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }
