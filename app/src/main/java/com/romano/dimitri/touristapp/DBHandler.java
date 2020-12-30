@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class DBHandler extends SQLiteOpenHelper {
-    private Context context;
+
 
     //name of database
     public static final String DB_NAME = "TouristApp";
@@ -66,21 +66,9 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        System.out.println("avannt");
         db.execSQL(CREATE_TABLE_USER);
         db.execSQL(CREATE_TABLE_PLACE);
-        System.out.println("test avant");
-        ArrayList<Place> places=new ArrayList<>();
-        places=getPlaces();
-        if(places==null){
-            System.out.println("echec");
-        }
-        else {
-            Iterator<Place> iter = places.iterator();
-            System.out.println("test");
-        }
-        /*while(iter.hasNext()){
-            addPlace(iter.next());
-        }*/
 
     }
 
@@ -99,6 +87,10 @@ public class DBHandler extends SQLiteOpenHelper {
         // don't accidentally leak an Activity's context.
         if(sInstance == null){
             sInstance = new DBHandler(context.getApplicationContext());
+            ArrayList<Place> places=new ArrayList<>();
+            places=getPlaces(context);
+
+            System.out.println("instanced");
         }
         return sInstance;
     }
@@ -218,10 +210,11 @@ public class DBHandler extends SQLiteOpenHelper {
         return place;
     }
 */
-    public ArrayList<Place> getPlaces(){
+    public static ArrayList<Place> getPlaces(Context context){
         ArrayList<Place> places=new ArrayList<>();
         String delimiter=";";
         Place place=new Place();
+
         InputStream inputStream = context.getResources().openRawResource(R.raw.places);
         try{
             if(inputStream!=null){
@@ -229,20 +222,32 @@ public class DBHandler extends SQLiteOpenHelper {
                 String str;
                 while((str=br.readLine())!=null){
                     System.out.println(str);
+                    String parts[]=str.split(delimiter);
+                    place.setTitle(parts[0]);
+                    place.setType(parts[1]);
+                    place.setLatitude(Double.parseDouble(parts[2]));
+                    place.setLongitude(Double.parseDouble(parts[3]));
+                    place.setDescription(parts[4]);
+                    System.out.println(place.toString());
+                    places.add(place);
                 }
+                br.close();
+                return places;
             }
             else{
                 System.out.println("echec");
+                return null;
             }
-            return null;
-        }
 
-        /*try {
-            File file = new File("");
+        }
+        /*
+        try {
+            File file = new File("C:\\Users\\Quitterie\\Desktop\\QUITTERIE\\fac\\L3\\S1\\DA\\projet\\TouristApp\\app\\src\\main\\res\\raw\\places.txt");
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
             String line;
             while((line=br.readLine()) != null){
+                System.out.println(line);
                 String parts[]=line.split(delimiter);
                 place.setTitle(parts[0]);
                 place.setType(parts[1]);
