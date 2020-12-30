@@ -2,6 +2,7 @@ package com.romano.dimitri.touristapp;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -15,10 +16,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public class DBHandler extends SQLiteOpenHelper {
+    private Context context;
 
     //name of database
     public static final String DB_NAME = "TouristApp";
@@ -64,10 +68,17 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_USER);
         db.execSQL(CREATE_TABLE_PLACE);
+        System.out.println("test avant");
         ArrayList<Place> places=new ArrayList<>();
         places=getPlaces();
-        /*Iterator<Place> iter=places.iterator();
-        while(iter.hasNext()){
+        if(places==null){
+            System.out.println("echec");
+        }
+        else {
+            Iterator<Place> iter = places.iterator();
+            System.out.println("test");
+        }
+        /*while(iter.hasNext()){
             addPlace(iter.next());
         }*/
 
@@ -211,8 +222,23 @@ public class DBHandler extends SQLiteOpenHelper {
         ArrayList<Place> places=new ArrayList<>();
         String delimiter=";";
         Place place=new Place();
-        try {
-            File file = new File("places.txt");
+        InputStream inputStream = context.getResources().openRawResource(R.raw.places);
+        try{
+            if(inputStream!=null){
+                BufferedReader br=new BufferedReader(new InputStreamReader(inputStream));
+                String str;
+                while((str=br.readLine())!=null){
+                    System.out.println(str);
+                }
+            }
+            else{
+                System.out.println("echec");
+            }
+            return null;
+        }
+
+        /*try {
+            File file = new File("");
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
             String line;
@@ -230,7 +256,7 @@ public class DBHandler extends SQLiteOpenHelper {
             br.close();
             fr.close();
             return places;
-        }
+        }*/
         catch (IOException e){
             e.printStackTrace();
             return null;
