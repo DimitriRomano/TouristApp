@@ -2,14 +2,27 @@ package com.romano.dimitri.touristapp;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.icu.text.Edits;
 import android.util.Log;
 
+import com.romano.dimitri.touristapp.model.Place;
 import com.romano.dimitri.touristapp.model.User;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Iterator;
+
 public class DBHandler extends SQLiteOpenHelper {
+    private Context context;
 
     //name of database
     public static final String DB_NAME = "TouristApp";
@@ -19,19 +32,30 @@ public class DBHandler extends SQLiteOpenHelper {
 
     //table names
     public static final String TABLE_USER="USER";
+    public static final String TABLE_PLACE="PLACE";
 
     //columns names user Table
     private static final String COL_PSEUDO ="PSEUDO";
     private static final String COL_EMAIL ="EMAIL";
     private static final String COL_SCORE ="SCORE";
     private static final String COL_PASSWORD ="PASSWORD";
-    private static final String COL_AGE ="AGE";
 
-    //create table
-    private static final String CREATE_BD = "CREATE TABLE " + TABLE_USER + "(" +
-            COL_PSEUDO + " TEXT PRIMARY KEY, " + COL_EMAIL + " TEXT, " + COL_SCORE + " INTEGER, " + COL_PASSWORD + " TEXT " + "" +
-            ", " + COL_AGE + " INTEGER)" ;
+    //columns names place Table
+    private static final String COL_ID ="ID";
+    private static final String COL_TITLE ="TITLE";
+    private static final String COL_TYPE ="TYPE";
+    private static final String COL_LATITUDE ="LATITUDE";
+    private static final String COL_LONGITUDE ="LONGITUDE";
+    private static final String COL_DESCRIPTION ="DESCRIPTION";
 
+    //create user table
+    private static final String CREATE_TABLE_USER = "CREATE TABLE " + TABLE_USER + "(" +
+            COL_PSEUDO + " TEXT PRIMARY KEY, " + COL_EMAIL + " TEXT, " + COL_SCORE + " INTEGER, " + COL_PASSWORD + " TEXT " + ")" ;
+
+    //create place table
+    private static final String CREATE_TABLE_PLACE = "CREATE TABLE " + TABLE_PLACE + "(" +
+            COL_ID + " INTEGER PRIMARY KEY, " + COL_TITLE + " TEXT, " + COL_TYPE + " TEXT, " + COL_LATITUDE + " TEXT, " +
+            COL_LONGITUDE + " TEXT, " + COL_DESCRIPTION +"TEXT " +")" ;
     //singleton pattern
     private static DBHandler sInstance;
 
@@ -42,7 +66,22 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_BD);
+        db.execSQL(CREATE_TABLE_USER);
+        db.execSQL(CREATE_TABLE_PLACE);
+        System.out.println("test avant");
+        ArrayList<Place> places=new ArrayList<>();
+        places=getPlaces();
+        if(places==null){
+            System.out.println("echec");
+        }
+        else {
+            Iterator<Place> iter = places.iterator();
+            System.out.println("test");
+        }
+        /*while(iter.hasNext()){
+            addPlace(iter.next());
+        }*/
+
     }
 
     @Override
@@ -51,6 +90,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER + ";");
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLACE + ";");
         onCreate(db);
     }
 
@@ -72,11 +112,9 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(DBHandler.COL_EMAIL,user.getEmail());
         cv.put(DBHandler.COL_SCORE,user.getScore());
         cv.put(DBHandler.COL_PASSWORD,psw);
-        cv.put(DBHandler.COL_AGE,user.getAge());
 
         db.insert(TABLE_USER,null, cv);
         db.close();
-
 
     }
 
@@ -145,6 +183,84 @@ public class DBHandler extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return u;
+    }
+
+    public void addPlace(Place place){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(DBHandler.COL_TITLE,place.getTitle());
+        cv.put(DBHandler.COL_TYPE,place.getType());
+        cv.put(DBHandler.COL_LATITUDE,Double.toString(place.getLatitude()));
+        cv.put(DBHandler.COL_LONGITUDE,Double.toString(place.getLongitude()));
+        cv.put(DBHandler.COL_DESCRIPTION,place.getDescription());
+        db.insert(TABLE_PLACE,null, cv);
+        db.close();
+
+    }
+/*
+    public Place getPlace(int id){
+        SQLiteDatabase db=this.getReadableDatabase();
+        Place place = new Place();
+
+        String selectQuery = "SELECT " + COL_ID + " FROM " + TABLE_PLACE + " WHERE " + COL_ID + " = '" + id +"' ";
+        Cursor cursor = db.query(TABLE_PLACE,new String[]{COL_ID,COL_TITLE,COL_TYPE,COL_LATITUDE,COL_LONGITUDE,COL_DESCRIPTION},COL_ID + " =  ? "  ,new String[]{String.valueOf(id)},null,null,null);
+        cursor.moveToFirst();
+        place.setId(cursor.getInt(0));
+        place.setTitle(cursor.getString(1));
+        place.setType(cursor.getString(2));
+        place.setLatitude(cursor.getDouble(3));
+        place.setLongitude(cursor.getDouble(4));
+        place.setDescription(cursor.getString(5));
+        cursor.close();
+        db.close();
+        return place;
+    }
+*/
+    public ArrayList<Place> getPlaces(){
+        ArrayList<Place> places=new ArrayList<>();
+        String delimiter=";";
+        Place place=new Place();
+        InputStream inputStream = context.getResources().openRawResource(R.raw.places);
+        try{
+            if(inputStream!=null){
+                BufferedReader br=new BufferedReader(new InputStreamReader(inputStream));
+                String str;
+                while((str=br.readLine())!=null){
+                    System.out.println(str);
+                }
+            }
+            else{
+                System.out.println("echec");
+            }
+            return null;
+        }
+
+        /*try {
+            File file = new File("");
+            FileReader fr = new FileReader(file);
+            BufferedReader br = new BufferedReader(fr);
+            String line;
+            while((line=br.readLine()) != null){
+                String parts[]=line.split(delimiter);
+                place.setTitle(parts[0]);
+                place.setType(parts[1]);
+                place.setLatitude(Double.parseDouble(parts[2]));
+                place.setLongitude(Double.parseDouble(parts[3]));
+                place.setDescription(parts[4]);
+
+                //System.out.println(place.toString());
+                places.add(place);
+            }
+            br.close();
+            fr.close();
+            return places;
+        }*/
+        catch (IOException e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }
