@@ -15,8 +15,12 @@ import android.widget.TextView;
 public class UserFragment extends Fragment {
     private TextView mPseudoView;
     private TextView mScoreView;
+    private TextView mGradeView;
+    private TextView mAgeView;
 
     private String mPseudo;
+    private String mGrade;
+    private int mAge;
     private int mScore;
 
     public UserFragment() {
@@ -39,14 +43,20 @@ public class UserFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        mGrade = requireArguments().getString("grade");
         mScore = requireArguments().getInt("score");
         mPseudo = requireArguments().getString("pseudo");
+        mAge = requireArguments().getInt("age");
 
+        mGradeView = view.findViewById(R.id.textViewGrade);
         mPseudoView = view.findViewById(R.id.textViewPseudo);
         mScoreView = view.findViewById(R.id.textViewScore);
+        mAgeView = view.findViewById(R.id.textViewAge);
 
         mPseudoView.setText(mPseudo);
-        mScoreView.setText(String.valueOf(mScore));
+        mGradeView.setText(mGrade);
+        mScoreView.setText(mScore + "/10000 XP");
+        mAgeView.setText(mAge + " ans");
     }
 
     public void setScore(){ mPseudoView.setText(mScore);}
