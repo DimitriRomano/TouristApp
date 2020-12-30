@@ -10,9 +10,17 @@ import java.util.HashMap;
 
 public class ProcessLevel {
 
-    private HashMap<String, Integer> type_point, levels;
+    private HashMap<String, Integer> type_point;
+    private HashMap<Integer, String> grades;
     private ArrayList<Place> place_al;
+    private int[] levels;
     private User user;
+
+    public ProcessLevel(User user){
+        this.user = user;
+        type_point();
+        level_point();
+    }
 
     public ProcessLevel(ArrayList<Place> place_al, User user){
         this.place_al = place_al;
@@ -35,17 +43,36 @@ public class ProcessLevel {
 
     /* Initializing every type of level depending on how much point the user has */
     private void level_point(){
-        HashMap<String, Integer> levels = new HashMap<String, Integer>();
-        levels.put("Tourist", 0);
-        levels.put("Confirmed Tourist", 500);
-        levels.put("Traveler", 1500);
-        levels.put("Confirmed Traveler", 3000);
-        levels.put("Explorator", 6000);
-        levels.put("Confirmed Explorator", 7000);
-        levels.put("Prospector", 7000);
-        levels.put("Lara Croft", 9000);
-        levels.put("Indiana Jones", 10000);
+        HashMap<Integer, String> grades = new HashMap<Integer, String>();
+        int[] levels = {0, 500, 1500, 3000, 6000, 7000, 8000, 9000, 10000};
+        grades.put(1, "Tourist");
+        grades.put(2, "Confirmed Tourist");
+        grades.put(3, "Traveler");
+        grades.put(4, "Confirmed Traveler");
+        grades.put(5, "Explorator");
+        grades.put(6, "Confirmed Explorator");
+        grades.put(7, "Prospector");
+        grades.put(8, "Lara Croft");
+        grades.put(9, "Indiana Jones");
+        this.grades = grades;
         this.levels = levels;
+    }
+
+    public String getUserGrade(int mPoints){
+        int nearest = 0;
+        int index = 1;
+        System.out.println("Your points: " + mPoints);
+        System.out.println(levels.length);
+        for (int i=0; i< this.levels.length; i++){
+            System.out.println(levels[i]);
+            if(mPoints > levels[i]){
+                nearest = levels[i];
+                System.out.println("Nearest: " + nearest);
+                index = i;
+            }
+        }
+        System.out.println("Index " + index + "; Nearest " + grades.get(index));
+        return grades.get(index);
     }
 
     /* This method is going to check in which location the user is going to be
@@ -64,6 +91,4 @@ public class ProcessLevel {
             return userPoint;
         }
     }
-
-
 }
