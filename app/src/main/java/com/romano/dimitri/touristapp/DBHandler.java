@@ -50,8 +50,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
     //create place table
     private static final String CREATE_TABLE_PLACE = "CREATE TABLE " + TABLE_PLACE + "(" +
-            COL_ID + " INTEGER PRIMARY KEY, " + COL_TITLE + " TEXT, " + COL_TYPE + " TEXT, " + COL_LATITUDE + " DOUBLE, " +
-            COL_LONGITUDE + " DOUBLE, " + COL_DESCRIPTION +"TEXT " +")" ;
+            COL_ID + " INTEGER PRIMARY KEY, " + COL_TITLE + " TEXT, " + COL_TYPE + " TEXT, " + COL_LATITUDE + " TEXT, " +
+            COL_LONGITUDE + " TEXT, " + COL_DESCRIPTION +"TEXT " +")" ;
     //singleton pattern
     private static DBHandler sInstance;
 
@@ -64,13 +64,12 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_USER);
         db.execSQL(CREATE_TABLE_PLACE);
-
-        ArrayList<Place> places=new ArrayList<Place>();
+        ArrayList<Place> places=new ArrayList<>();
         places=getPlaces();
-        Iterator<Place> iter=places.iterator();
+        /*Iterator<Place> iter=places.iterator();
         while(iter.hasNext()){
             addPlace(iter.next());
-        }
+        }*/
 
     }
 
@@ -209,7 +208,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 */
     public ArrayList<Place> getPlaces(){
-        ArrayList<Place> places=new ArrayList<Place>();
+        ArrayList<Place> places=new ArrayList<>();
         String delimiter=";";
         Place place=new Place();
         try {
@@ -224,6 +223,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 place.setLatitude(Double.parseDouble(parts[2]));
                 place.setLongitude(Double.parseDouble(parts[3]));
                 place.setDescription(parts[4]);
+
+                //System.out.println(place.toString());
                 places.add(place);
             }
             br.close();
