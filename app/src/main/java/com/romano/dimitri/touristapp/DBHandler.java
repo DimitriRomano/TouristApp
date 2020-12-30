@@ -25,10 +25,12 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String COL_EMAIL ="EMAIL";
     private static final String COL_SCORE ="SCORE";
     private static final String COL_PASSWORD ="PASSWORD";
+    private static final String COL_AGE ="AGE";
 
     //create table
     private static final String CREATE_BD = "CREATE TABLE " + TABLE_USER + "(" +
-            COL_PSEUDO + " TEXT PRIMARY KEY, " + COL_EMAIL + " TEXT, " + COL_SCORE + " INTEGER, " + COL_PASSWORD + " TEXT " + ")" ;
+            COL_PSEUDO + " TEXT PRIMARY KEY, " + COL_EMAIL + " TEXT, " + COL_SCORE + " INTEGER, " + COL_PASSWORD + " TEXT " + "" +
+            ", " + COL_AGE + " INTEGER)" ;
 
     //singleton pattern
     private static DBHandler sInstance;
@@ -70,6 +72,7 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(DBHandler.COL_EMAIL,user.getEmail());
         cv.put(DBHandler.COL_SCORE,user.getScore());
         cv.put(DBHandler.COL_PASSWORD,psw);
+        cv.put(DBHandler.COL_AGE,user.getAge());
 
         db.insert(TABLE_USER,null, cv);
         db.close();

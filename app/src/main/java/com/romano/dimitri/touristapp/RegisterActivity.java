@@ -13,7 +13,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText mPseudoInput;
     private EditText mEmailInput;
     private EditText mPasswordInput;
-
+    private EditText mAgeInput;
 
     public static final String TAG = "REGISTER ACTIVITY";
 
@@ -28,7 +28,7 @@ public class RegisterActivity extends AppCompatActivity {
         mPseudoInput = findViewById(R.id.editTextPseudo);
         mEmailInput = findViewById(R.id.editTextEmail);
         mPasswordInput = findViewById(R.id.editTextPassword);
-
+        mAgeInput = findViewById(R.id.editTextAge);
         db=DBHandler.getInstance(this);
 
 
@@ -39,7 +39,8 @@ public class RegisterActivity extends AppCompatActivity {
             mPseudoInput.setError("Pseudo is required");
             mPseudoInput.setHint("Enter Pseudo");
             return;
-        }else {
+        }
+        else {
             if(db.existPseudo(mPseudoInput.getText().toString())== true) {
                 mPseudoInput.setError("This pseudo already exist");
                 return;
@@ -65,7 +66,9 @@ public class RegisterActivity extends AppCompatActivity {
         String uPseudo = mPseudoInput.getText().toString();
         String uEmail = mEmailInput.getText().toString();
         String uPsw = mPasswordInput.getText().toString();
-        User u = new User(uPseudo,uEmail);
+        int uAge = Integer.parseInt(mAgeInput.getText().toString());
+        System.out.println("Son age : " + uAge);
+        User u = new User(uPseudo,uEmail, uAge);
         db.addUser(u,uPsw);
         Intent backLog = new Intent();
         backLog.putExtra("result",mPseudoInput.getText().toString());
