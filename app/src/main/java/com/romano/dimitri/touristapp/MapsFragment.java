@@ -309,8 +309,8 @@ public class MapsFragment extends Fragment {
                 Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED) {
 
             // Permission already granted
-            //mLocationManager.requestLocationUpdates(
-                    //mLocationProvider, 1000, 1, locationListener);
+            mLocationManager.requestLocationUpdates(
+                    mLocationProvider, 5000, 1, locationListener);
             //mMap.setMyLocationEnabled(true);
                     updateMap();
 

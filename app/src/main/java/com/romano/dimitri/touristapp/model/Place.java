@@ -68,5 +68,15 @@ public class Place implements Serializable {
         mId = id;
     }
 
-
+    @Override
+    public String toString() {
+        return "Place{" +
+                "mTitle='" + mTitle + '\'' +
+                ", mType='" + mType + '\'' +
+                ", mLatitude=" + mLatitude +
+                ", mLongitude=" + mLongitude +
+                ", mDescription='" + mDescription + '\'' +
+                ", mVisited=" + mVisited +
+                '}';
+    }
 }

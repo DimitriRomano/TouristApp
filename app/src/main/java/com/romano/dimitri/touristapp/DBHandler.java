@@ -39,6 +39,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String COL_EMAIL ="EMAIL";
     private static final String COL_SCORE ="SCORE";
     private static final String COL_PASSWORD ="PASSWORD";
+    private static final String COL_AGE = "AGE";
 
     //columns names place Table
     private static final String COL_ID ="ID";
@@ -50,7 +51,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
     //create user table
     private static final String CREATE_TABLE_USER = "CREATE TABLE " + TABLE_USER + "(" +
-            COL_PSEUDO + " TEXT PRIMARY KEY, " + COL_EMAIL + " TEXT, " + COL_SCORE + " INTEGER, " + COL_PASSWORD + " TEXT " + ")" ;
+            COL_PSEUDO + " TEXT PRIMARY KEY, " + COL_EMAIL + " TEXT, " + COL_SCORE + " INTEGER, " + COL_PASSWORD + " TEXT " +
+            ", " + COL_AGE + " INTEGER)" ;
 
     //create place table
     private static final String CREATE_TABLE_PLACE = "CREATE TABLE " + TABLE_PLACE + "(" +
@@ -107,9 +109,11 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(DBHandler.COL_EMAIL,user.getEmail());
         cv.put(DBHandler.COL_SCORE,user.getScore());
         cv.put(DBHandler.COL_PASSWORD,psw);
+        cv.put(DBHandler.COL_AGE,user.getAge());
 
         db.insert(TABLE_USER,null, cv);
         db.close();
+
 
     }
 
@@ -170,11 +174,12 @@ public class DBHandler extends SQLiteOpenHelper {
         User u = new User();
 
         String selectQuery = "SELECT " + COL_PSEUDO + " FROM " + TABLE_USER + " WHERE " + COL_PSEUDO + " = '" + pseudo +"' ";
-        Cursor cursor = db.query(TABLE_USER,new String[]{COL_PSEUDO,COL_EMAIL,COL_SCORE},COL_PSEUDO + " =  ? "  ,new String[]{pseudo},null,null,null);
+        Cursor cursor = db.query(TABLE_USER,new String[]{COL_PSEUDO,COL_EMAIL,COL_SCORE, COL_AGE},COL_PSEUDO + " =  ? "  ,new String[]{pseudo},null,null,null);
         cursor.moveToFirst();
         u.setPseudo(cursor.getString(0));
         u.setEmail(cursor.getString(1));
         u.setScore(cursor.getInt(2));
+        u.setAge(cursor.getInt(3));
         cursor.close();
         db.close();
         return u;
