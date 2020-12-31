@@ -25,11 +25,11 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String COL_EMAIL ="EMAIL";
     private static final String COL_SCORE ="SCORE";
     private static final String COL_PASSWORD ="PASSWORD";
-    private static final String COL_AGE ="AGE";
+    private static final String COL_AGE = "AGE";
 
     //create table
     private static final String CREATE_BD = "CREATE TABLE " + TABLE_USER + "(" +
-            COL_PSEUDO + " TEXT PRIMARY KEY, " + COL_EMAIL + " TEXT, " + COL_SCORE + " INTEGER, " + COL_PASSWORD + " TEXT " + "" +
+            COL_PSEUDO + " TEXT PRIMARY KEY, " + COL_EMAIL + " TEXT, " + COL_SCORE + " INTEGER, " + COL_PASSWORD + " TEXT " +
             ", " + COL_AGE + " INTEGER)" ;
 
     //singleton pattern
@@ -137,11 +137,12 @@ public class DBHandler extends SQLiteOpenHelper {
         User u = new User();
 
         String selectQuery = "SELECT " + COL_PSEUDO + " FROM " + TABLE_USER + " WHERE " + COL_PSEUDO + " = '" + pseudo +"' ";
-        Cursor cursor = db.query(TABLE_USER,new String[]{COL_PSEUDO,COL_EMAIL,COL_SCORE},COL_PSEUDO + " =  ? "  ,new String[]{pseudo},null,null,null);
+        Cursor cursor = db.query(TABLE_USER,new String[]{COL_PSEUDO,COL_EMAIL,COL_SCORE, COL_AGE},COL_PSEUDO + " =  ? "  ,new String[]{pseudo},null,null,null);
         cursor.moveToFirst();
         u.setPseudo(cursor.getString(0));
         u.setEmail(cursor.getString(1));
         u.setScore(cursor.getInt(2));
+        u.setAge(cursor.getInt(3));
         cursor.close();
         db.close();
         return u;

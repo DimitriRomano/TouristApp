@@ -91,4 +91,8 @@ public class ProcessLevel {
             return userPoint;
         }
     }
+
+    private void progressBarProcess(){
+
+    }
 }
