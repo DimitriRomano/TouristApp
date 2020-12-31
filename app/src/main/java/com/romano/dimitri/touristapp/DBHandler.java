@@ -55,7 +55,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     //create place table
     private static final String CREATE_TABLE_PLACE = "CREATE TABLE " + TABLE_PLACE + "(" +
-            COL_ID + " INTEGER PRIMARY KEY, " + COL_TITLE + " TEXT, " + COL_TYPE + " TEXT, " + COL_LATITUDE + " TEXT, " +
+            COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COL_TITLE + " TEXT, " + COL_TYPE + " TEXT, " + COL_LATITUDE + " TEXT, " +
             COL_LONGITUDE + " TEXT, " + COL_DESCRIPTION +"TEXT " +")" ;
     //singleton pattern
     private static DBHandler sInstance;
@@ -88,7 +88,7 @@ public class DBHandler extends SQLiteOpenHelper {
             sInstance = new DBHandler(context.getApplicationContext());
             ArrayList<Place> places=new ArrayList<>();
             places=sInstance.getPlacesFile(context);
-            /*Iterator<Place> iter=places.iterator();
+            Iterator<Place> iter=places.iterator();
             Place test=new Place();
             while(iter.hasNext()){
                 test=iter.next();
@@ -101,7 +101,7 @@ public class DBHandler extends SQLiteOpenHelper {
             for(Place p:placeList){
                 System.out.println("test ajout");
                 System.out.println(p.toString());
-            }*/
+            }
             System.out.println("instanced");
         }
         return sInstance;
@@ -225,7 +225,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public ArrayList<Place> getPlacesFile(Context context){
         ArrayList<Place> places=new ArrayList<>();
         String delimiter=";";
-        Place place=new Place();
+
 
         InputStream inputStream = context.getResources().openRawResource(R.raw.places);
         try{
@@ -233,6 +233,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 BufferedReader br=new BufferedReader(new InputStreamReader(inputStream));
                 String str;
                 while((str=br.readLine())!=null){
+                    Place place=new Place();
                     System.out.println(str);
                     String parts[]=str.split(delimiter);
                     place.setTitle(parts[0]);
@@ -242,12 +243,6 @@ public class DBHandler extends SQLiteOpenHelper {
                     place.setDescription(parts[4]);
                     System.out.println(place.toString());
                     places.add(place);
-                }
-                Iterator<Place> iter=places.iterator();
-                Place test=new Place();
-                while(iter.hasNext()){
-
-                    System.out.println("essai iter dans fonction"+iter.next().toString());
                 }
                 br.close();
                 return places;
