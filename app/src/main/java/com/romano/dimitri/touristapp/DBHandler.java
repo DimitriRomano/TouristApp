@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class DBHandler extends SQLiteOpenHelper {
 
@@ -66,10 +67,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        System.out.println("avannt");
         db.execSQL(CREATE_TABLE_USER);
         db.execSQL(CREATE_TABLE_PLACE);
-
     }
 
     @Override
@@ -88,11 +87,21 @@ public class DBHandler extends SQLiteOpenHelper {
         if(sInstance == null){
             sInstance = new DBHandler(context.getApplicationContext());
             ArrayList<Place> places=new ArrayList<>();
-            places=sInstance.getPlaces(context);
-            Iterator<Place> iter=places.iterator();
+            places=sInstance.getPlacesFile(context);
+            /*Iterator<Place> iter=places.iterator();
+            Place test=new Place();
             while(iter.hasNext()){
-                sInstance.addPlace(iter.next());
+                test=iter.next();
+                sInstance.addPlace(test);
+                System.out.println("essai iter "+test.toString());
             }
+            //vérification de l'ajout des places
+            List<Place> placeList=sInstance.getAllRows();
+            System.out.println("test avant");
+            for(Place p:placeList){
+                System.out.println("test ajout");
+                System.out.println(p.toString());
+            }*/
             System.out.println("instanced");
         }
         return sInstance;
@@ -213,7 +222,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return place;
     }
 */
-    public ArrayList<Place> getPlaces(Context context){
+    public ArrayList<Place> getPlacesFile(Context context){
         ArrayList<Place> places=new ArrayList<>();
         String delimiter=";";
         Place place=new Place();
@@ -233,6 +242,12 @@ public class DBHandler extends SQLiteOpenHelper {
                     place.setDescription(parts[4]);
                     System.out.println(place.toString());
                     places.add(place);
+                }
+                Iterator<Place> iter=places.iterator();
+                Place test=new Place();
+                while(iter.hasNext()){
+
+                    System.out.println("essai iter dans fonction"+iter.next().toString());
                 }
                 br.close();
                 return places;
@@ -271,4 +286,36 @@ public class DBHandler extends SQLiteOpenHelper {
         }
     }
 
+    public List<Place> getAllRows(){
+        List<Place> place= new ArrayList<>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_PLACE;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // Loop through all the rows and addi the to the list
+        if (cursor.moveToFirst()) {
+            do {
+                Place p=new Place();
+                p.setId(cursor.getInt(0));
+                p.setTitle(cursor.getString(1));
+                p.setType(cursor.getString(2));
+                p.setLatitude(cursor.getDouble(3));
+                p.setLongitude(cursor.getDouble(4));
+                p.setDescription(cursor.getString(5));
+                System.out.println("Test affichage :" + p.toString());
+
+                // Add row to list
+                place.add(p);
+            } while (cursor.moveToNext());
+        }
+        else{
+            System.out.println("echec :(");
+        }
+        cursor.close();
+        db.close();
+
+        // Return the list
+        return place;
+    }
 }
