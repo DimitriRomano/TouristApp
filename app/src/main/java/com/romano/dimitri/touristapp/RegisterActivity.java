@@ -67,8 +67,7 @@ public class RegisterActivity extends AppCompatActivity {
         String uEmail = mEmailInput.getText().toString();
         String uPsw = mPasswordInput.getText().toString();
         int uAge = Integer.parseInt(mAgeInput.getText().toString());
-        System.out.println("Son age : " + uAge);
-        User u = new User(uPseudo,uEmail, uAge);
+        User u = new User(uPseudo, uEmail, uAge);
         db.addUser(u,uPsw);
         Intent backLog = new Intent();
         backLog.putExtra("result",mPseudoInput.getText().toString());

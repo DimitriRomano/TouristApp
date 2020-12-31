@@ -19,6 +19,7 @@ public class DashboardActivity extends AppCompatActivity {
     private User mUser;
 
     private int currentScore;
+    private int userAge;
     private String pseudoUser;
 
     public static final String TAG = "MapActivity";
@@ -37,8 +38,8 @@ public class DashboardActivity extends AppCompatActivity {
         mUser = mDB.getUser(mPreferencesLog.getString(PREF_PSEUDO,null));
         pseudoUser = mUser.getPseudo();
         currentScore = mUser.getScore();
-
-        Log.d(TAG,pseudoUser + " " + currentScore);
+        userAge = mUser.getAge();
+        Log.d(TAG, "Pseudo: " + pseudoUser + "; Score: " + currentScore + "; Age: " + userAge);
 
         //test to know which session we are with
         /*if(mPreferencesLog.contains(PREF_CONNEXION) && mPreferencesLog.contains(PREF_PSEUDO)){
@@ -51,6 +52,7 @@ public class DashboardActivity extends AppCompatActivity {
             ProcessLevel prolevel = new ProcessLevel(mUser);
             Bundle bundleUser = new Bundle();
             bundleUser.putString("pseudo", pseudoUser);
+            bundleUser.putInt("age", userAge);
             bundleUser.putInt("score", currentScore);
             bundleUser.putString("grade", prolevel.getUserGrade(mUser.getScore()));
 
