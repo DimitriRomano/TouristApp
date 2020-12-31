@@ -3,7 +3,6 @@ package com.romano.dimitri.touristapp.model;
 import java.io.Serializable;
 
 public class Place implements Serializable {
-    private int mId;
     private String mTitle;
     private String mType;
     private Double mLatitude;
@@ -60,19 +59,10 @@ public class Place implements Serializable {
         mVisited = visited;
     }
 
-    public int getId() {
-        return mId;
-    }
-
-    public void setId(int id) {
-        mId = id;
-    }
-
     @Override
     public String toString() {
         return "Place{" +
-                "mId=" + mId +
-                ", mTitle='" + mTitle + '\'' +
+                "mTitle='" + mTitle + '\'' +
                 ", mType='" + mType + '\'' +
                 ", mLatitude=" + mLatitude +
                 ", mLongitude=" + mLongitude +
