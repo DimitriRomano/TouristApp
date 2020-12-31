@@ -88,8 +88,11 @@ public class DBHandler extends SQLiteOpenHelper {
         if(sInstance == null){
             sInstance = new DBHandler(context.getApplicationContext());
             ArrayList<Place> places=new ArrayList<>();
-            places=getPlaces(context);
-
+            places=sInstance.getPlaces(context);
+            Iterator<Place> iter=places.iterator();
+            while(iter.hasNext()){
+                sInstance.addPlace(iter.next());
+            }
             System.out.println("instanced");
         }
         return sInstance;
@@ -210,7 +213,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return place;
     }
 */
-    public static ArrayList<Place> getPlaces(Context context){
+    public ArrayList<Place> getPlaces(Context context){
         ArrayList<Place> places=new ArrayList<>();
         String delimiter=";";
         Place place=new Place();
