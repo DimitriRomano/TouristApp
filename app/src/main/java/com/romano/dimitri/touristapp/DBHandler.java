@@ -56,7 +56,7 @@ public class DBHandler extends SQLiteOpenHelper {
     //create place table
     private static final String CREATE_TABLE_PLACE = "CREATE TABLE " + TABLE_PLACE + "(" +
             COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COL_TITLE + " TEXT, " + COL_TYPE + " TEXT, " + COL_LATITUDE + " TEXT, " +
-            COL_LONGITUDE + " TEXT, " + COL_DESCRIPTION +"TEXT " +")" ;
+            COL_LONGITUDE + " TEXT, " + COL_DESCRIPTION +" TEXT " +")" ;
     //singleton pattern
     private static DBHandler sInstance;
 
