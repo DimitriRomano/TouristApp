@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 
 import android.Manifest;
 
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -118,6 +119,12 @@ public class MapsFragment extends Fragment {
                 if (mMap != null && btnActivation==true) {
                     updateMap();
                 }
+                if(location != null){
+                    Intent i = new Intent(getActivity(),LocationReceiver.class);
+                    i.putExtra("currentLocation",location);
+                    getActivity().startService(i);
+                }
+
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -239,6 +246,8 @@ public class MapsFragment extends Fragment {
                 }
 
             }
+
+
 
 
         } else {
