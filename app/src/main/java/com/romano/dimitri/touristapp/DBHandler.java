@@ -139,13 +139,13 @@ public class DBHandler extends SQLiteOpenHelper {
         User u = new User();
 
         String selectQuery = "SELECT " + COL_PSEUDO + " FROM " + TABLE_USER + " WHERE " + COL_PSEUDO + " = '" + pseudo +"' ";
-        Cursor cursor = db.query(TABLE_USER,new String[]{COL_PSEUDO,COL_EMAIL,COL_SCORE, COL_AGE},COL_PSEUDO + " =  ? "  ,new String[]{pseudo},null,null,null);
+        Cursor cursor = db.query(TABLE_USER,new String[]{COL_PSEUDO,COL_EMAIL,COL_SCORE, COL_AGE, COL_IMAGE},COL_PSEUDO + " =  ? "  ,new String[]{pseudo},null,null,null);
         cursor.moveToFirst();
         u.setPseudo(cursor.getString(0));
         u.setEmail(cursor.getString(1));
         u.setScore(cursor.getInt(2));
         u.setAge(cursor.getInt(3));
-        //u.setImage(cursor.getBlob(4));
+        u.setImage(cursor.getBlob(4));
         cursor.close();
         db.close();
         return u;
