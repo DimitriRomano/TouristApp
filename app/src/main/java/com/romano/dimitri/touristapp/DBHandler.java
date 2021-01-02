@@ -63,8 +63,8 @@ public class DBHandler extends SQLiteOpenHelper {
             COL_ID + " INTEGER PRIMARY KEY, " + COL_TITLE + " TEXT, " + COL_TYPE + " TEXT, " + COL_LATITUDE + " TEXT, " +
             COL_LONGITUDE + " TEXT, " + COL_DESCRIPTION +" TEXT " +")" ;
     //create visited table
-    private static final String CREATE_TABLE_VISITED="CREATE TABLE" +TABLE_VISITED + "(" +
-            COL_ID_VISITED + "INTEGER PRIMARY KEY, " + COL_PSEUDO_VISITED + " TEXT PRIMARY KEY, " + "FOREIGN KEY (" + COL_ID_VISITED + ") REFERENCES " +
+    private static final String CREATE_TABLE_VISITED="CREATE TABLE " +TABLE_VISITED + "(" +
+            COL_ID_VISITED + " INTEGER PRIMARY KEY, " + COL_PSEUDO_VISITED + " TEXT PRIMARY KEY, " + " FOREIGN KEY (" + COL_ID_VISITED + ") REFERENCES " +
             TABLE_PLACE + " (" + COL_ID + "), " + "FOREIGN KEY (" + COL_PSEUDO_VISITED + ") REFERENCES " +
             TABLE_USER + " (" + COL_PSEUDO + ");" ;
     //singleton pattern
@@ -79,6 +79,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_USER);
         db.execSQL(CREATE_TABLE_PLACE);
+        db.execSQL(CREATE_TABLE_VISITED);
     }
 
     @Override
@@ -88,6 +89,7 @@ public class DBHandler extends SQLiteOpenHelper {
                         + newVersion + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER + ";");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLACE + ";");
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_VISITED +";");
         onCreate(db);
     }
 
@@ -298,11 +300,47 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public ArrayList<Place> placeVisitedUser(String pseudo){
+        ArrayList<Place> place= new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String selectQuery = "SELECT " + COL_EMAIL + " FROM " + TABLE_USER + " WHERE " + COL_EMAIL + " = '" + email +"' ";
+        String selectQuery = "SELECT " + COL_ID +", " + COL_TITLE + ", " + COL_TYPE + ", " + COL_LATITUDE + " ," + COL_LONGITUDE + " ," + COL_DESCRIPTION +
+                " FROM " + TABLE_VISITED + " INNER JOIN " + TABLE_PLACE + " ON " + TABLE_VISITED+"."+COL_ID_VISITED + "=" + TABLE_PLACE+"."+COL_ID
+                + " WHERE " + TABLE_VISITED+"."+COL_PSEUDO_VISITED + " = " + pseudo+";";
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // Loop through all the rows and addi the to the list
+        if (cursor.moveToFirst()) {
+            do {
+                Place p=new Place();
+                p.setId(cursor.getInt(0));
+                p.setTitle(cursor.getString(1));
+                p.setType(cursor.getString(2));
+                p.setLatitude(cursor.getDouble(3));
+                p.setLongitude(cursor.getDouble(4));
+                p.setDescription(cursor.getString(5));
+                System.out.println("Test jointure :" + p.toString());
+
+                // Add row to list
+                place.add(p);
+            } while (cursor.moveToNext());
+        }
+        else{
+            System.out.println("echec :(");
+        }
+        cursor.close();
+        db.close();
+
+        // Return the list
+        return place;
+
     }
 
-    public void addVisit(String pseudo){
-
+    public void addVisit(String pseudo,Place place){
+        int idPlace=place.getId();
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(DBHandler.COL_ID_VISITED,idPlace);
+        cv.put(DBHandler.COL_PSEUDO_VISITED,pseudo);
+        db.insert(TABLE_VISITED,null, cv);
+        db.close();
     }
 }
