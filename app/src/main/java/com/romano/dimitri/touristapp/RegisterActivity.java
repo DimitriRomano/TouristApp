@@ -121,6 +121,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         String uPsw = mPasswordInput.getText().toString();
         int uAge = Integer.parseInt(mAgeInput.getText().toString());
         User u;
+        System.out.println(imageData.length);
         if(imageSet){
             u = new User(uPseudo, uEmail, uAge, imageData);
         }
