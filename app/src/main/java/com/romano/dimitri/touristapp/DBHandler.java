@@ -60,13 +60,15 @@ public class DBHandler extends SQLiteOpenHelper {
 
     //create place table
     private static final String CREATE_TABLE_PLACE = "CREATE TABLE " + TABLE_PLACE + "(" +
-            COL_ID + " INTEGER PRIMARY KEY, " + COL_TITLE + " TEXT, " + COL_TYPE + " TEXT, " + COL_LATITUDE + " TEXT, " +
+            COL_ID + " INTEGER PRIMARY KEY, " + COL_TITLE + " TEXT UNIQUE , " + COL_TYPE + " TEXT, " + COL_LATITUDE + " TEXT, " +
             COL_LONGITUDE + " TEXT, " + COL_DESCRIPTION +" TEXT " +")" ;
     //create visited table
     private static final String CREATE_TABLE_VISITED="CREATE TABLE " +TABLE_VISITED + "(" +
-            COL_ID_VISITED + " INTEGER PRIMARY KEY, " + COL_PSEUDO_VISITED + " TEXT PRIMARY KEY, " + " FOREIGN KEY (" + COL_ID_VISITED + ") REFERENCES " +
-            TABLE_PLACE + " (" + COL_ID + "), " + "FOREIGN KEY (" + COL_PSEUDO_VISITED + ") REFERENCES " +
-            TABLE_USER + " (" + COL_PSEUDO + ");" ;
+            COL_ID_VISITED + " INTEGER, " + COL_PSEUDO_VISITED + " TEXT, " +
+            "PRIMARY KEY ("+COL_ID_VISITED +" , "+ COL_PSEUDO_VISITED +") " +
+            "FOREIGN KEY (" + COL_ID_VISITED + ") REFERENCES " + TABLE_PLACE + " (" + COL_ID + "), " +
+            "FOREIGN KEY (" + COL_PSEUDO_VISITED + ") REFERENCES " + TABLE_USER + " (" + COL_PSEUDO +") )" ;
+
     //singleton pattern
     private static DBHandler sInstance;
 
@@ -107,7 +109,7 @@ public class DBHandler extends SQLiteOpenHelper {
             //vérification de l'ajout des places
             List<Place> placeList=sInstance.getAllRows();
             for(Place p:placeList) {
-                System.out.println("test ajout");
+                System.out.println("test BD");
                 System.out.println(p.toString());
             }
         }
@@ -304,7 +306,7 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String selectQuery = "SELECT " + COL_ID +", " + COL_TITLE + ", " + COL_TYPE + ", " + COL_LATITUDE + " ," + COL_LONGITUDE + " ," + COL_DESCRIPTION +
                 " FROM " + TABLE_VISITED + " INNER JOIN " + TABLE_PLACE + " ON " + TABLE_VISITED+"."+COL_ID_VISITED + "=" + TABLE_PLACE+"."+COL_ID
-                + " WHERE " + TABLE_VISITED+"."+COL_PSEUDO_VISITED + " = " + pseudo+";";
+                + " WHERE " + TABLE_VISITED+"."+COL_PSEUDO_VISITED + " = '" + pseudo+"' ";
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         // Loop through all the rows and addi the to the list
