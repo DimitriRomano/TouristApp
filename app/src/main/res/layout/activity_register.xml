@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisterActivity">
+    tools:context=".RegisterActivity"
+    android:background="#FFFFFF">
 
     <TextView
         android:id="@+id/textViewPseudo"
@@ -20,7 +21,8 @@
         android:layout_marginTop="50dp"
         android:layout_marginEnd="179dp"
         android:layout_marginRight="179dp"
-        android:text="Pseudo" />
+        android:text="Pseudo"
+        android:textColor="#000000"/>
 
 
     <EditText
@@ -38,7 +40,9 @@
         android:layout_marginEnd="100dp"
         android:layout_marginRight="100dp"
         android:ems="10"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:textColorHint="#6D6A6E"
+        android:textColor="#6D6A6E"/>
 
     <TextView
         android:id="@+id/textViewEmail"
@@ -55,7 +59,8 @@
         android:layout_marginEnd="182dp"
         android:layout_marginRight="182dp"
         android:gravity="center|center_horizontal|center_vertical"
-        android:text="Email" />
+        android:text="Email"
+        android:textColor="#000000"/>
 
     <EditText
         android:id="@+id/editTextEmail"
@@ -72,7 +77,9 @@
         android:layout_marginEnd="100dp"
         android:layout_marginRight="100dp"
         android:ems="10"
-        android:inputType="textEmailAddress" />
+        android:inputType="textEmailAddress"
+        android:textColorHint="#6D6A6E"
+        android:textColor="#6D6A6E"/>
 
     <TextView
         android:id="@+id/textViewPutAge"
@@ -88,6 +95,7 @@
         android:layout_marginTop="18dp"
         android:layout_marginEnd="174dp"
         android:layout_marginRight="174dp"
+        android:textColor="#000000"
         android:text="Password" />
 
     <TextView
@@ -106,7 +114,27 @@
         android:layout_marginEnd="182dp"
         android:layout_marginRight="182dp"
         android:gravity="center|center_horizontal|center_vertical"
+        android:textColor="#000000"
         android:text="Age" />
+
+    <TextView
+        android:id="@+id/textViewImage"
+        android:layout_width="46dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextEmail"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="182dp"
+        android:layout_marginLeft="182dp"
+        android:layout_marginTop="434dp"
+        android:layout_marginEnd="183dp"
+        android:layout_marginRight="183dp"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:textColor="#000000"
+        android:text="Image" />
 
     <EditText
         android:id="@+id/editTextPassword"
@@ -123,6 +151,8 @@
         android:layout_marginEnd="100dp"
         android:layout_marginRight="100dp"
         android:ems="10"
+        android:textColorHint="#6D6A6E"
+        android:textColor="#6D6A6E"
         android:inputType="textPassword" />
 
     <EditText
@@ -140,22 +170,53 @@
         android:layout_marginEnd="97dp"
         android:layout_marginRight="97dp"
         android:ems="10"
+        android:textColorHint="#6D6A6E"
+        android:textColor="#6D6A6E"
         android:inputType="textPassword" />
+
 
     <Button
         android:id="@+id/btnRegister"
-        android:layout_width="125dp"
-        android:layout_height="wrap_content"
+        android:layout_width="148dp"
+        android:layout_height="68dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginStart="143dp"
-        android:layout_marginLeft="143dp"
-        android:layout_marginTop="472dp"
-        android:layout_marginEnd="143dp"
-        android:layout_marginRight="143dp"
+        android:layout_marginStart="131dp"
+        android:layout_marginLeft="131dp"
+        android:layout_marginTop="652dp"
+        android:layout_marginEnd="131dp"
+        android:layout_marginRight="131dp"
         android:onClick="register"
-        android:text="Register" />
+        android:text="Register"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/Upload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="160dp"
+        android:layout_marginLeft="160dp"
+        android:layout_marginTop="598dp"
+        android:onClick="upload"
+        android:text="Upload"
+        android:textColor="#FFFFFF" />
+
+    <ImageView
+        android:id="@+id/uploadedImage"
+        android:layout_width="123dp"
+        android:layout_height="119dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="142dp"
+        android:layout_marginLeft="142dp"
+        android:layout_marginTop="465dp"
+        tools:srcCompat="@drawable/ic_launcher_foreground" />
+
 </RelativeLayout>

@@ -21,6 +21,7 @@ public class DashboardActivity extends AppCompatActivity {
     private int currentScore;
     private int userAge;
     private String pseudoUser;
+    private byte[] imageData;
 
     public static final String TAG = "MapActivity";
 
@@ -39,6 +40,7 @@ public class DashboardActivity extends AppCompatActivity {
         pseudoUser = mUser.getPseudo();
         currentScore = mUser.getScore();
         userAge = mUser.getAge();
+
         Log.d(TAG, "Pseudo: " + pseudoUser + "; Score: " + currentScore + "; Age: " + userAge);
 
         //test to know which session we are with
@@ -55,8 +57,8 @@ public class DashboardActivity extends AppCompatActivity {
             bundleUser.putInt("age", userAge);
             bundleUser.putInt("score", currentScore);
             bundleUser.putString("grade", prolevel.getUserGrade(mUser.getScore()));
-
-             getSupportFragmentManager().beginTransaction()
+            bundleUser.putByteArray("image", imageData);
+            getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
                      .add(R.id.fragment_user_container_view, UserFragment.class, bundleUser)
                     .add(R.id.fragment_map_container_view, MapsFragment.class, null)
