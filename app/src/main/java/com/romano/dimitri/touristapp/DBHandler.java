@@ -34,6 +34,7 @@ public class DBHandler extends SQLiteOpenHelper {
     //table names
     public static final String TABLE_USER="USER";
     public static final String TABLE_PLACE="PLACE";
+    public static final String TABLE_VISITED="VISITED";
 
     //columns names user Table
     private static final String COL_PSEUDO ="PSEUDO";
@@ -49,14 +50,23 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String COL_LONGITUDE ="LONGITUDE";
     private static final String COL_DESCRIPTION ="DESCRIPTION";
 
+    //columns names visited Table
+    private static final String COL_ID_VISITED="ID";
+    private static final String COL_PSEUDO_VISITED="PSEUDO";
+
     //create user table
     private static final String CREATE_TABLE_USER = "CREATE TABLE " + TABLE_USER + "(" +
             COL_PSEUDO + " TEXT PRIMARY KEY, " + COL_EMAIL + " TEXT, " + COL_SCORE + " INTEGER, " + COL_PASSWORD + " TEXT " + ")" ;
 
     //create place table
     private static final String CREATE_TABLE_PLACE = "CREATE TABLE " + TABLE_PLACE + "(" +
-            COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COL_TITLE + " TEXT, " + COL_TYPE + " TEXT, " + COL_LATITUDE + " TEXT, " +
+            COL_ID + " INTEGER PRIMARY KEY, " + COL_TITLE + " TEXT, " + COL_TYPE + " TEXT, " + COL_LATITUDE + " TEXT, " +
             COL_LONGITUDE + " TEXT, " + COL_DESCRIPTION +" TEXT " +")" ;
+    //create visited table
+    private static final String CREATE_TABLE_VISITED="CREATE TABLE" +TABLE_VISITED + "(" +
+            COL_ID_VISITED + "INTEGER PRIMARY KEY, " + COL_PSEUDO_VISITED + " TEXT PRIMARY KEY, " + "FOREIGN KEY (" + COL_ID_VISITED + ") REFERENCES " +
+            TABLE_PLACE + " (" + COL_ID + "), " + "FOREIGN KEY (" + COL_PSEUDO_VISITED + ") REFERENCES " +
+            TABLE_USER + " (" + COL_PSEUDO + ");" ;
     //singleton pattern
     private static DBHandler sInstance;
 
@@ -89,20 +99,15 @@ public class DBHandler extends SQLiteOpenHelper {
             ArrayList<Place> places=new ArrayList<>();
             places=sInstance.getPlacesFile(context);
             Iterator<Place> iter=places.iterator();
-            Place test=new Place();
             while(iter.hasNext()){
-                test=iter.next();
-                sInstance.addPlace(test);
-                System.out.println("essai iter "+test.toString());
+                sInstance.addPlaceDB(iter.next());
             }
             //vérification de l'ajout des places
             List<Place> placeList=sInstance.getAllRows();
-            System.out.println("test avant");
-            for(Place p:placeList){
+            for(Place p:placeList) {
                 System.out.println("test ajout");
                 System.out.println(p.toString());
             }
-            System.out.println("instanced");
         }
         return sInstance;
     }
@@ -189,10 +194,10 @@ public class DBHandler extends SQLiteOpenHelper {
         return u;
     }
 
-    public void addPlace(Place place){
+    public void addPlaceDB(Place place){
 
         SQLiteDatabase db = this.getWritableDatabase();
-
+        System.out.println("add : " + place.toString());
         ContentValues cv = new ContentValues();
         cv.put(DBHandler.COL_TITLE,place.getTitle());
         cv.put(DBHandler.COL_TYPE,place.getType());
@@ -253,28 +258,6 @@ public class DBHandler extends SQLiteOpenHelper {
             }
 
         }
-        /*
-        try {
-            File file = new File("C:\\Users\\Quitterie\\Desktop\\QUITTERIE\\fac\\L3\\S1\\DA\\projet\\TouristApp\\app\\src\\main\\res\\raw\\places.txt");
-            FileReader fr = new FileReader(file);
-            BufferedReader br = new BufferedReader(fr);
-            String line;
-            while((line=br.readLine()) != null){
-                System.out.println(line);
-                String parts[]=line.split(delimiter);
-                place.setTitle(parts[0]);
-                place.setType(parts[1]);
-                place.setLatitude(Double.parseDouble(parts[2]));
-                place.setLongitude(Double.parseDouble(parts[3]));
-                place.setDescription(parts[4]);
-
-                //System.out.println(place.toString());
-                places.add(place);
-            }
-            br.close();
-            fr.close();
-            return places;
-        }*/
         catch (IOException e){
             e.printStackTrace();
             return null;
@@ -312,5 +295,14 @@ public class DBHandler extends SQLiteOpenHelper {
 
         // Return the list
         return place;
+    }
+
+    public ArrayList<Place> placeVisitedUser(String pseudo){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT " + COL_EMAIL + " FROM " + TABLE_USER + " WHERE " + COL_EMAIL + " = '" + email +"' ";
+    }
+
+    public void addVisit(String pseudo){
+
     }
 }
