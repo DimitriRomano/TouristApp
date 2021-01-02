@@ -43,4 +43,5 @@ dependencies {
     //for fragment use
     def fragment_version = "1.2.5"
     implementation "androidx.fragment:fragment:$fragment_version"
+
 }

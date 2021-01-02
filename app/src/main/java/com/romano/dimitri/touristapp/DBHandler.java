@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class DBHandler extends SQLiteOpenHelper {
 
@@ -33,6 +34,7 @@ public class DBHandler extends SQLiteOpenHelper {
     //table names
     public static final String TABLE_USER="USER";
     public static final String TABLE_PLACE="PLACE";
+    public static final String TABLE_VISITED="VISITED";
 
     //columns names user Table
     private static final String COL_PSEUDO ="PSEUDO";
@@ -50,6 +52,10 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String COL_LONGITUDE ="LONGITUDE";
     private static final String COL_DESCRIPTION ="DESCRIPTION";
 
+    //columns names visited Table
+    private static final String COL_ID_VISITED="ID";
+    private static final String COL_PSEUDO_VISITED="PSEUDO";
+
     //create user table
     private static final String CREATE_TABLE_USER = "CREATE TABLE " + TABLE_USER + "(" +
             COL_PSEUDO + " TEXT PRIMARY KEY, " + COL_EMAIL + " TEXT, " + COL_SCORE + " INTEGER, " + COL_PASSWORD + " TEXT " +
@@ -57,8 +63,15 @@ public class DBHandler extends SQLiteOpenHelper {
 
     //create place table
     private static final String CREATE_TABLE_PLACE = "CREATE TABLE " + TABLE_PLACE + "(" +
-            COL_ID + " INTEGER PRIMARY KEY, " + COL_TITLE + " TEXT, " + COL_TYPE + " TEXT, " + COL_LATITUDE + " TEXT, " +
-            COL_LONGITUDE + " TEXT, " + COL_DESCRIPTION +"TEXT " +")" ;
+            COL_ID + " INTEGER PRIMARY KEY, " + COL_TITLE + " TEXT UNIQUE , " + COL_TYPE + " TEXT, " + COL_LATITUDE + " TEXT, " +
+            COL_LONGITUDE + " TEXT, " + COL_DESCRIPTION +" TEXT " +")" ;
+    //create visited table
+    private static final String CREATE_TABLE_VISITED="CREATE TABLE " +TABLE_VISITED + "(" +
+            COL_ID_VISITED + " INTEGER, " + COL_PSEUDO_VISITED + " TEXT, " +
+            "PRIMARY KEY ("+COL_ID_VISITED +" , "+ COL_PSEUDO_VISITED +") " +
+            "FOREIGN KEY (" + COL_ID_VISITED + ") REFERENCES " + TABLE_PLACE + " (" + COL_ID + "), " +
+            "FOREIGN KEY (" + COL_PSEUDO_VISITED + ") REFERENCES " + TABLE_USER + " (" + COL_PSEUDO +") )" ;
+
     //singleton pattern
     private static DBHandler sInstance;
 
@@ -69,10 +82,9 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        System.out.println("avannt");
         db.execSQL(CREATE_TABLE_USER);
         db.execSQL(CREATE_TABLE_PLACE);
-
+        db.execSQL(CREATE_TABLE_VISITED);
     }
 
     @Override
@@ -82,6 +94,7 @@ public class DBHandler extends SQLiteOpenHelper {
                         + newVersion + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER + ";");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLACE + ";");
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_VISITED +";");
         onCreate(db);
     }
 
@@ -91,12 +104,17 @@ public class DBHandler extends SQLiteOpenHelper {
         if(sInstance == null){
             sInstance = new DBHandler(context.getApplicationContext());
             ArrayList<Place> places=new ArrayList<>();
-            places=sInstance.getPlaces(context);
+            places=sInstance.getPlacesFile(context);
             Iterator<Place> iter=places.iterator();
             while(iter.hasNext()){
-                sInstance.addPlace(iter.next());
+                sInstance.addPlaceDB(iter.next());
             }
-            System.out.println("instanced");
+            //vérification de l'ajout des places
+            List<Place> placeList=sInstance.getAllRows();
+            for(Place p:placeList) {
+                System.out.println("test BD");
+                System.out.println(p.toString());
+            }
         }
         return sInstance;
     }
@@ -188,10 +206,10 @@ public class DBHandler extends SQLiteOpenHelper {
         return u;
     }
 
-    public void addPlace(Place place){
+    public void addPlaceDB(Place place){
 
         SQLiteDatabase db = this.getWritableDatabase();
-
+        System.out.println("add : " + place.toString());
         ContentValues cv = new ContentValues();
         cv.put(DBHandler.COL_TITLE,place.getTitle());
         cv.put(DBHandler.COL_TYPE,place.getType());
@@ -221,10 +239,10 @@ public class DBHandler extends SQLiteOpenHelper {
         return place;
     }
 */
-    public ArrayList<Place> getPlaces(Context context){
+    public ArrayList<Place> getPlacesFile(Context context){
         ArrayList<Place> places=new ArrayList<>();
         String delimiter=";";
-        Place place=new Place();
+
 
         InputStream inputStream = context.getResources().openRawResource(R.raw.places);
         try{
@@ -232,6 +250,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 BufferedReader br=new BufferedReader(new InputStreamReader(inputStream));
                 String str;
                 while((str=br.readLine())!=null){
+                    Place place=new Place();
                     System.out.println(str);
                     String parts[]=str.split(delimiter);
                     place.setTitle(parts[0]);
@@ -251,32 +270,87 @@ public class DBHandler extends SQLiteOpenHelper {
             }
 
         }
-        /*
-        try {
-            File file = new File("C:\\Users\\Quitterie\\Desktop\\QUITTERIE\\fac\\L3\\S1\\DA\\projet\\TouristApp\\app\\src\\main\\res\\raw\\places.txt");
-            FileReader fr = new FileReader(file);
-            BufferedReader br = new BufferedReader(fr);
-            String line;
-            while((line=br.readLine()) != null){
-                System.out.println(line);
-                String parts[]=line.split(delimiter);
-                place.setTitle(parts[0]);
-                place.setType(parts[1]);
-                place.setLatitude(Double.parseDouble(parts[2]));
-                place.setLongitude(Double.parseDouble(parts[3]));
-                place.setDescription(parts[4]);
-
-                //System.out.println(place.toString());
-                places.add(place);
-            }
-            br.close();
-            fr.close();
-            return places;
-        }*/
         catch (IOException e){
             e.printStackTrace();
             return null;
         }
     }
 
+    public List<Place> getAllRows(){
+        List<Place> place= new ArrayList<>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_PLACE;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // Loop through all the rows and addi the to the list
+        if (cursor.moveToFirst()) {
+            do {
+                Place p=new Place();
+                p.setId(cursor.getInt(0));
+                p.setTitle(cursor.getString(1));
+                p.setType(cursor.getString(2));
+                p.setLatitude(cursor.getDouble(3));
+                p.setLongitude(cursor.getDouble(4));
+                p.setDescription(cursor.getString(5));
+                System.out.println("Test affichage :" + p.toString());
+
+                // Add row to list
+                place.add(p);
+            } while (cursor.moveToNext());
+        }
+        else{
+            System.out.println("echec :(");
+        }
+        cursor.close();
+        db.close();
+
+        // Return the list
+        return place;
+    }
+
+    public ArrayList<Place> placeVisitedUser(String pseudo){
+        ArrayList<Place> place= new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT " + COL_ID +", " + COL_TITLE + ", " + COL_TYPE + ", " + COL_LATITUDE + " ," + COL_LONGITUDE + " ," + COL_DESCRIPTION +
+                " FROM " + TABLE_VISITED + " INNER JOIN " + TABLE_PLACE + " ON " + TABLE_VISITED+"."+COL_ID_VISITED + "=" + TABLE_PLACE+"."+COL_ID
+                + " WHERE " + TABLE_VISITED+"."+COL_PSEUDO_VISITED + " = '" + pseudo+"' ";
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // Loop through all the rows and addi the to the list
+        if (cursor.moveToFirst()) {
+            do {
+                Place p=new Place();
+                p.setId(cursor.getInt(0));
+                p.setTitle(cursor.getString(1));
+                p.setType(cursor.getString(2));
+                p.setLatitude(cursor.getDouble(3));
+                p.setLongitude(cursor.getDouble(4));
+                p.setDescription(cursor.getString(5));
+                System.out.println("Test jointure :" + p.toString());
+
+                // Add row to list
+                place.add(p);
+            } while (cursor.moveToNext());
+        }
+        else{
+            System.out.println("echec :(");
+        }
+        cursor.close();
+        db.close();
+
+        // Return the list
+        return place;
+
+    }
+
+    public void addVisit(String pseudo,Place place){
+        int idPlace=place.getId();
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(DBHandler.COL_ID_VISITED,idPlace);
+        cv.put(DBHandler.COL_PSEUDO_VISITED,pseudo);
+        db.insert(TABLE_VISITED,null, cv);
+        db.close();
+    }
 }

@@ -11,6 +11,18 @@ public class Place implements Serializable {
     private String mDescription;
     private boolean mVisited;
 
+    public Place(){
+    }
+
+    public Place(String mTitle, String mType, Double mLatitude, Double mLongitude,
+                 String mDescription, boolean mVisited){
+        this.mTitle = mTitle;
+        this.mType = mType;
+        this.mLatitude = mLatitude;
+        this.mLongitude = mLongitude;
+        this.mDescription = mDescription;
+        this.mVisited = mVisited;
+    }
 
     public String getTitle() {
         return mTitle;
