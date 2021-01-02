@@ -1,15 +1,25 @@
 package com.romano.dimitri.touristapp.model;
 
 import java.io.Serializable;
+import java.sql.Blob;
 
 public class User implements Serializable {
     private String mPseudo;
     private String mEmail;
     private int mAge;
     private int mScore;
+    private byte[] mImage;
 
     public User(){
         //default
+    }
+
+    public User(String pseudo, String email, int age, byte[] image) {
+        mPseudo = pseudo;
+        mEmail = email;
+        mAge = age;
+        mScore = 0;
+        mImage = image;
     }
 
     public User(String pseudo, String email, int age) {
@@ -57,5 +67,13 @@ public class User implements Serializable {
 
     public void setAge(int age) {
         mAge = age;
+    }
+
+    public byte[] getImage() {
+        return mImage;
+    }
+
+    public void setImage(byte[] mImage) {
+        this.mImage = mImage;
     }
 }
