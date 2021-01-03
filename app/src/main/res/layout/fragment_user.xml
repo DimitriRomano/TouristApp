@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="235dp"
+    android:layout_height="240dp"
     android:background="#eeeeee"
     android:gravity="center|center_horizontal"
     tools:context=".UserFragment">
@@ -25,12 +25,12 @@
         android:layout_marginEnd="284dp"
         android:layout_marginRight="284dp"
         android:layout_marginBottom="102dp"
-        app:srcCompat="?android:attr/fingerprintAuthDrawable" />
+        app:srcCompat="@mipmap/ic_launcher" />
 
     <TextView
         android:id="@+id/textViewPseudo"
-        android:layout_width="189dp"
-        android:layout_height="45dp"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
@@ -39,20 +39,20 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="131dp"
         android:layout_marginLeft="131dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="100dp"
-        android:layout_marginRight="100dp"
-        android:layout_marginBottom="185dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="197dp"
         android:gravity="center_vertical"
         android:text="UserPseudo"
         android:textColor="#000000"
-        android:textSize="30sp"
+        android:textSize="25sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textViewAge"
-        android:layout_width="117dp"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
@@ -61,27 +61,27 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="131dp"
         android:layout_marginLeft="131dp"
-        android:layout_marginTop="86dp"
-        android:layout_marginEnd="163dp"
-        android:layout_marginRight="163dp"
-        android:layout_marginBottom="125dp"
+        android:layout_marginTop="69dp"
+        android:layout_marginEnd="141dp"
+        android:layout_marginRight="141dp"
+        android:layout_marginBottom="141dp"
         android:gravity="center_vertical"
         android:text="UserAge"
         android:textColor="#000000"
         android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/textViewAge2"
+        android:id="@+id/textViewEmail"
         android:layout_width="264dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="41dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="155dp"
+        android:layout_marginBottom="170dp"
         android:gravity="center_vertical"
         android:text="UserEmail"
         android:textColor="#000000"
@@ -154,7 +154,7 @@
         android:textSize="18sp" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/alreadyVisitedButton"
         android:layout_width="121dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -170,6 +170,25 @@
         android:layout_marginRight="12dp"
         android:layout_marginBottom="82dp"
         android:text="Already visited"
-        app:backgroundTint="#64EC4C" />
+        app:backgroundTint="#555555" />
+
+    <Button
+        android:id="@+id/captionButton"
+        android:layout_width="121dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="138dp"
+        android:layout_marginLeft="138dp"
+        android:layout_marginTop="97dp"
+        android:layout_marginEnd="151dp"
+        android:layout_marginRight="151dp"
+        android:layout_marginBottom="82dp"
+        android:text="Caption"
+        app:backgroundTint="#3DDC84" />
 
 </RelativeLayout>

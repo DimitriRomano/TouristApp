@@ -34,7 +34,7 @@ Musée du Débarquement ltd;Museum;49.3382;-0.6248;Musée couvert et en plein ai
 Centre Georges Pompidou;Museum;48.860363;2.352162;Le centre culturel et d’art « Georges Pompidou », construit sur le plateau de Beaubourg a suscité de vives polémiques.
 Le musée d’Orsay;Museum;48.859955;2.325458;Le musée d’Orsay est un musée national situé à Paris, sur la rive gauche de la Seine, dans le VIIe arrondissement.
 Le Musée de l’Armée;Museum;48.858231;2.311751;Installé dans les salles qui encadrent la cour d’honneur des Invalides, le Musée de l’Armée présente l’une des plus riches collections mondiales consacrée à l’art et à l’histoire militaires.
-Musée de la Tapisserie de Bayeux ;Museum;49.277100;-0.701237;La Tapisserie de Bayeux (Calvados) est une broderie longue de 70 mètres, réalisée au XIè siècle.
+Musée de la Tapisserie de Bayeux;Museum;49.277100;-0.701237;La Tapisserie de Bayeux (Calvados) est une broderie longue de 70 mètres, réalisée au XIè siècle.
 Musée Miniature et Cinéma;Museum;45.762390;4.827247;Ce musée unique en France permet de découvrir deux expressions rares et insolites : l’Art des effets spéciaux dans le cinéma et la magie de la miniature.
 MUCEM–Musée des civilisations de l’Europe et de la Méditerranée;Museum;43.296772;5.361070;Unique en son genre, le MuCEM (Musée des Civilisations de l’Europe et de la Méditerranée), à Marseille, est tout entier consacré aux cultures de l’Europe et de la méditerranée.
 Centre Pompidou Metz;Museum;49.108204;6.180158;Le Centre Pompidou-Metz est un chef-d’oeuvre de l’architecture contemporaine.

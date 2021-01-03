@@ -69,7 +69,7 @@ public class UserFragment extends Fragment {
         mImageProfile = view.findViewById(R.id.imageUser);
 
         mPseudoView.setText(mPseudo);
-        mGradeView.setText(mGrade);
+        mGradeView.setText("Grade: " + mGrade);
         mScoreView.setText(mScore + "/10000 XP");
         mAgeView.setText(mAge + " ans");
 

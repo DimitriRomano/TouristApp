@@ -357,6 +357,28 @@ public class DBHandler extends SQLiteOpenHelper {
         return place;
     }
 
+    public void getVisited(String pseudo){
+        String selectQuery = "SELECT " + COL_ID + ", " + COL_TITLE + "," + COL_TYPE + ", " + COL_LATITUDE
+                + ", " + COL_LONGITUDE + "," + COL_DESCRIPTION +" FROM " + TABLE_VISITED + " NATURAL JOIN " + TABLE_PLACE + " WHERE " + TABLE_VISITED + "." + COL_PSEUDO_VISITED + " = '"
+                + pseudo + "' ";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // Loop through all the rows and addi the to the list
+        if (cursor.moveToFirst()) {
+            do {
+                Place p=new Place();
+                p.setId(cursor.getInt(0));
+                p.setTitle(cursor.getString(1));
+                p.setType(cursor.getString(2));
+                p.setLatitude(cursor.getDouble(3));
+                p.setLongitude(cursor.getDouble(4));
+                p.setDescription(cursor.getString(5));
+                System.out.println("Visited place: " + p.toString());
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+    }
     /*
         placeVisitedUser allow us to recover the data of the places the user visited and didn't visited.
         @param pseudo           The name of the user
@@ -375,9 +397,10 @@ public class DBHandler extends SQLiteOpenHelper {
                     " FROM " + TABLE_VISITED + " NATURAL JOIN " + TABLE_PLACE + " WHERE " + TABLE_VISITED + "." + COL_PSEUDO_VISITED + " = '" + pseudo +"' ";
         }
         else{
-            selectQuery = "SELECT " + COL_ID +", " + COL_TITLE + ", " + COL_TYPE + ", " + COL_LATITUDE + " ," + COL_LONGITUDE + " ," + COL_DESCRIPTION +
-                    " FROM " + TABLE_VISITED + " INNER JOIN " + TABLE_PLACE + " ON " + TABLE_VISITED+"."+COL_ID_VISITED + "=" + TABLE_PLACE+"."+COL_ID
-                    + " WHERE " + TABLE_VISITED+"."+COL_PSEUDO_VISITED + " = '" + pseudo+"' ";
+            selectQuery = "SELECT " + COL_ID +", " + COL_TITLE + ", " + COL_TYPE + ", " + COL_LATITUDE + ", " + COL_LONGITUDE + ", " + COL_DESCRIPTION +
+                    " FROM " + TABLE_VISITED + " NATURAL JOIN " + TABLE_PLACE + " EXCEPT " + "SELECT " + COL_ID +", " + COL_TITLE + ", " + COL_TYPE + ", "
+                    + COL_LATITUDE + ", " + COL_LONGITUDE + ", " + COL_DESCRIPTION +  " FROM " + TABLE_VISITED + " NATURAL JOIN " + TABLE_PLACE + " WHERE "
+                    + TABLE_VISITED + "." + COL_PSEUDO_VISITED + " = '" + pseudo +"' ";;
         }
 
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -392,17 +415,11 @@ public class DBHandler extends SQLiteOpenHelper {
                 p.setLatitude(cursor.getDouble(3));
                 p.setLongitude(cursor.getDouble(4));
                 p.setDescription(cursor.getString(5));
-                System.out.println("Test jointure :" + p.toString());
-                // Add row to list
                 place.add(p);
             } while (cursor.moveToNext());
         }
-        else{
-            System.out.println("echec :(");
-        }
         cursor.close();
         db.close();
-        // Return the list
         return place;
     }
 
