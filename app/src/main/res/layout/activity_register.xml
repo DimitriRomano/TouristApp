@@ -170,9 +170,9 @@
         android:layout_marginEnd="97dp"
         android:layout_marginRight="97dp"
         android:ems="10"
-        android:textColorHint="#6D6A6E"
+        android:inputType="number"
         android:textColor="#6D6A6E"
-        android:inputType="textPassword" />
+        android:textColorHint="#6D6A6E" />
 
 
     <Button
