@@ -31,7 +31,8 @@ public class UserFragment extends Fragment {
     private String mGrade;
     private int mAge;
     private int mScore;
-    private byte[] mImage;
+    private String mImage;
+    private boolean mImageSet;
 
     public UserFragment() {
         // Required empty public constructor
@@ -57,7 +58,9 @@ public class UserFragment extends Fragment {
         mScore = requireArguments().getInt("score");
         mPseudo = requireArguments().getString("pseudo");
         mAge = requireArguments().getInt("age");
-        mImage = requireArguments().getByteArray("image");
+        mImage = requireArguments().getString("image");
+        mImageSet=requireArguments().getBoolean("imageSet");
+
 
         mGradeView = view.findViewById(R.id.textViewGrade);
         mPseudoView = view.findViewById(R.id.textViewPseudo);
@@ -69,9 +72,11 @@ public class UserFragment extends Fragment {
         mGradeView.setText(mGrade);
         mScoreView.setText(mScore + "/10000 XP");
         mAgeView.setText(mAge + " ans");
-       // System.out.println("Bitmap" + BitmapFactory.decodeByteArray(mImage,0,mImage.length).toString());
-        System.out.println(mImage.length);
-        mImageProfile.setImageBitmap(BitmapFactory.decodeByteArray(mImage,0,mImage.length));
+
+        if(mImageSet==true){
+            Bitmap bitmap = BitmapFactory.decodeFile(mImage);
+            mImageProfile.setImageBitmap(bitmap);
+        }
         calculateScore(view);
     }
 

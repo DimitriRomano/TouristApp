@@ -8,18 +8,19 @@ public class User implements Serializable {
     private String mEmail;
     private int mAge;
     private int mScore;
-    private byte[] mImage;
-
+    private String mImage;
+    private boolean mImageSet=false;
     public User(){
         //default
     }
 
-    public User(String pseudo, String email, int age, byte[] image) {
+    public User(String pseudo, String email, int age, String image) {
         mPseudo = pseudo;
         mEmail = email;
         mAge = age;
         mScore = 0;
         mImage = image;
+        mImageSet= true;
     }
 
     public User(String pseudo, String email, int age) {
@@ -69,11 +70,31 @@ public class User implements Serializable {
         mAge = age;
     }
 
-    public byte[] getImage() {
+    public String getImage() {
         return mImage;
     }
 
-    public void setImage(byte[] mImage) {
+    public void setImage(String mImage) {
         this.mImage = mImage;
+    }
+
+    public boolean getImageSet() {
+        return mImageSet;
+    }
+
+    public void setImageSet(boolean mImageSet) {
+        this.mImageSet = mImageSet;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "mPseudo='" + mPseudo + '\'' +
+                ", mEmail='" + mEmail + '\'' +
+                ", mAge=" + mAge +
+                ", mScore=" + mScore +
+                ", mImage='" + mImage + '\'' +
+                ", mImageSet=" + mImageSet +
+                '}';
     }
 }
