@@ -3,19 +3,19 @@ package com.romano.dimitri.touristapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.romano.dimitri.touristapp.model.User;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener{
     private EditText mPseudoInput;
@@ -23,8 +23,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private EditText mPasswordInput;
     private EditText mAgeInput;
     private ImageView mImageInput;
-    private byte[] imageData;
+    private String imgPath;
+    //private byte[] imageData;
     private boolean imageSet = false;
+
+    private Button upload;
 
     public static final String TAG = "REGISTER ACTIVITY";
     public static final int PICK_IMAGE = 1;
@@ -59,24 +62,23 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null) {
             imageUri = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-                mImageInput.setImageBitmap(bitmap);
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 75, stream);
-                imageData = stream.toByteArray();
-                imageSet = true;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            String[] filePath ={MediaStore.Images.Media.DATA};
+            Cursor cursor = this.getContentResolver().query(imageUri,filePath,null,null,null);
+            cursor.moveToFirst();
+            int column =cursor.getColumnIndex(filePath[0]);
+            imgPath=cursor.getString(column);
+            System.out.println("path : "+imgPath);
+            cursor.close();
+            Bitmap mImage = BitmapFactory.decodeFile(imgPath);
+            mImageInput.setImageBitmap(mImage);
+            imageSet=true;
         }
     }
 
     public void upload(View view){
-        Intent intentGallery = new Intent();
-        intentGallery.setType("image/*");
-        intentGallery.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intentGallery, "Select your profile picture"), PICK_IMAGE);
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent, PICK_IMAGE);
+
     }
 
     public void register(View view) {
@@ -113,11 +115,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         String uPsw = mPasswordInput.getText().toString();
         int uAge = Integer.parseInt(mAgeInput.getText().toString());
         User u;
-        System.out.println(imageData.length);
-        if(imageSet){
-            u = new User(uPseudo, uEmail, uAge, imageData);
+        if(imageSet==true){
+            u=new User(uPseudo,uEmail,uAge,imgPath);
         }
-        else{
+        else {
             u = new User(uPseudo, uEmail, uAge);
         }
         db.addUser(u,uPsw);

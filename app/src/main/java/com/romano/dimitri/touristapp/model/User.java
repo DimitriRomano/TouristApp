@@ -8,13 +8,13 @@ public class User implements Serializable {
     private String mEmail;
     private int mAge;
     private int mScore;
-    private byte[] mImage;
+    private String mImage;
 
     public User(){
         //default
     }
 
-    public User(String pseudo, String email, int age, byte[] image) {
+    public User(String pseudo, String email, int age, String image) {
         mPseudo = pseudo;
         mEmail = email;
         mAge = age;
@@ -69,11 +69,11 @@ public class User implements Serializable {
         mAge = age;
     }
 
-    public byte[] getImage() {
+    public String getImage() {
         return mImage;
     }
 
-    public void setImage(byte[] mImage) {
+    public void setImage(String mImage) {
         this.mImage = mImage;
     }
 }

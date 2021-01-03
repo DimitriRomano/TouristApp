@@ -70,8 +70,9 @@ public class UserFragment extends Fragment {
         mScoreView.setText(mScore + "/10000 XP");
         mAgeView.setText(mAge + " ans");
        // System.out.println("Bitmap" + BitmapFactory.decodeByteArray(mImage,0,mImage.length).toString());
-        System.out.println(mImage.length);
-        mImageProfile.setImageBitmap(BitmapFactory.decodeByteArray(mImage,0,mImage.length));
+       // System.out.println(mImage.length);
+       // mImageProfile.setImageBitmap(BitmapFactory.decodeByteArray(mImage,0,mImage.length));
+
         calculateScore(view);
     }
 
