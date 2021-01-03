@@ -9,7 +9,7 @@ public class User implements Serializable {
     private int mAge;
     private int mScore;
     private String mImage;
-
+    private boolean mImageSet=false;
     public User(){
         //default
     }
@@ -20,6 +20,7 @@ public class User implements Serializable {
         mAge = age;
         mScore = 0;
         mImage = image;
+        mImageSet= true;
     }
 
     public User(String pseudo, String email, int age) {
@@ -75,5 +76,25 @@ public class User implements Serializable {
 
     public void setImage(String mImage) {
         this.mImage = mImage;
+    }
+
+    public boolean getImageSet() {
+        return mImageSet;
+    }
+
+    public void setImageSet(boolean mImageSet) {
+        this.mImageSet = mImageSet;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "mPseudo='" + mPseudo + '\'' +
+                ", mEmail='" + mEmail + '\'' +
+                ", mAge=" + mAge +
+                ", mScore=" + mScore +
+                ", mImage='" + mImage + '\'' +
+                ", mImageSet=" + mImageSet +
+                '}';
     }
 }

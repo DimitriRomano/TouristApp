@@ -67,7 +67,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             cursor.moveToFirst();
             int column =cursor.getColumnIndex(filePath[0]);
             imgPath=cursor.getString(column);
-            System.out.println("path : "+imgPath);
             cursor.close();
             Bitmap mImage = BitmapFactory.decodeFile(imgPath);
             mImageInput.setImageBitmap(mImage);
@@ -115,6 +114,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         String uPsw = mPasswordInput.getText().toString();
         int uAge = Integer.parseInt(mAgeInput.getText().toString());
         User u;
+        System.out.println("RE"+imageSet);
         if(imageSet==true){
             u=new User(uPseudo,uEmail,uAge,imgPath);
         }
