@@ -80,14 +80,3 @@ Fontaine de la Rotonde;Monument;43.526809521893014;5.4493367639893675;Fontaine �
 Les Remparts de Saint-Malo;Monument;48.65051226929641;-2.0263487468939068;Les visiteurs peuvent se promener sur les remparts médiévaux et leurs tours qui offrent une vue sur la vieille ville et la Manche.
 Place Masséna;Monument;43.69751224968933;7.271630748662895;La place Masséna est une place du centre-ville de Nice.
 Arc de Triomphe;Monument;48.8742429869742;2.297001576517455;Arc de triomphe emblématique érigé pour commémorer les victoires de Napoléon, avec plateforme d'observation.
-
-
-
-
-
-
-
-
-
-
-

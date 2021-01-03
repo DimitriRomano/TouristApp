@@ -178,37 +178,37 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
             switch(placesAL.get(placePositionAL).getType()){
                 case "Stadium": mMap.addMarker(new MarkerOptions().position(placeLatLng)
                         .title(placesAL.get(placePositionAL).getTitle())
-                        .snippet(placesAL.get(placePositionAL).getDescription() + " :" + placesAL.get(placePositionAL).getId())
+                        .snippet(placesAL.get(placePositionAL).getDescription() + " ID :" + placesAL.get(placePositionAL).getId())
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                     break;
                 case "Museum": mMap.addMarker(new MarkerOptions().position(placeLatLng)
                         .title(placesAL.get(placePositionAL).getTitle())
-                        .snippet(placesAL.get(placePositionAL).getDescription() + " :" + placesAL.get(placePositionAL).getId())
+                        .snippet(placesAL.get(placePositionAL).getDescription() + " ID :" + placesAL.get(placePositionAL).getId())
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
                     break;
                 case "Castle": mMap.addMarker(new MarkerOptions().position(placeLatLng)
                         .title(placesAL.get(placePositionAL).getTitle())
-                        .snippet(placesAL.get(placePositionAL).getDescription() + " :" + placesAL.get(placePositionAL).getId())
+                        .snippet(placesAL.get(placePositionAL).getDescription() + " ID :" + placesAL.get(placePositionAL).getId())
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
                     break;
                 case "Church": mMap.addMarker(new MarkerOptions().position(placeLatLng)
                         .title(placesAL.get(placePositionAL).getTitle())
-                        .snippet(placesAL.get(placePositionAL).getDescription() + " :" + placesAL.get(placePositionAL).getId())
+                        .snippet(placesAL.get(placePositionAL).getDescription() + " ID :" + placesAL.get(placePositionAL).getId())
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
                     break;
                 case "Monument": mMap.addMarker(new MarkerOptions().position(placeLatLng)
                         .title(placesAL.get(placePositionAL).getTitle())
-                        .snippet(placesAL.get(placePositionAL).getDescription() + " :" + placesAL.get(placePositionAL).getId())
+                        .snippet(placesAL.get(placePositionAL).getDescription() + " ID :" + placesAL.get(placePositionAL).getId())
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
                     break;
                 default: mMap.addMarker(new MarkerOptions().position(placeLatLng)
                         .title(placesAL.get(placePositionAL).getTitle())
-                        .snippet(placesAL.get(placePositionAL).getDescription() + " :" + placesAL.get(placePositionAL).getId())
+                        .snippet(placesAL.get(placePositionAL).getDescription() + " ID :" + placesAL.get(placePositionAL).getId())
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
                     break;
@@ -222,6 +222,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                     String[] splittedSnippet = snippetContent.split(":");
                     System.out.println("SplittedSnippet 0: " + splittedSnippet[0]);
                     System.out.println("SplittedSnippet 1: " + splittedSnippet[1]);
+                    //marker.setSnippet(splittedSnippet[0]);
                     Location.distanceBetween(marker.getPosition().latitude,marker.getPosition().longitude,mCurrentLocalisation.getLatitude(),mCurrentLocalisation.getLongitude(),distance);
 
                     System.out.println("Distance is : " + distance[0]);

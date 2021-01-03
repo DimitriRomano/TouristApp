@@ -127,11 +127,19 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             }
         }
 
+
         if(isEmpty(mPasswordInput)){
             mPasswordInput.setError("Psw is required");
             mPasswordInput.setHint("Enter Password ");
             return;
         }
+
+        if(isEmpty(mAgeInput)){
+            mAgeInput.setError("Your age is required");
+            mAgeInput.setHint("Please enter your age");
+            return;
+        }
+
         String uPseudo = mPseudoInput.getText().toString();
         String uEmail = mEmailInput.getText().toString();
         String uPsw = mPasswordInput.getText().toString();
