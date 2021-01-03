@@ -170,6 +170,7 @@
         android:layout_marginRight="12dp"
         android:layout_marginBottom="82dp"
         android:text="Already visited"
+        android:onClick="visited"
         app:backgroundTint="#555555" />
 
     <Button
