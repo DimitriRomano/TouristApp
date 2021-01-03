@@ -1,14 +1,17 @@
 package com.romano.dimitri.touristapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.romano.dimitri.touristapp.model.User;
 
 import static com.romano.dimitri.touristapp.MainActivity.PREF;
+import static com.romano.dimitri.touristapp.MainActivity.PREF_CONNEXION;
 import static com.romano.dimitri.touristapp.MainActivity.PREF_PSEUDO;
 
 public class DashboardActivity extends AppCompatActivity {
@@ -19,8 +22,10 @@ public class DashboardActivity extends AppCompatActivity {
     private User mUser;
 
     private int currentScore;
+    private int userAge;
     private String pseudoUser;
-
+    private String imageData;
+    private boolean imageSet;
     public static final String TAG = "MapActivity";
 
     @Override
@@ -37,8 +42,12 @@ public class DashboardActivity extends AppCompatActivity {
         mUser = mDB.getUser(mPreferencesLog.getString(PREF_PSEUDO,null));
         pseudoUser = mUser.getPseudo();
         currentScore = mUser.getScore();
-
-        Log.d(TAG,pseudoUser + " " + currentScore);
+        userAge = mUser.getAge();
+        imageData = mUser.getImage();
+        if(imageData!=null){
+            imageSet=true;
+        }
+        Log.d(TAG, "Pseudo: " + pseudoUser + "; Score: " + currentScore + "; Age: " + userAge);
 
         //test to know which session we are with
         /*if(mPreferencesLog.contains(PREF_CONNEXION) && mPreferencesLog.contains(PREF_PSEUDO)){
@@ -51,13 +60,15 @@ public class DashboardActivity extends AppCompatActivity {
             ProcessLevel prolevel = new ProcessLevel(mUser);
             Bundle bundleUser = new Bundle();
             bundleUser.putString("pseudo", pseudoUser);
+            bundleUser.putInt("age", userAge);
             bundleUser.putInt("score", currentScore);
             bundleUser.putString("grade", prolevel.getUserGrade(mUser.getScore()));
-
-             getSupportFragmentManager().beginTransaction()
+            bundleUser.putString("image", imageData);
+            bundleUser.putBoolean("imageSet", imageSet);
+            getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
                      .add(R.id.fragment_user_container_view, UserFragment.class, bundleUser)
-                    .add(R.id.fragment_map_container_view, MapsFragment.class, null)
+                    .add(R.id.fragment_map_container_view, MapsFragment.class, bundleUser)
                     .commit();
         }
 

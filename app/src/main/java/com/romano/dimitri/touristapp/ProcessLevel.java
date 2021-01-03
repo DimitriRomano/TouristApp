@@ -36,8 +36,8 @@ public class ProcessLevel {
         type_point.put("Museum", 100);
         type_point.put("Monument", 80);
         type_point.put("Church", 70);
-        type_point.put("Lake", 30);
-        type_point.put("Beach", 60);
+        type_point.put("Stadium", 30);
+        type_point.put("Castle", 60);
         this.type_point = type_point;
     }
 
@@ -90,5 +90,9 @@ public class ProcessLevel {
         else{
             return userPoint;
         }
+    }
+
+    private void progressBarProcess(){
+
     }
 }
