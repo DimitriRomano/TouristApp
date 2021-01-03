@@ -1,14 +1,17 @@
 package com.romano.dimitri.touristapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.romano.dimitri.touristapp.model.User;
 
 import static com.romano.dimitri.touristapp.MainActivity.PREF;
+import static com.romano.dimitri.touristapp.MainActivity.PREF_CONNEXION;
 import static com.romano.dimitri.touristapp.MainActivity.PREF_PSEUDO;
 
 public class DashboardActivity extends AppCompatActivity {
