@@ -93,7 +93,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         db = DBHandler.getInstance(this.getContext());
-        placesAL = db.getPlacesFile(this.getContext());
+        placesAL = db.getAllRows();
         return inflater.inflate(R.layout.fragment_maps, container, false);
 
     }
@@ -178,37 +178,37 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
             switch(placesAL.get(placePositionAL).getType()){
                 case "Stadium": mMap.addMarker(new MarkerOptions().position(placeLatLng)
                         .title(placesAL.get(placePositionAL).getTitle())
-                        .snippet(placesAL.get(placePositionAL).getDescription() + " ; " + placesAL.get(placePositionAL).getId())
+                        .snippet(placesAL.get(placePositionAL).getDescription() + " :" + placesAL.get(placePositionAL).getId())
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                     break;
                 case "Museum": mMap.addMarker(new MarkerOptions().position(placeLatLng)
                         .title(placesAL.get(placePositionAL).getTitle())
-                        .snippet(placesAL.get(placePositionAL).getDescription() + " ; " + placesAL.get(placePositionAL).getId())
+                        .snippet(placesAL.get(placePositionAL).getDescription() + " :" + placesAL.get(placePositionAL).getId())
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
                     break;
                 case "Castle": mMap.addMarker(new MarkerOptions().position(placeLatLng)
                         .title(placesAL.get(placePositionAL).getTitle())
-                        .snippet(placesAL.get(placePositionAL).getDescription() + " ; " + placesAL.get(placePositionAL).getId())
+                        .snippet(placesAL.get(placePositionAL).getDescription() + " :" + placesAL.get(placePositionAL).getId())
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
                     break;
                 case "Church": mMap.addMarker(new MarkerOptions().position(placeLatLng)
                         .title(placesAL.get(placePositionAL).getTitle())
-                        .snippet(placesAL.get(placePositionAL).getDescription() + " ; " + placesAL.get(placePositionAL).getId())
+                        .snippet(placesAL.get(placePositionAL).getDescription() + " :" + placesAL.get(placePositionAL).getId())
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
                     break;
                 case "Monument": mMap.addMarker(new MarkerOptions().position(placeLatLng)
                         .title(placesAL.get(placePositionAL).getTitle())
-                        .snippet(placesAL.get(placePositionAL).getDescription() + " ; " + placesAL.get(placePositionAL).getId())
+                        .snippet(placesAL.get(placePositionAL).getDescription() + " :" + placesAL.get(placePositionAL).getId())
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
                     break;
                 default: mMap.addMarker(new MarkerOptions().position(placeLatLng)
                         .title(placesAL.get(placePositionAL).getTitle())
-                        .snippet(placesAL.get(placePositionAL).getDescription() + " ; " + placesAL.get(placePositionAL).getId())
+                        .snippet(placesAL.get(placePositionAL).getDescription() + " :" + placesAL.get(placePositionAL).getId())
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
                     break;
@@ -219,7 +219,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                 public void onInfoWindowClick(Marker marker) {
                     float[] distance = new float[1];
                     String snippetContent = marker.getSnippet();
-                    String[] splittedSnippet = snippetContent.split(";");
+                    String[] splittedSnippet = snippetContent.split(":");
                     System.out.println("SplittedSnippet 0: " + splittedSnippet[0]);
                     System.out.println("SplittedSnippet 1: " + splittedSnippet[1]);
                     Location.distanceBetween(marker.getPosition().latitude,marker.getPosition().longitude,mCurrentLocalisation.getLatitude(),mCurrentLocalisation.getLongitude(),distance);
@@ -231,7 +231,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                     if(!marker.getTitle().contains("Current location")){
                         if(distance[0] <= 500){
                             marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                            //db.addVisit(mPseudo, );
+                            db.addVisit(mPseudo, Integer.parseInt(splittedSnippet[1]));
+                            for(int i=0; i<db.placeVisitedUser(mPseudo, true).size(); i++){
+                                db.placeVisitedUser(mPseudo, true);
+                            }
                             Toast.makeText(getActivity(),"Congrats, " + marker.getTitle() + " is now validated !",Toast.LENGTH_SHORT).show();
                         }
                         else{

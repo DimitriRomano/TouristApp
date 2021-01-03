@@ -57,9 +57,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String COL_PSEUDO_VISITED="PSEUDO";
 
     //create user table
-    private static final String CREATE_TABLE_USER = "CREATE TABLE " + TABLE_USER + "(" +
-            COL_PSEUDO + " TEXT PRIMARY KEY, " + COL_EMAIL + " TEXT, " + COL_SCORE + " INTEGER, " + COL_PASSWORD + " TEXT " +
-            ", " + COL_AGE + " INTEGER, " + COL_IMAGE + " BLOB NULL)" ;
+    private static final String CREATE_TABLE_USER = new StringBuilder().append("CREATE TABLE ").append(TABLE_USER).append("(").append(COL_PSEUDO).append(" TEXT PRIMARY KEY, ").append(COL_EMAIL).append(" TEXT, ").append(COL_SCORE).append(" INTEGER, ").append(COL_PASSWORD).append(" TEXT ").append(", ").append(COL_AGE).append(" INTEGER, ").append(COL_IMAGE).append(" BLOB NULL)").toString();
 
     //create place table
     private static final String CREATE_TABLE_PLACE = "CREATE TABLE " + TABLE_PLACE + "(" +
@@ -322,8 +320,8 @@ public class DBHandler extends SQLiteOpenHelper {
         @return place   All the rows from the table "Place" recovered from the database
                         into a List of Place.
     */
-    public List<Place> getAllRows(){
-        List<Place> place= new ArrayList<>();
+    public ArrayList<Place> getAllRows(){
+        ArrayList<Place> place= new ArrayList<>();
 
         String selectQuery = "SELECT * FROM " + TABLE_PLACE;
         SQLiteDatabase db = this.getWritableDatabase();
@@ -369,9 +367,8 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String selectQuery = "";
         if(selectVisited){
-            selectQuery = "SELECT " + COL_ID +", " + COL_TITLE + ", " + COL_TYPE + ", " + COL_LATITUDE + " ," + COL_LONGITUDE + " ," + COL_DESCRIPTION +
-                    " FROM " + TABLE_VISITED + " INNER JOIN " + TABLE_PLACE + " ON " + TABLE_VISITED+"."+COL_ID_VISITED + "=" + TABLE_PLACE+"."+COL_ID
-                    + " WHERE " + TABLE_VISITED+"."+COL_PSEUDO_VISITED + " = '" + pseudo+"' ";
+            selectQuery = "SELECT " + COL_ID +", " + COL_TITLE + ", " + COL_TYPE + ", " + COL_LATITUDE + ", " + COL_LONGITUDE + ", " + COL_DESCRIPTION +
+                    " FROM " + TABLE_VISITED + " NATURAL JOIN " + TABLE_PLACE + " WHERE " + TABLE_VISITED + "." + COL_PSEUDO_VISITED + " = '" + pseudo +"' ";
         }
         else{
             selectQuery = "SELECT " + COL_ID +", " + COL_TITLE + ", " + COL_TYPE + ", " + COL_LATITUDE + " ," + COL_LONGITUDE + " ," + COL_DESCRIPTION +
@@ -411,8 +408,7 @@ public class DBHandler extends SQLiteOpenHelper {
         @param pseudo           The name of the user
         @param place            The place we want to add to the database
      */
-    public void addVisit(String pseudo,Place place){
-        int idPlace=place.getId();
+    public void addVisit(String pseudo, int idPlace){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(DBHandler.COL_ID_VISITED,idPlace);

@@ -83,6 +83,7 @@ public class Place implements Serializable {
     @Override
     public String toString() {
         return "Place{" +
+                "mID='" + mId + '\'' +
                 "mTitle='" + mTitle + '\'' +
                 ", mType='" + mType + '\'' +
                 ", mLatitude=" + mLatitude +
