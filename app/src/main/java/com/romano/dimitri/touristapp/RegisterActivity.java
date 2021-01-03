@@ -1,8 +1,12 @@
 package com.romano.dimitri.touristapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,24 +18,26 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.romano.dimitri.touristapp.model.User;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener{
+
     private EditText mPseudoInput;
     private EditText mEmailInput;
     private EditText mPasswordInput;
     private EditText mAgeInput;
     private ImageView mImageInput;
     private String imgPath;
-    //private byte[] imageData;
     private boolean imageSet = false;
-
+    private Uri imageUri;
     private Button upload;
 
     public static final String TAG = "REGISTER ACTIVITY";
+    public static final int PERMISSIONS_REQUEST = 0;
     public static final int PICK_IMAGE = 1;
-    private Uri imageUri;
+
 
     private DBHandler db;
 
@@ -39,21 +45,33 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
-        //set views
-        mPseudoInput = findViewById(R.id.editTextPseudo);
-        mEmailInput = findViewById(R.id.editTextEmail);
-        mPasswordInput = findViewById(R.id.editTextPassword);
-        mAgeInput = findViewById(R.id.editTextAge);
-        mImageInput = findViewById(R.id.uploadedImage);
-        mImageInput.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                upload(v);
-            }
-        });
-        db=DBHandler.getInstance(this);
+        db = DBHandler.getInstance(this);
         Log.i("Register Activity", "Entered");
+        //check permission
+
+            //permission already granted
+            //set views
+            mPseudoInput = findViewById(R.id.editTextPseudo);
+            mEmailInput = findViewById(R.id.editTextEmail);
+            mPasswordInput = findViewById(R.id.editTextPassword);
+            mAgeInput = findViewById(R.id.editTextAge);
+            mImageInput = findViewById(R.id.uploadedImage);
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            mImageInput.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    upload(v);
+                }
+            });
+
+        }
+        else{
+            //request permission
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    PERMISSIONS_REQUEST);
+        }
     }
 
     @Override
@@ -67,6 +85,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             cursor.moveToFirst();
             int column =cursor.getColumnIndex(filePath[0]);
             imgPath=cursor.getString(column);
+            System.out.println("imgPath : "+imgPath);
             cursor.close();
             Bitmap mImage = BitmapFactory.decodeFile(imgPath);
             mImageInput.setImageBitmap(mImage);
@@ -132,7 +151,25 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public static boolean isEmpty(EditText etText) {
         return etText.getText().toString().trim().length() == 0;
     }
+    @Override
+    public void onRequestPermissionsResult(int request, String permissions[], int[] results) {
+        switch (request) {
+            case PERMISSIONS_REQUEST: {
 
+                // If request is cancelled, the result arrays are empty
+                if (results.length > 0 && results[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission was granted, yay! Do something useful
+
+                } else {
+
+                    // Permission was denied, boo! Disable the
+                    // functionality that depends on this permission
+                    Toast.makeText(this, "Permission denied to access device's storage", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        }
+    }
     @Override
     public void onClick(View v) {
 
