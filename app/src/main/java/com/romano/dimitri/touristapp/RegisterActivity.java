@@ -161,11 +161,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     // Permission was granted, yay! Do something useful
                     Toast.makeText(this, "Permission granted to access device's storage", Toast.LENGTH_SHORT).show();
                 } else {
-
                     // Permission was denied, boo! Disable the
                     // functionality that depends on this permission
                     Toast.makeText(this, "Permission denied to access device's storage", Toast.LENGTH_SHORT).show();
-
                 }
             }
         }
