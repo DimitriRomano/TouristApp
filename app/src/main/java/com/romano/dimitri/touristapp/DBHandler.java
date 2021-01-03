@@ -357,6 +357,11 @@ public class DBHandler extends SQLiteOpenHelper {
         return place;
     }
 
+    /*
+       getVisited shows all the Places that a user has visited, from his username (pseudo)
+       in the System.out.
+       @param pseudo           The name of the user
+    */
     public void getVisited(String pseudo){
         String selectQuery = "SELECT " + COL_ID + ", " + COL_TITLE + "," + COL_TYPE + ", " + COL_LATITUDE
                 + ", " + COL_LONGITUDE + "," + COL_DESCRIPTION +" FROM " + TABLE_VISITED + " NATURAL JOIN " + TABLE_PLACE + " WHERE " + TABLE_VISITED + "." + COL_PSEUDO_VISITED + " = '"
@@ -379,6 +384,7 @@ public class DBHandler extends SQLiteOpenHelper {
         cursor.close();
         db.close();
     }
+
     /*
         placeVisitedUser allow us to recover the data of the places the user visited and didn't visited.
         @param pseudo           The name of the user

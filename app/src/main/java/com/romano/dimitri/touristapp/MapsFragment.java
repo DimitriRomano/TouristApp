@@ -96,7 +96,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                              @Nullable Bundle savedInstanceState) {
         db = DBHandler.getInstance(this.getContext());
         return inflater.inflate(R.layout.fragment_maps, container, false);
-
     }
 
     @Override
