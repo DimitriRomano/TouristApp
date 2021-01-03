@@ -32,7 +32,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private String imgPath;
     private boolean imageSet = false;
     private Uri imageUri;
-    private Button upload;
+    private Button uploadButton;
 
     public static final String TAG = "REGISTER ACTIVITY";
     public static final int PERMISSIONS_REQUEST = 0;
@@ -56,6 +56,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         mPasswordInput = findViewById(R.id.editTextPassword);
         mAgeInput = findViewById(R.id.editTextAge);
         mImageInput = findViewById(R.id.uploadedImage);
+        uploadButton=findViewById(R.id.Upload);
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             mImageInput.setOnClickListener(new View.OnClickListener() {
@@ -163,6 +164,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 } else {
                     // Permission was denied, boo! Disable the
                     // functionality that depends on this permission
+                    uploadButton.setEnabled(false);
                     Toast.makeText(this, "Permission denied to access device's storage", Toast.LENGTH_SHORT).show();
                 }
             }
