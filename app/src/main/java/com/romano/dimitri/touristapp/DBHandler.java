@@ -27,7 +27,6 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String COL_PASSWORD ="PASSWORD";
     private static final String COL_AGE = "AGE";
     private static final String COL_IMAGE ="IMAGE";
-    private static final String COL_SET_IMAGE="IMAGE_SET";
     //create table
     private static final String CREATE_BD = "CREATE TABLE " + TABLE_USER + "(" +
             COL_PSEUDO + " TEXT PRIMARY KEY, " + COL_EMAIL + " TEXT, " + COL_SCORE + " INTEGER, " + COL_PASSWORD + " TEXT " +

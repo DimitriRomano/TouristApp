@@ -49,15 +49,15 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         Log.i("Register Activity", "Entered");
         //check permission
 
-            //permission already granted
-            //set views
-            mPseudoInput = findViewById(R.id.editTextPseudo);
-            mEmailInput = findViewById(R.id.editTextEmail);
-            mPasswordInput = findViewById(R.id.editTextPassword);
-            mAgeInput = findViewById(R.id.editTextAge);
-            mImageInput = findViewById(R.id.uploadedImage);
-            if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        //permission already granted
+        //set views
+        mPseudoInput = findViewById(R.id.editTextPseudo);
+        mEmailInput = findViewById(R.id.editTextEmail);
+        mPasswordInput = findViewById(R.id.editTextPassword);
+        mAgeInput = findViewById(R.id.editTextAge);
+        mImageInput = findViewById(R.id.uploadedImage);
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             mImageInput.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -159,7 +159,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 // If request is cancelled, the result arrays are empty
                 if (results.length > 0 && results[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission was granted, yay! Do something useful
-
+                    Toast.makeText(this, "Permission granted to access device's storage", Toast.LENGTH_SHORT).show();
                 } else {
 
                     // Permission was denied, boo! Disable the
