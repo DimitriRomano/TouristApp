@@ -415,5 +415,6 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(DBHandler.COL_PSEUDO_VISITED,pseudo);
         db.insert(TABLE_VISITED,null, cv);
         db.close();
+
     }
 }
