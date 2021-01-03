@@ -178,7 +178,6 @@ public class MapsFragment extends Fragment {
     public void getSelfLocation(View view) {
         locationEnabled();
         requestLocationUpdates();
-        //locationEnabled();
         updateMap();
     }
 
