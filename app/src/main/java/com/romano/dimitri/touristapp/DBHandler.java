@@ -268,7 +268,6 @@ public class DBHandler extends SQLiteOpenHelper {
                 System.out.println("echec");
                 return null;
             }
-
         }
         catch (IOException e){
             e.printStackTrace();
@@ -309,12 +308,21 @@ public class DBHandler extends SQLiteOpenHelper {
         return place;
     }
 
-    public ArrayList<Place> placeVisitedUser(String pseudo){
+    public ArrayList<Place> placeVisitedUser(String pseudo, boolean selectVisited){
         ArrayList<Place> place= new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String selectQuery = "SELECT " + COL_ID +", " + COL_TITLE + ", " + COL_TYPE + ", " + COL_LATITUDE + " ," + COL_LONGITUDE + " ," + COL_DESCRIPTION +
-                " FROM " + TABLE_VISITED + " INNER JOIN " + TABLE_PLACE + " ON " + TABLE_VISITED+"."+COL_ID_VISITED + "=" + TABLE_PLACE+"."+COL_ID
-                + " WHERE " + TABLE_VISITED+"."+COL_PSEUDO_VISITED + " = '" + pseudo+"' ";
+        String selectQuery = "";
+        if(selectVisited){
+            selectQuery = "SELECT " + COL_ID +", " + COL_TITLE + ", " + COL_TYPE + ", " + COL_LATITUDE + " ," + COL_LONGITUDE + " ," + COL_DESCRIPTION +
+                    " FROM " + TABLE_VISITED + " INNER JOIN " + TABLE_PLACE + " ON " + TABLE_VISITED+"."+COL_ID_VISITED + "=" + TABLE_PLACE+"."+COL_ID
+                    + " WHERE " + TABLE_VISITED+"."+COL_PSEUDO_VISITED + " = '" + pseudo+"' ";
+        }
+        else{
+            selectQuery = "SELECT " + COL_ID +", " + COL_TITLE + ", " + COL_TYPE + ", " + COL_LATITUDE + " ," + COL_LONGITUDE + " ," + COL_DESCRIPTION +
+                    " FROM " + TABLE_VISITED + " INNER JOIN " + TABLE_PLACE + " ON " + TABLE_VISITED+"."+COL_ID_VISITED + "=" + TABLE_PLACE+"."+COL_ID
+                    + " WHERE " + TABLE_VISITED+"."+COL_PSEUDO_VISITED + " = '" + pseudo+"' ";
+        }
+
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         // Loop through all the rows and addi the to the list
@@ -328,7 +336,6 @@ public class DBHandler extends SQLiteOpenHelper {
                 p.setLongitude(cursor.getDouble(4));
                 p.setDescription(cursor.getString(5));
                 System.out.println("Test jointure :" + p.toString());
-
                 // Add row to list
                 place.add(p);
             } while (cursor.moveToNext());
