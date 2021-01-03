@@ -48,7 +48,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     private FloatingActionButton current_location_btn;
     private GoogleMap mMap;
     private LocationListener locationListener;
-    private ArrayList<Place> arrayListPlace, alreadyVisitedarrayListPlace;
+    private ArrayList<Place> placesAL, alreadyVisitedPlacesAL;
     private DBHandler db;
     private SupportMapFragment mapFragment;
     private int placePositionAL;
@@ -95,8 +95,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         db = DBHandler.getInstance(this.getContext());
-        arrayListPlace = db.placeVisitedUser(mPseudo, false);
-        alreadyVisitedarrayListPlace = db.placeVisitedUser(mPseudo, true);
         return inflater.inflate(R.layout.fragment_maps, container, false);
 
     }
@@ -107,6 +105,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
         mPseudo = requireArguments().getString("pseudo");
 
+        placesAL = db.placeVisitedUser(mPseudo, false);
+        alreadyVisitedPlacesAL = db.placeVisitedUser(mPseudo, true);
         mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
@@ -175,46 +175,68 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
     }
 
-    private void showAllPlaces(ArrayList<Place> arrayListPlace){
-        for(placePositionAL=0; placePositionAL<arrayListPlace.size(); placePositionAL++){
-            LatLng placeLatLng = new LatLng(arrayListPlace.get(placePositionAL).getLatitude(), arrayListPlace.get(placePositionAL).getLongitude());
-            switch(arrayListPlace.get(placePositionAL).getType()){
-                case "Stadium": mMap.addMarker(new MarkerOptions().position(placeLatLng)
-                        .title(arrayListPlace.get(placePositionAL).getTitle())
-                        .snippet(arrayListPlace.get(placePositionAL).getDescription() + " ID :" + arrayListPlace.get(placePositionAL).getId())
+    private void showAllPlaces(ArrayList<Place> arrayListPlaces, boolean alreadyVisited){
+        for(placePositionAL=0; placePositionAL<arrayListPlaces.size(); placePositionAL++){
+            LatLng placeLatLng = new LatLng(arrayListPlaces.get(placePositionAL).getLatitude(), arrayListPlaces.get(placePositionAL).getLongitude());
+            if(alreadyVisited == false) {
+                switch (arrayListPlaces.get(placePositionAL).getType()) {
+                    case "Stadium":
+                        mMap.addMarker(new MarkerOptions().position(placeLatLng)
+                                .title(arrayListPlaces.get(placePositionAL).getTitle())
+                                .snippet(arrayListPlaces.get(placePositionAL).getDescription() + " ID :" + arrayListPlaces.get(placePositionAL).getId() + ":" +
+                                        arrayListPlaces.get(placePositionAL).getType())
+                                .icon(BitmapDescriptorFactory
+                                        .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                        break;
+                    case "Museum":
+                        mMap.addMarker(new MarkerOptions().position(placeLatLng)
+                                .title(arrayListPlaces.get(placePositionAL).getTitle())
+                                .snippet(arrayListPlaces.get(placePositionAL).getDescription() + " ID :" + arrayListPlaces.get(placePositionAL).getId() + ":" +
+                                        arrayListPlaces.get(placePositionAL).getType())
+                                .icon(BitmapDescriptorFactory
+                                        .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+                        break;
+                    case "Castle":
+                        mMap.addMarker(new MarkerOptions().position(placeLatLng)
+                                .title(arrayListPlaces.get(placePositionAL).getTitle())
+                                .snippet(arrayListPlaces.get(placePositionAL).getDescription() + " ID :" + arrayListPlaces.get(placePositionAL).getId() + ":" +
+                                        arrayListPlaces.get(placePositionAL).getType())
+                                .icon(BitmapDescriptorFactory
+                                        .defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+                        break;
+                    case "Church":
+                        mMap.addMarker(new MarkerOptions().position(placeLatLng)
+                                .title(arrayListPlaces.get(placePositionAL).getTitle())
+                                .snippet(arrayListPlaces.get(placePositionAL).getDescription() + " ID :" + arrayListPlaces.get(placePositionAL).getId() + ":" +
+                                        arrayListPlaces.get(placePositionAL).getType())
+                                .icon(BitmapDescriptorFactory
+                                        .defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
+                        break;
+                    case "Monument":
+                        mMap.addMarker(new MarkerOptions().position(placeLatLng)
+                                .title(arrayListPlaces.get(placePositionAL).getTitle())
+                                .snippet(arrayListPlaces.get(placePositionAL).getDescription() + " ID :" + arrayListPlaces.get(placePositionAL).getId() + ":" +
+                                        arrayListPlaces.get(placePositionAL).getType())
+                                .icon(BitmapDescriptorFactory
+                                        .defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                        break;
+                    default:
+                        mMap.addMarker(new MarkerOptions().position(placeLatLng)
+                                .title(arrayListPlaces.get(placePositionAL).getTitle())
+                                .snippet(arrayListPlaces.get(placePositionAL).getDescription() + " ID :" + arrayListPlaces.get(placePositionAL).getId() + ":" +
+                                        arrayListPlaces.get(placePositionAL).getType())
+                                .icon(BitmapDescriptorFactory
+                                        .defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
+                        break;
+                }
+            }
+            else{
+                mMap.addMarker(new MarkerOptions().position(placeLatLng)
+                        .title(arrayListPlaces.get(placePositionAL).getTitle())
+                        .snippet(arrayListPlaces.get(placePositionAL).getDescription() + " ID :" + arrayListPlaces.get(placePositionAL).getId() + ":" +
+                        arrayListPlaces.get(placePositionAL).getType())
                         .icon(BitmapDescriptorFactory
-                                .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-                    break;
-                case "Museum": mMap.addMarker(new MarkerOptions().position(placeLatLng)
-                        .title(arrayListPlace.get(placePositionAL).getTitle())
-                        .snippet(arrayListPlace.get(placePositionAL).getDescription() + " ID :" + arrayListPlace.get(placePositionAL).getId())
-                        .icon(BitmapDescriptorFactory
-                                .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
-                    break;
-                case "Castle": mMap.addMarker(new MarkerOptions().position(placeLatLng)
-                        .title(arrayListPlace.get(placePositionAL).getTitle())
-                        .snippet(arrayListPlace.get(placePositionAL).getDescription() + " ID :" + arrayListPlace.get(placePositionAL).getId())
-                        .icon(BitmapDescriptorFactory
-                                .defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
-                    break;
-                case "Church": mMap.addMarker(new MarkerOptions().position(placeLatLng)
-                        .title(arrayListPlace.get(placePositionAL).getTitle())
-                        .snippet(arrayListPlace.get(placePositionAL).getDescription() + " ID :" + arrayListPlace.get(placePositionAL).getId())
-                        .icon(BitmapDescriptorFactory
-                                .defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
-                    break;
-                case "Monument": mMap.addMarker(new MarkerOptions().position(placeLatLng)
-                        .title(arrayListPlace.get(placePositionAL).getTitle())
-                        .snippet(arrayListPlace.get(placePositionAL).getDescription() + " ID :" + arrayListPlace.get(placePositionAL).getId())
-                        .icon(BitmapDescriptorFactory
-                                .defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
-                    break;
-                default: mMap.addMarker(new MarkerOptions().position(placeLatLng)
-                        .title(arrayListPlace.get(placePositionAL).getTitle())
-                        .snippet(arrayListPlace.get(placePositionAL).getDescription() + " ID :" + arrayListPlace.get(placePositionAL).getId())
-                        .icon(BitmapDescriptorFactory
-                                .defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
-                    break;
+                                .defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
             }
             mMap.animateCamera(CameraUpdateFactory.zoomTo(5.0f));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(placeLatLng));
@@ -223,19 +245,17 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                     float[] distance = new float[1];
                     String snippetContent = marker.getSnippet();
                     String[] splittedSnippet = snippetContent.split(":");
-                    System.out.println("SplittedSnippet 0: " + splittedSnippet[0]);
-                    System.out.println("SplittedSnippet 1: " + splittedSnippet[1]);
-                    Location.distanceBetween(marker.getPosition().latitude,marker.getPosition().longitude,mCurrentLocalisation.getLatitude(),mCurrentLocalisation.getLongitude(),distance);
 
-                    System.out.println("Distance is : " + distance[0]);
-                    System.out.println("My position : Lat " + mCurrentLocalisation.getLatitude() + ": Long " + mCurrentLocalisation.getLongitude());
-                    System.out.println("Marker pos : Lat " + marker.getPosition().latitude + ": Long " + marker.getPosition().longitude);
+                    Location.distanceBetween(marker.getPosition().latitude,marker.getPosition().longitude,mCurrentLocalisation.getLatitude(),mCurrentLocalisation.getLongitude(),distance);
 
                     if(!marker.getTitle().contains("Current location")){
                         if(distance[0] <= 500){
                             marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                             db.addVisit(mPseudo, Integer.parseInt(splittedSnippet[1]));
                             Toast.makeText(getActivity(),"Congrats, " + marker.getTitle() + " is now validated !",Toast.LENGTH_SHORT).show();
+                            placesAL = db.placeVisitedUser(mPseudo, false);
+                            alreadyVisitedPlacesAL = db.placeVisitedUser(mPseudo, true);
+
                         }
                         else{
                             Toast.makeText(getActivity(),"You are too far from this location, please get closer.",Toast.LENGTH_SHORT).show();
@@ -283,8 +303,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         Log.d(TAG, "Updating map...");
         if (mMap != null) {
             mMap.clear();
-            showAllPlaces(arrayListPlace);
-            showAllPlaces(alreadyVisitedarrayListPlace);
+            //db.getVisited(mPseudo);
+            showAllPlaces(alreadyVisitedPlacesAL, true);
+            showAllPlaces(placesAL, false);
             Log.d(TAG, "my currentLocalisation : " + mCurrentLocalisation);
             /*if (mCurrentLocalisation == null) {
                 mCurrentLocalisation = new Location(mLocationProvider);

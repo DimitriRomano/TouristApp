@@ -258,25 +258,25 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
 
     }
-/*
-    public Place getPlace(int id){
-        SQLiteDatabase db=this.getReadableDatabase();
-        Place place = new Place();
+    /*
+        public Place getPlace(int id){
+            SQLiteDatabase db=this.getReadableDatabase();
+            Place place = new Place();
 
-        String selectQuery = "SELECT " + COL_ID + " FROM " + TABLE_PLACE + " WHERE " + COL_ID + " = '" + id +"' ";
-        Cursor cursor = db.query(TABLE_PLACE,new String[]{COL_ID,COL_TITLE,COL_TYPE,COL_LATITUDE,COL_LONGITUDE,COL_DESCRIPTION},COL_ID + " =  ? "  ,new String[]{String.valueOf(id)},null,null,null);
-        cursor.moveToFirst();
-        place.setId(cursor.getInt(0));
-        place.setTitle(cursor.getString(1));
-        place.setType(cursor.getString(2));
-        place.setLatitude(cursor.getDouble(3));
-        place.setLongitude(cursor.getDouble(4));
-        place.setDescription(cursor.getString(5));
-        cursor.close();
-        db.close();
-        return place;
-    }
-*/
+            String selectQuery = "SELECT " + COL_ID + " FROM " + TABLE_PLACE + " WHERE " + COL_ID + " = '" + id +"' ";
+            Cursor cursor = db.query(TABLE_PLACE,new String[]{COL_ID,COL_TITLE,COL_TYPE,COL_LATITUDE,COL_LONGITUDE,COL_DESCRIPTION},COL_ID + " =  ? "  ,new String[]{String.valueOf(id)},null,null,null);
+            cursor.moveToFirst();
+            place.setId(cursor.getInt(0));
+            place.setTitle(cursor.getString(1));
+            place.setType(cursor.getString(2));
+            place.setLatitude(cursor.getDouble(3));
+            place.setLongitude(cursor.getDouble(4));
+            place.setDescription(cursor.getString(5));
+            cursor.close();
+            db.close();
+            return place;
+        }
+    */
     /*
         getPlacesFile allow us to recover all the data from our raw file "places.txt" to create our objects
         so we can look forward to store it into the database.
@@ -390,23 +390,28 @@ public class DBHandler extends SQLiteOpenHelper {
      */
     public ArrayList<Place> placeVisitedUser(String pseudo, boolean selectVisited){
         ArrayList<Place> place= new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
         String selectQuery = "";
         if(selectVisited){
-            selectQuery = "SELECT " + COL_ID +", " + COL_TITLE + ", " + COL_TYPE + ", " + COL_LATITUDE + ", " + COL_LONGITUDE + ", " + COL_DESCRIPTION +
-                    " FROM " + TABLE_VISITED + " NATURAL JOIN " + TABLE_PLACE + " WHERE " + TABLE_VISITED + "." + COL_PSEUDO_VISITED + " = '" + pseudo +"' ";
+            selectQuery = "SELECT " + COL_ID + ", " + COL_TITLE + "," + COL_TYPE + ", " + COL_LATITUDE
+                    + ", " + COL_LONGITUDE + "," + COL_DESCRIPTION +" FROM " + TABLE_VISITED + " NATURAL JOIN " + TABLE_PLACE + " WHERE " + TABLE_VISITED + "." + COL_PSEUDO_VISITED + " = '"
+                    + pseudo + "' ";
+            System.out.println("VISITED");
         }
         else{
             selectQuery = "SELECT " + COL_ID +", " + COL_TITLE + ", " + COL_TYPE + ", " + COL_LATITUDE + ", " + COL_LONGITUDE + ", " + COL_DESCRIPTION +
-                    " FROM " + TABLE_VISITED + " NATURAL JOIN " + TABLE_PLACE + " EXCEPT " + "SELECT " + COL_ID +", " + COL_TITLE + ", " + COL_TYPE + ", "
+                    " FROM " + TABLE_PLACE + " EXCEPT " + "SELECT " + COL_ID +", " + COL_TITLE + ", " + COL_TYPE + ", "
                     + COL_LATITUDE + ", " + COL_LONGITUDE + ", " + COL_DESCRIPTION +  " FROM " + TABLE_VISITED + " NATURAL JOIN " + TABLE_PLACE + " WHERE "
-                    + TABLE_VISITED + "." + COL_PSEUDO_VISITED + " = '" + pseudo +"' ";;
+                    + TABLE_VISITED + "." + COL_PSEUDO_VISITED + " = '" + pseudo +"' ";
+            System.out.println("NOT VISITED");
         }
 
-        Cursor cursor = db.rawQuery(selectQuery, null);
 
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        System.out.println("Before selection");
         // Loop through all the rows and addi the to the list
         if (cursor.moveToFirst()) {
+            System.out.println("entered the cursor");
             do {
                 Place p=new Place();
                 p.setId(cursor.getInt(0));
@@ -420,6 +425,8 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
+        System.out.println("After selection");
+
         return place;
     }
 
@@ -436,5 +443,6 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(DBHandler.COL_PSEUDO_VISITED,pseudo);
         db.insert(TABLE_VISITED,null, cv);
         db.close();
+        getVisited(pseudo);
     }
 }
