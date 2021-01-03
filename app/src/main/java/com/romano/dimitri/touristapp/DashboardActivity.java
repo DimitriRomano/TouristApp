@@ -61,7 +61,7 @@ public class DashboardActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
                      .add(R.id.fragment_user_container_view, UserFragment.class, bundleUser)
-                    .add(R.id.fragment_map_container_view, MapsFragment.class, null)
+                    .add(R.id.fragment_map_container_view, MapsFragment.class, bundleUser)
                     .commit();
         }
 

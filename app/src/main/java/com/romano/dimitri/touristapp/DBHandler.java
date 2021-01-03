@@ -98,6 +98,12 @@ public class DBHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    /*
+        getInstance is a singleton which permits us to only have one instanciation of our DBHandler class
+        usable in every other class.
+        @param context  Context of our activity
+        @return DBHandler   Return the instanciation of our DBHandler class.
+    */
     public static synchronized DBHandler getInstance(Context context){
         // Use the application context, which will ensure that you
         // don't accidentally leak an Activity's context.
@@ -119,6 +125,11 @@ public class DBHandler extends SQLiteOpenHelper {
         return sInstance;
     }
 
+    /*
+        addUser add the user account to the database depending on the information he gave us.
+        @param user       The user object which contains every single information about our user account.
+        @param psw        The password associated to the user account
+    */
     public void addUser(User user, String psw){
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -137,6 +148,12 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
+    /*
+        verifLog checks if the login informations are correct when the user wants to connect.
+        @param pseudo     The pseudo of our user
+        @param password   The password associated to the user account
+        @return retVal Returns if the login infos exists and are a match in the database (table User) or not.
+    */
     public boolean verifLog(String pseudo, String password){
         SQLiteDatabase db = this.getWritableDatabase();
         boolean verifReturn = false;
@@ -156,6 +173,11 @@ public class DBHandler extends SQLiteOpenHelper {
         return verifReturn;
     }
 
+    /*
+     existPseudo checks if an username (pseudo) exists in our database, then return a boolean.
+     @param pseudo   The pseudo of our user
+     @return retVal Returns if the pseudo (username) exist in the database (table User) or not.
+    */
     public boolean existPseudo(String pseudo){
         Boolean retVal = false;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -172,6 +194,11 @@ public class DBHandler extends SQLiteOpenHelper {
         return retVal;
     }
 
+    /*
+        existEmail checks if an email exists in our database, then return a boolean.
+        @param email   The email of our user
+        @return retVal Returns if the mail exist in the database (table User) or not.
+     */
     public boolean existEmail(String email){
         Boolean retVal = false;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -188,7 +215,12 @@ public class DBHandler extends SQLiteOpenHelper {
         return retVal;
     }
 
-    //return User from a pseudo ( map activity)
+    /*
+        getUser allow us to recover the data of a user depending on his username (pseudo) from our
+        database, then creating a User object with this data.
+        @param pseudo   The name of our user
+        @return u       The instanciation of the user filled with the data recovered
+     */
     public User getUser(String pseudo){
         SQLiteDatabase db=this.getReadableDatabase();
         User u = new User();
@@ -206,8 +238,12 @@ public class DBHandler extends SQLiteOpenHelper {
         return u;
     }
 
+    /*
+        addPlaceDB allow us to add places into our table "Place" in our database SQLite following the content of
+        one of our Place object.
+        @param place    Our place object, which contains all our data about a place.
+     */
     public void addPlaceDB(Place place){
-
         SQLiteDatabase db = this.getWritableDatabase();
         System.out.println("add : " + place.toString());
         ContentValues cv = new ContentValues();
@@ -239,6 +275,12 @@ public class DBHandler extends SQLiteOpenHelper {
         return place;
     }
 */
+    /*
+        getPlacesFile allow us to recover all the data from our raw file "places.txt" to create our objects
+        so we can look forward to store it into the database.
+        @param context  The context of our activity
+        @return places  All the places recovered from the database into an ArrayList of Places.
+     */
     public ArrayList<Place> getPlacesFile(Context context){
         ArrayList<Place> places=new ArrayList<>();
         String delimiter=";";
@@ -275,6 +317,11 @@ public class DBHandler extends SQLiteOpenHelper {
         }
     }
 
+    /*
+        getAllRows allow us to recover the data of the existant places in database.
+        @return place   All the rows from the table "Place" recovered from the database
+                        into a List of Place.
+    */
     public List<Place> getAllRows(){
         List<Place> place= new ArrayList<>();
 
@@ -308,6 +355,15 @@ public class DBHandler extends SQLiteOpenHelper {
         return place;
     }
 
+    /*
+        placeVisitedUser allow us to recover the data of the places the user visited and didn't visited.
+        @param pseudo           The name of the user
+        @param selectVisited    Boolean to let us know which data we want to recover
+        Status of selectVisited :
+            • false : Data of the places the user didn't visited
+            • true : Data of the places the user visited
+        @return place   All the places visited or non-visited into an ArrayList of Place.
+     */
     public ArrayList<Place> placeVisitedUser(String pseudo, boolean selectVisited){
         ArrayList<Place> place= new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -345,12 +401,16 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
-
         // Return the list
         return place;
-
     }
 
+    /*
+        addVisit allows us to add a row into the "Visited" table with
+        the username and the place visited.
+        @param pseudo           The name of the user
+        @param place            The place we want to add to the database
+     */
     public void addVisit(String pseudo,Place place){
         int idPlace=place.getId();
         SQLiteDatabase db = this.getWritableDatabase();

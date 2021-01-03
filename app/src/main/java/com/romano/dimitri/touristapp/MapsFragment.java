@@ -52,7 +52,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     private DBHandler db;
     private SupportMapFragment mapFragment;
     private int placePositionAL;
-
+    private String mPseudo;
     private static final String TAG = "MapFragment";
     private static final int LOCALISATION_REQUEST = 30;
     private static final int MULTIPLE_LOCATION_REQUEST = 42;
@@ -82,6 +82,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     // Declaring a Location Manager
     protected LocationManager locationManager;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -96,6 +101,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        mPseudo = requireArguments().getString("pseudo");
+
         mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
@@ -167,41 +175,40 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     private void showAllPlaces(){
         for(placePositionAL=0; placePositionAL<placesAL.size(); placePositionAL++){
             LatLng placeLatLng = new LatLng(placesAL.get(placePositionAL).getLatitude(), placesAL.get(placePositionAL).getLongitude());
-            String placeInfo = "";
             switch(placesAL.get(placePositionAL).getType()){
                 case "Stadium": mMap.addMarker(new MarkerOptions().position(placeLatLng)
                         .title(placesAL.get(placePositionAL).getTitle())
-                        .snippet(placesAL.get(placePositionAL).getDescription())
+                        .snippet(placesAL.get(placePositionAL).getDescription() + " ; " + placesAL.get(placePositionAL).getId())
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                     break;
                 case "Museum": mMap.addMarker(new MarkerOptions().position(placeLatLng)
                         .title(placesAL.get(placePositionAL).getTitle())
-                        .snippet(placesAL.get(placePositionAL).getDescription())
+                        .snippet(placesAL.get(placePositionAL).getDescription() + " ; " + placesAL.get(placePositionAL).getId())
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
                     break;
                 case "Castle": mMap.addMarker(new MarkerOptions().position(placeLatLng)
                         .title(placesAL.get(placePositionAL).getTitle())
-                        .snippet(placesAL.get(placePositionAL).getDescription())
+                        .snippet(placesAL.get(placePositionAL).getDescription() + " ; " + placesAL.get(placePositionAL).getId())
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
                     break;
                 case "Church": mMap.addMarker(new MarkerOptions().position(placeLatLng)
                         .title(placesAL.get(placePositionAL).getTitle())
-                        .snippet(placesAL.get(placePositionAL).getDescription())
+                        .snippet(placesAL.get(placePositionAL).getDescription() + " ; " + placesAL.get(placePositionAL).getId())
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
                     break;
                 case "Monument": mMap.addMarker(new MarkerOptions().position(placeLatLng)
                         .title(placesAL.get(placePositionAL).getTitle())
-                        .snippet(placesAL.get(placePositionAL).getDescription())
+                        .snippet(placesAL.get(placePositionAL).getDescription() + " ; " + placesAL.get(placePositionAL).getId())
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
                     break;
                 default: mMap.addMarker(new MarkerOptions().position(placeLatLng)
                         .title(placesAL.get(placePositionAL).getTitle())
-                        .snippet(placesAL.get(placePositionAL).getDescription())
+                        .snippet(placesAL.get(placePositionAL).getDescription() + " ; " + placesAL.get(placePositionAL).getId())
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
                     break;
@@ -210,7 +217,27 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
             mMap.moveCamera(CameraUpdateFactory.newLatLng(placeLatLng));
             mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                 public void onInfoWindowClick(Marker marker) {
-                    marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                    float[] distance = new float[1];
+                    String snippetContent = marker.getSnippet();
+                    String[] splittedSnippet = snippetContent.split(";");
+                    System.out.println("SplittedSnippet 0: " + splittedSnippet[0]);
+                    System.out.println("SplittedSnippet 1: " + splittedSnippet[1]);
+                    Location.distanceBetween(marker.getPosition().latitude,marker.getPosition().longitude,mCurrentLocalisation.getLatitude(),mCurrentLocalisation.getLongitude(),distance);
+
+                    System.out.println("Distance is : " + distance[0]);
+                    System.out.println("My position : Lat " + mCurrentLocalisation.getLatitude() + ": Long " + mCurrentLocalisation.getLongitude());
+                    System.out.println("Marker pos : Lat " + marker.getPosition().latitude + ": Long " + marker.getPosition().longitude);
+
+                    if(!marker.getTitle().contains("Current location")){
+                        if(distance[0] <= 500){
+                            marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                            //db.addVisit(mPseudo, );
+                            Toast.makeText(getActivity(),"Congrats, " + marker.getTitle() + " is now validated !",Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Toast.makeText(getActivity(),"You are too far from this location, please get closer.",Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
             });
            /*mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -252,7 +279,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     private void updateMap() {
         Log.d(TAG, "Updating map...");
         if (mMap != null) {
-            //mMap.clear();
+            mMap.clear();
             showAllPlaces();
             Log.d(TAG, "my currentLocalisation : " + mCurrentLocalisation);
             /*if (mCurrentLocalisation == null) {
