@@ -1,10 +1,93 @@
 Cathédrale Notre-Dame de Paris;Church;48.852968; 2.349902;Cathédrale colossale du XIIIe siècle ornée d'arcs-boutants et de gargouilles, lieu du roman de Victor Hugo.
 Cathédrale Saint-Nicolas de Nice;Church;43.70377;7.253959;Lieu de culte orthodoxe de style byzantin et jardins à l'endroit de la mort du tsarévitch Nicolas.
+Cathédrale Saint-Front de Périgueux;Church;45.18365353782697;0.7227465405073429;Cathédrale construite au XIIe siècle sur un plan en forme de croix grecque, avec clocher et coupoles blanches.
+Cathédrale Saint-Pierre d'Angoulême;Church;45.650056759395476;0.15205610687307114;Cathédrale médiévale de style roman édifiée au XIIe siècle avec façade sculptée et nef surmontée de 3 dômes.
+Abbaye de Saint-Roman;Church;43.8359498333288;4.613313158217398;La seule abbaye troglodyte d'Europe occidentale est aussi l'un des plus anciens monastères de France. Entièrement creusée dans les hauteurs d'une colline, elle témoigne d'une histoire millénaire.
+Église Saint Nicolas;Church;49.85787319747892;4.039834461272275;Eglise catholique
+Église Sainte-Catherine de Honfleur;Church;49.421957817251936;0.23429729998686735;Une nef conçue par des charpentiers de marine, voilà qui n'a rien d'étonnant.
+Chapelle Saint-Pierre;Church;43.70379615822361;7.314223680887013;La chapelle Saint-Pierre est une chapelle de pêcheurs décorée par Jean Cocteau à Villefranche-sur-Mer.
+Colline Notre-Dame du Haut;Church;47.705259105146816;6.623875689953173;Œuvres d'art religieuses et vue panoramique depuis un monastère contemporain en partie dissimulé dans la colline.
+Église monolithe Saint-Jean;Church;45.273379800219985;0.1728072362568504;Église monolithe creusée sous terre au 12e siècle et dotée d'une vaste nécropole.
+Cathédrale Saint-Samson;Church;48.551348895799634;-1.7522781481890788;La cathédrale Saint-Samson de Dol-de-Bretagne est une ancienne cathédrale catholique romaine dédiée à saint Samson. De style gothique.
+Cathédrale Notre-Dame de Chartres;Church;48.44812137383976;1.488966247844667;Très haute cathédrale gothique du XIIIe siècle avec arcs-boutants et vitraux complexes.
+Cathédrale Notre-Dame de Reims;Church;49.25399083191712;4.035863789611219;Imposante cathédrale gothique du XIIIe avec façade ornementale, tours jumelles et vitraux aux motifs détaillés.
+Cathédrale Notre-Dame d'Amiens;Church;49.894652517910814;2.303206785470191;Vaste édifice gothique du XIIIe connu pour sa décoration et ses sculptures somptueuses, 2 tours asymétriques.
+Cathédrale Notre Dame de Strasbourg;Church;48.58283357614778;7.752258154162605;Édifice gothique construit de 1187 à 1439, doté d'une horloge astronomique du XVIe siècle et d'une rosace.
+Cathédrale d'Albi;Church;44.09135594481409;2.8056651371881705;Cathédrale gothique du XIIIe avec clocher de 78 m de haut, et fresques et chapelles peintes remarquables.
+Cathédrale Saint-Pierre de Beauvais;Church;49.43275993851754;2.0836551380765425;Immense édifice catholique construit à partir de 1225 avec vitraux médiévaux et horloge astronomique complexe.
+Cathédrale Saint-Étienne de Bourges;Church;47.08286491918941;2.400020361100972;Cathédrale dont la construction débuta à la fin du XIIe, avec vaste crypte abritant la tombe de Jean de Berry.
+Cathédrale de Metz;Church;49.12089759262284;6.177513984467961;Cathédrale gothique construite du XIIIe au XVIe siècle, connue pour son immense surface de vitraux.
+Cathédrale Saint-Corentin de Quimper;Church;47.99661592210373;-4.100531416184151;Cathédrale gothique dont la construction débuta en 1239, avec grandes flèches jumelles et vitraux.
 Le Parc des Princes;Stadium;48.841436;2.253049;Stade sur 2 niveaux pour l'équipe de foot du Paris Saint-Germain, événements sportifs/musicaux et visites.
 Orange Vélodrome;Stadium; 43.704;7.191;Stade de l'Olympique de Marseille, rénové et reconnaissable à son toit ondulé.
+Stade de France;Stadium;48.967766921726884;2.3750683129749457;Stade de 81 000 places assises accueillant matchs internationaux de football et rugby, et grands concerts.
+Groupama Stadium;Stadium;45.76613291691427;4.981642730771472;Stade du club de football de l'Olympique lyonnais avec près de 60 000 places, accueillant aussi des concerts.
+Matmut ATLANTIQUE;Stadium;44.89787476563813;-0.5586251729867973;Stade multifonctions, inauguré le 18 mai 2015 sous le nom de Nouveau stade de Bordeaux.
+Stade Geoffroy Guichard;Stadium;45.46104387299941;4.392447039876111;Stade de l'AS Saint-Étienne datant des années 1930 accueillant également des matchs de rugby et des concerts.
+Stade Bollaert-Delelis;Stadium;50.433288614137545;2.8166285240035416;Principal stade de football de Lens, ville du Pas-de-Calais.
+Allianz Riviera;Stadium;43.70595093519543;7.193832720695792;Stade ouvert en 2013, domicile de l'OGC Nice, hôte des matchs du Championnat d'Europe UEFA de 2016.
+Stade de la Beaujoire;Stadium;47.25651813441213;-1.522314686324542;Le stade de La Beaujoire-Louis Fonteneau est le nom officiel du principal stade de la ville de Nantes.
+Stade de la Meinau Strasbourg;Stadium;48.56097255426795;7.75658259220611;Le stade de la Meinau, communément appelé la Meinau, est un stade de football situé à Strasbourg.
 Musée du Louvre;Museum;48.8592;2.3417;Forteresse médiévale et résidence royale du XIVe siècle abritant aujourd'hui le célèbre musée du Louvre.
 Musée des Beaux-Arts de Lyon;Museum;45.767109;4.833617;Musée dans une ancienne abbaye du XVIIe qui expose des peintures, sculptures, et objets anciens et modernes.
 Musée du Débarquement ltd;Museum;49.3382;-0.6248;Musée couvert et en plein air commémorant la bataille et le débarquement de Normandie, avec visites guidées.
+Centre Georges Pompidou;Museum;48.860363;2.352162;Le centre culturel et d’art « Georges Pompidou », construit sur le plateau de Beaubourg a suscité de vives polémiques.
+Le musée d’Orsay;Museum;48.859955;2.325458;Le musée d’Orsay est un musée national situé à Paris, sur la rive gauche de la Seine, dans le VIIe arrondissement.
+Le Musée de l’Armée;Museum;48.858231;2.311751;Installé dans les salles qui encadrent la cour d’honneur des Invalides, le Musée de l’Armée présente l’une des plus riches collections mondiales consacrée à l’art et à l’histoire militaires.
+Musée de la Tapisserie de Bayeux ;Museum;49.277100;-0.701237;La Tapisserie de Bayeux (Calvados) est une broderie longue de 70 mètres, réalisée au XIè siècle.
+Musée Miniature et Cinéma;Museum;45.762390;4.827247;Ce musée unique en France permet de découvrir deux expressions rares et insolites : l’Art des effets spéciaux dans le cinéma et la magie de la miniature.
+MUCEM–Musée des civilisations de l’Europe et de la Méditerranée;Museum;43.296772;5.361070;Unique en son genre, le MuCEM (Musée des Civilisations de l’Europe et de la Méditerranée), à Marseille, est tout entier consacré aux cultures de l’Europe et de la méditerranée.
+Centre Pompidou Metz;Museum;49.108204;6.180158;Le Centre Pompidou-Metz est un chef-d’oeuvre de l’architecture contemporaine.
+Musée du Louvre-Lens;Museum;50.431343;2.804575;Inauguré en décembre 2012, le Louvre-Lens est situé sur un ancien carreau de fosse, au coeur du Bassin minier du Nord-Pas de Calais, inscrit au patrimoine mondial de l’Unesco.
+Palais des Beaux Arts de Lille;Museum;50.630432;3.062855;Le Palais des Beaux-Arts constitue l’un des premiers musées français après le Louvre, grâce à ses collections de tout premier ordre.
+La Piscine-Musée d'art et d'industrie André Diligent de Roubaix;Museum;50.69440145663045;3.1681585608520337;Musée occupant une ancienne piscine Art déco dédié aux beaux-arts et à des expositions scientifiques.
+Musée Condé de Chantilly;Museum;49.194554124305604;2.487215392049825;Musée d'Art dans château avec collection de peintures de grands maîtres, dessins et manuscrits.
+Musée de Grenoble;Museum;45.19583492778925;5.733600328916531;Musée ancien avec vaste collection d'œuvres d'art européennes, notamment des chefs-d'œuvre du XIIIe siècle.
+Musée de Pont-Aven;Museum;47.855972269895716;-3.74438548597999;Située près du port de Concarneau, Pont-Aven a accueilli beaucoup de peintres à partir du 19e siècle.
+Musée des Beaux-Arts de Rouen;Museum;49.44548333263956;1.0965998921980056;Grande collection d'art à partir du XVe siècle comportant des peintures de Monet de la cathédrale de Rouen.
+Musée des impressionnismes Giverny;Museum;49.07701345987892;1.534750198331419;Musée d'Art avec collection et spectacles axés sur l'histoire de l'impressionnisme.
+La Cité du Vin Bordeaux;Museum;44.862858141554035;-0.5507931929617306;Musée du Vin high-tech, expositions interactives et dégustations dans bâtiment incurvé en aluminium et verre.
+Musée Goya;Museum;43.604028084075686;2.242927797360858;Musée dans un ancien palais épiscopal dédié à l'art hispanique avec, entre entres, des pièces de Goya et Miró.
+Musée Fabre;Museum;43.61224311616734;3.8821628735566964;Musée fondé par un peintre local en 1825, vaste collection, dont des œuvres de Delacroix et Raphaël.
+Musée Matisse;Museum;43.72006882170555;7.278217073614629;Élégante villa du XVIIe siècle avec musée exposant des peintures de Matisse réalisées pour la plupart à Nice.
 Château de Versailles;Castle;48.8038406;2.1246463;Grand château du XVIIIe, appartements luxueux, galerie des glaces avec chandeliers, spectacles avec fontaines.
 Château de Chantilly;Castle;49.1923042;2.46575;Château opulent reconstruit après la Révolution avec importante collection d'art, musée du Cheval et jardins.
 Château de Fontainebleau;Castle;48.402486;2.6967867;Somptueuse ancienne demeure royale du XIIe siècle abritant 4 musées et des appartements richement ornés.
+Château de Castelnaud-la-Chapelle;Castle;44.81677232213156;1.1499845054275077;Château du XIIIe, musée de la Guerre au Moyen Âge exposant armes, armures et machines de guerre restaurées.
+Château de Chambord;Castle;47.617080315183955;1.5187200070027558;Immense palais royal du XVIe siècle entouré de douves avec tours et coupoles.
+Château de Chenonceau;Castle;47.32580013087806;1.0729183057786917;Remarquable château du XVIe construit sur la rivière, collections de tapisseries et tableaux de maîtres.
+Château d'Ussé;Castle;47.250004966600414;0.2919226845693172;Château blanc à tourelles du XVIIe siècle qui serait à l'origine de l'histoire de la Belle au bois dormant.
+Château des ducs de Bretagne;Castle;47.2169741502342;-1.5470542165068033;Château et musée relatant l'histoire du port, et exposant diverses maquettes de la ville.
+Château de Saumur;Castle;47.25764570504265;-0.07055497045156953;Fort médiéval sur une colline, résidence des ducs d'Anjou, prison, armurerie et aujourd'hui musée de la ville.
+Château Royal d'Amboise;Castle;47.414406032290586;0.9892076523897354;Château gothique et Renaissance du XVe siècle, pièces décorées de tapisseries et terrasse panoramique.
+Château de Vaux le Vicomte;Castle;48.566294459549546;2.715508261521557;Château orné du XVIIe siècle doté d'un dôme et entouré de vastes jardins à la française.
+Château du Haut-Kœnigsbourg;Castle;48.24994219492526;7.3480879592235775;Forteresse restaurée du XIIe siècle sur un mont avec tours d'artillerie, jardin médiéval, chambres royales.
+Cité de Carcassonne;Castle;43.20659899711972;2.365627847950574;Citadelle fondée à l'époque gallo-romaine, ceinte de murs doubles de 3 km de long avec 52 tours.
+Château de Villandry;Castle;47.34095815251816;0.5170617518191751;Palais Renaissance restauré abritant jardins à la française avec labyrinthe et expositions d'art temporaires.
+Château de Cheverny;Castle;47.500847210510756;1.4600218910637233;Grand manoir champêtre du XVIIe siècle avec intérieurs ornés, jardins paysagers et café dans l'orangerie.
+Palais des Papes;Castle;43.95146968809046;4.809456597019735;Palais papal, autrefois rival du Vatican, avec 25 salles ouvertes, des fresques et des événements culturels.
+Phare de l'Île Vierge;Monument;48.66508614550766;-4.496685446939937;L'Ile Vierge accueille deux phares, à Plouguerneau. Le premier datant de 1845 et jugé obsolète, un deuxième voit le jour en 1902 : une merveille unique en son genre s’élançant plus haut vers le ciel.
+Viaduc de Millau;Monument;44.07831701026715;3.024555381744324;Pont à haubans de 2,4 km de long parmi les plus hauts du monde, conçu par Norman Foster et Michel Virlogeux.
+Pont du Gard;Monument;43.947967338225546;4.537878211305106;Imposant aqueduc à 3 niveaux avec voûtes bien conservées, bâti au Ier siècle par les Romains.
+Phare de Pertusato;Monument;41.36841255344626;9.18576754221572;Situé au sommet du cap de Pertusato, ce phare du XIXe siècle offre une vue imprenable sur la Méditerranée.
+Phare de Cordouan;Monument;45.587170100353795;-1.1713785253628177;Visites d'un phare majestueux construit en 1611, accessible par bateau et à pied à marée basse.
+Tour Eiffel;Monument;48.859357982943806;2.295296662221258;Célèbre tour en fer de Gustave Eiffel (1889), terrasses panoramiques accessibles par escaliers et ascenseurs.
+Arènes de Nîmes;Monument;43.8358942652195;4.361030774205332;Imposant amphithéâtre romain accueillant reconstitutions historiques, concerts et événements réguliers.
+Place Stanislas;Monument;48.69387301780281;6.18628826001105;Place de style classique avec grilles en fer forgé et fontaines remarquables, accueillant événements locaux.
+Pont fortifié de Valentré;Monument;44.44534367069114;1.434094981415891;Ce fameux pont médiéval fortifié est rattaché à une légende liée au diable, d'où le démon sculpté qui l'orne.
+Arc de triomphe de Montpellier;Monument;43.61192026913418;3.873496751333039;Arc de triomphe célèbre construit en 1692 avec bas-reliefs et médaillons.
+Fontaine de la Rotonde;Monument;43.526809521893014;5.4493367639893675;Fontaine élaborée construite en 1860 et surmontée de 3 statues symbolisant la justice, l'agriculture et l'art.
+Les Remparts de Saint-Malo;Monument;48.65051226929641;-2.0263487468939068;Les visiteurs peuvent se promener sur les remparts médiévaux et leurs tours qui offrent une vue sur la vieille ville et la Manche.
+Place Masséna;Monument;43.69751224968933;7.271630748662895;La place Masséna est une place du centre-ville de Nice.
+Arc de Triomphe;Monument;48.8742429869742;2.297001576517455;Arc de triomphe emblématique érigé pour commémorer les victoires de Napoléon, avec plateforme d'observation.
+
+
+
+
+
+
+
+
+
+
+
