@@ -40,17 +40,30 @@ teaching us everything to make this application.
                                                              will be created [added to database] and the next activity will
                                                              be DashboardActivity).
      DashboardActivity -> This activity will show to the user his panels and a google maps map.
-                        UserFragment => UserFragment is the user panel, and will contain ○ His image
-                                                                                         ○ His pseudo
-                                                                                         ○ His age
-                                                                                         ○ His email
-                                                                                         ○ His score
-                                                                                         ○ His progression
-                                                                                         ○ Two buttons
-                                                                                            - Caption (a little caption to help
-                                                                                              understand the map)
-                                                                                            - Already visited (a list of places
-                                                                                              already visited)
-                                                                                              
-                                                             
-                                                            
+                          It is regrouping two fragments to do the Dashboard panel.
+                          UserFragment => UserFragment is the user panel, and will contain ○ His image
+                                                                                           ○ His pseudo
+                                                                                           ○ His age
+                                                                                           ○ His email
+                                                                                           ○ His score
+                                                                                           ○ His progression
+                                                                                           ○ Two buttons
+                                                                                              - Caption (a little caption to help
+                                                                                                understand the map)
+                                                                                              - Already visited (a list of places
+                                                                                                already visited)
+                           MapsFragment => MapsFragment is the map from the Google Maps Services which will show us all the places
+                                           (represented by different types of markers) the user can visit or the one he already
+                                           visited. A floating button will allow the user to geolocate himself and will be represented
+                                           by a red marker.
+                                           Castles will be represented by an azure marker pin, with a castle inside.
+                                           Churches will be represented by a purple marker pin, with a church inside.
+                                           Monuments will be represented by a yellow marker pin, with an obelisk inside.
+                                           Museum will be represented by a orange marker pin, with a museum inside.
+                                           Stadium will be represented by a blue marker pin, with a stadium inside.
+                                           To visit a place you need to be at a maximum distance of 200 meters and you will earn a certain
+                                           amount of points depending on the place's type and for the ones you already visited, a toast will
+                                           be shown telling you that you already visited the place.
+                                        
+                                        
+                                        
