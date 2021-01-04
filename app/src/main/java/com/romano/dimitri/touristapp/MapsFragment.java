@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment;
 
 import android.Manifest;
 
-import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -22,29 +21,42 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.romano.dimitri.touristapp.model.Place;
+
+import java.util.ArrayList;
 
 import static android.content.Context.LOCATION_SERVICE;
 
-public class MapsFragment extends Fragment {
+public class MapsFragment extends Fragment implements OnMapReadyCallback{
     private Location mCurrentLocalisation = null;
     private Location mLocation;
+    private String mLocationProvider;
     private LocationManager mLocationManager;
     private FloatingActionButton current_location_btn;
     private GoogleMap mMap;
     private LocationListener locationListener;
-
+    private ArrayList<Place> placesAL, alreadyVisitedPlacesAL;
+    private DBHandler db;
+    private SupportMapFragment mapFragment;
+    private int placePositionAL;
+    private String mPseudo;
+    private ProcessLevel processLevel;
 
     private static final String TAG = "MapFragment";
+    private static final int LOCALISATION_REQUEST = 30;
     private static final int MULTIPLE_LOCATION_REQUEST = 42;
 
 
@@ -58,53 +70,52 @@ public class MapsFragment extends Fragment {
     Location lastLocation; // last location known
 
     // The minimum distance to change Updates in meters
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
+
     // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000  * 5;
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
+
     // Declaring a Location Manager
     protected LocationManager locationManager;
 
-
-    private OnMapReadyCallback callback = new OnMapReadyCallback() {
-
-        /**
-         * Manipulates the map once available.
-         * This callback is triggered when the map is ready to be used.
-         * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
-         * If Google Play services is not installed on the device, the user will be prompted to
-         * install it inside the SupportMapFragment. This method will only be triggered once the
-         * user has installed Google Play services and returned to the app.
-         */
-        @Override
-        public void onMapReady(GoogleMap googleMap) {
-            LatLng paris = new LatLng(48.858093, 2.294694);
-            mMap = googleMap;
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(paris, 6));
-        }
-    };
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        db = DBHandler.getInstance(this.getContext());
         return inflater.inflate(R.layout.fragment_maps, container, false);
+
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        SupportMapFragment mapFragment =
+
+        mPseudo = requireArguments().getString("pseudo");
+
+        placesAL = db.placeVisitedUser(mPseudo, false);
+        alreadyVisitedPlacesAL = db.placeVisitedUser(mPseudo, true);
+        mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
-            mapFragment.getMapAsync(callback);
+            mapFragment.getMapAsync(this);
         }
 
         //set button for self location
         current_location_btn = getActivity().findViewById(R.id.current_location_btn);
         current_location_btn.setOnClickListener(this::getSelfLocation);
 
+
+        //set location provider
+        mLocationProvider = LocationManager.GPS_PROVIDER;
+
+        //acquire reference to the system Location Manager
         mLocationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
 
 
@@ -112,9 +123,9 @@ public class MapsFragment extends Fragment {
         locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the location provider
-                Log.d(TAG, "Location changed" + location.getLongitude() + " " + location.getLatitude() );
+                Log.d(TAG, "Location changed" + location.getLongitude() + " " + location.getLatitude());
                 //Toast.makeText(getActivity(), "Location changed, updating map...",
-                        //Toast.LENGTH_SHORT).show();
+                //Toast.LENGTH_SHORT).show();
                 mCurrentLocalisation = location;
                 if (mMap != null && btnActivation==true) {
                     updateMap();
@@ -124,7 +135,6 @@ public class MapsFragment extends Fragment {
                     i.putExtra("currentLocation",location);
                     getActivity().startService(i);
                 }
-
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -151,9 +161,135 @@ public class MapsFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+
         // Remove the listener you previously added
         if (mLocationManager != null) {
             mLocationManager.removeUpdates(locationListener);
+        }
+
+    }
+
+    private void showAllPlaces(ArrayList<Place> arrayListPlaces, boolean alreadyVisited){
+        for(placePositionAL=0; placePositionAL<arrayListPlaces.size(); placePositionAL++){
+            LatLng placeLatLng = new LatLng(arrayListPlaces.get(placePositionAL).getLatitude(), arrayListPlaces.get(placePositionAL).getLongitude());
+            if(alreadyVisited == false) {
+                switch (arrayListPlaces.get(placePositionAL).getType()) {
+                    case "Stadium":
+                        mMap.addMarker(new MarkerOptions().position(placeLatLng)
+                                .title(arrayListPlaces.get(placePositionAL).getTitle())
+                                .snippet(arrayListPlaces.get(placePositionAL).getDescription() + " ID :" + arrayListPlaces.get(placePositionAL).getId() + ":" +
+                                        arrayListPlaces.get(placePositionAL).getType())
+                                .icon(BitmapDescriptorFactory
+                                        .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                        break;
+                    case "Museum":
+                        mMap.addMarker(new MarkerOptions().position(placeLatLng)
+                                .title(arrayListPlaces.get(placePositionAL).getTitle())
+                                .snippet(arrayListPlaces.get(placePositionAL).getDescription() + " ID :" + arrayListPlaces.get(placePositionAL).getId() + ":" +
+                                        arrayListPlaces.get(placePositionAL).getType())
+                                .icon(BitmapDescriptorFactory
+                                        .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+                        break;
+                    case "Castle":
+                        mMap.addMarker(new MarkerOptions().position(placeLatLng)
+                                .title(arrayListPlaces.get(placePositionAL).getTitle())
+                                .snippet(arrayListPlaces.get(placePositionAL).getDescription() + " ID :" + arrayListPlaces.get(placePositionAL).getId() + ":" +
+                                        arrayListPlaces.get(placePositionAL).getType())
+                                .icon(BitmapDescriptorFactory
+                                        .defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+                        break;
+                    case "Church":
+                        mMap.addMarker(new MarkerOptions().position(placeLatLng)
+                                .title(arrayListPlaces.get(placePositionAL).getTitle())
+                                .snippet(arrayListPlaces.get(placePositionAL).getDescription() + " ID :" + arrayListPlaces.get(placePositionAL).getId() + ":" +
+                                        arrayListPlaces.get(placePositionAL).getType())
+                                .icon(BitmapDescriptorFactory
+                                        .defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
+                        break;
+                    case "Monument":
+                        mMap.addMarker(new MarkerOptions().position(placeLatLng)
+                                .title(arrayListPlaces.get(placePositionAL).getTitle())
+                                .snippet(arrayListPlaces.get(placePositionAL).getDescription() + " ID :" + arrayListPlaces.get(placePositionAL).getId() + ":" +
+                                        arrayListPlaces.get(placePositionAL).getType())
+                                .icon(BitmapDescriptorFactory
+                                        .defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                        break;
+                    default:
+                        mMap.addMarker(new MarkerOptions().position(placeLatLng)
+                                .title(arrayListPlaces.get(placePositionAL).getTitle())
+                                .snippet(arrayListPlaces.get(placePositionAL).getDescription() + " ID :" + arrayListPlaces.get(placePositionAL).getId() + ":" +
+                                        arrayListPlaces.get(placePositionAL).getType())
+                                .icon(BitmapDescriptorFactory
+                                        .defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
+                        break;
+                }
+            }
+            else{
+                mMap.addMarker(new MarkerOptions().position(placeLatLng)
+                        .title(arrayListPlaces.get(placePositionAL).getTitle())
+                        .snippet(arrayListPlaces.get(placePositionAL).getDescription() + " ID :" + arrayListPlaces.get(placePositionAL).getId() + ":" +
+                        arrayListPlaces.get(placePositionAL).getType())
+                        .icon(BitmapDescriptorFactory
+                                .defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+            }
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(5.0f));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(placeLatLng));
+            mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                public void onInfoWindowClick(Marker marker) {
+                    float[] distance = new float[1];
+                    String snippetContent = marker.getSnippet();
+                    String[] splittedSnippet = snippetContent.split(":");
+
+                    Location.distanceBetween(marker.getPosition().latitude,marker.getPosition().longitude,mCurrentLocalisation.getLatitude(),mCurrentLocalisation.getLongitude(),distance);
+
+                    if(!marker.getTitle().contains("Current location")){
+                        if(distance[0] <= 500){
+                            marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                            db.addVisit(mPseudo, Integer.parseInt(splittedSnippet[1]));
+                            Toast.makeText(getActivity(),"Congrats, " + marker.getTitle() + " is now validated !",Toast.LENGTH_SHORT).show();
+                            placesAL = db.placeVisitedUser(mPseudo, false);
+                            alreadyVisitedPlacesAL = db.placeVisitedUser(mPseudo, true);
+
+                        }
+                        else{
+                            Toast.makeText(getActivity(),"You are too far from this location, please get closer.",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            });
+           /*mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+                    return false;
+                }
+            });*/
+            mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                // Use default InfoWindow frame
+                @Override
+                public View getInfoWindow(Marker arg0) {
+                    return null;
+                }
+
+                // Defines the contents of the InfoWindow
+                @Override
+                public View getInfoContents(Marker arg0) {
+                    View v = getLayoutInflater().inflate(R.layout.marker_info_layout, null);
+
+                    LatLng latLng = arg0.getPosition();
+                    String title = arg0.getTitle();
+                    String description = arg0.getSnippet();
+
+                    TextView tv1 = (TextView) v.findViewById(R.id.titleView);
+                    TextView tv2 = (TextView) v.findViewById(R.id.coordinatesView);
+                    TextView tv3 = (TextView) v.findViewById(R.id.descriptionView);
+
+                    tv1.setText(title);
+                    tv2.setText(latLng.latitude + " ; " + latLng.longitude);
+                    tv3.setText(description);
+                    return v;
+                }
+            });
         }
     }
 
@@ -161,16 +297,21 @@ public class MapsFragment extends Fragment {
         Log.d(TAG, "Updating map...");
         if (mMap != null) {
             mMap.clear();
-            if(mCurrentLocalisation == null) {
-                if(lastLocation != null){
+            //db.getVisited(mPseudo);
+            showAllPlaces(alreadyVisitedPlacesAL, true);
+            showAllPlaces(placesAL, false);
+            Log.d(TAG, "my currentLocalisation : " + mCurrentLocalisation);
+
+            if (mCurrentLocalisation == null) {
+                if (lastLocation != null) {
                     mCurrentLocalisation = lastLocation;
                 }
-            }
-            if(mCurrentLocalisation != null){
+            } else {
                 LatLng pin = new LatLng(mCurrentLocalisation.getLatitude(), mCurrentLocalisation.getLongitude());
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(pin));
                 mMap.addMarker(new MarkerOptions().position(pin).title("Current location"));
             }
+
         }
     }
 
@@ -250,10 +391,12 @@ public class MapsFragment extends Fragment {
 
 
         } else {
+
             // Request permission
             ActivityCompat.requestPermissions(getActivity(),
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.INTERNET},
                     MULTIPLE_LOCATION_REQUEST);
+
         }
     }
 
@@ -271,5 +414,25 @@ public class MapsFragment extends Fragment {
             return;
         }
     }
+
+
+
+    /**
+     * Manipulates the map once available.
+     * This callback is triggered when the map is ready to be used.
+     * This is where we can add markers or lines, add listeners or move the camera.
+     * In this case, we just add a marker near Sydney, Australia.
+     * If Google Play services is not installed on the device, the user will be prompted to
+     * install it inside the SupportMapFragment. This method will only be triggered once the
+     * user has installed Google Play services and returned to the app.
+     */
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        LatLng france_center = new LatLng(46.468133, 2.849159);
+        mMap = googleMap;
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(france_center, (float) 5));
+        //updateMap();
+    }
+
 }
 
