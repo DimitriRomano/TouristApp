@@ -19,13 +19,12 @@
         android:layout_alignParentRight="true"
         android:layout_marginStart="86dp"
         android:layout_marginLeft="86dp"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="7dp"
         android:layout_marginEnd="83dp"
         android:layout_marginRight="83dp"
-        android:text="Caption"
         android:gravity="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="#000000" />
+        android:text="Caption"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     <ImageView
         android:layout_width="40dp"
@@ -47,9 +46,10 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="81dp"
         android:layout_marginLeft="81dp"
-        android:layout_marginEnd="155dp"
-        android:layout_marginRight="155dp"
-        android:layout_marginBottom="257dp"
+        android:layout_marginEnd="151dp"
+        android:layout_marginRight="151dp"
+        android:layout_marginBottom="262dp"
+        android:gravity="center_vertical"
         android:text="Place visited" />
 
     <ImageView
@@ -74,7 +74,8 @@
         android:layout_marginLeft="81dp"
         android:layout_marginEnd="151dp"
         android:layout_marginRight="151dp"
-        android:layout_marginBottom="207dp"
+        android:layout_marginBottom="213dp"
+        android:gravity="center_vertical"
         android:text="Stadium" />
 
     <ImageView
@@ -99,7 +100,8 @@
         android:layout_marginLeft="81dp"
         android:layout_marginEnd="151dp"
         android:layout_marginRight="151dp"
-        android:layout_marginBottom="158dp"
+        android:layout_marginBottom="164dp"
+        android:gravity="center_vertical"
         android:text="Castle" />
 
     <ImageView
@@ -121,9 +123,10 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="81dp"
         android:layout_marginLeft="81dp"
-        android:layout_marginEnd="152dp"
-        android:layout_marginRight="152dp"
-        android:layout_marginBottom="109dp"
+        android:layout_marginEnd="151dp"
+        android:layout_marginRight="151dp"
+        android:layout_marginBottom="114dp"
+        android:gravity="center_vertical"
         android:text="Stadium" />
 
     <ImageView
@@ -148,7 +151,8 @@
         android:layout_marginLeft="81dp"
         android:layout_marginEnd="151dp"
         android:layout_marginRight="151dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="68dp"
+        android:gravity="center_vertical"
         android:text="Monument" />
 
     <ImageView
@@ -171,9 +175,10 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="81dp"
         android:layout_marginLeft="81dp"
-        android:layout_marginEnd="147dp"
-        android:layout_marginRight="147dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="151dp"
+        android:layout_marginRight="151dp"
+        android:layout_marginBottom="18dp"
+        android:gravity="center_vertical"
         android:text="Museum" />
 
 </RelativeLayout>

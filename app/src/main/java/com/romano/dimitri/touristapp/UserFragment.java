@@ -37,8 +37,8 @@ public class UserFragment extends Fragment {
 
     private ProgressBar mScoreProgressBar;
     private ImageView mImageProfile;
-    private Drawable mScoreProgressD;
 
+    private ProcessLevel proLevel;
     private String mPseudo;
     private String mEmail;
     private String mGrade;
@@ -67,7 +67,7 @@ public class UserFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_user, container, false);
-
+        proLevel = new ProcessLevel();
         mGradeView = v.findViewById(R.id.textViewGrade);
         mPseudoView = v.findViewById(R.id.textViewPseudo);
         mEmailView = v.findViewById(R.id.textViewEmail);
@@ -145,9 +145,12 @@ public class UserFragment extends Fragment {
 
     public void calculateScore(View view){
         mScore = db.getUser(mPseudo).getScore();
+        mGrade = proLevel.getUserGrade(mScore);
+        mGradeView = view.findViewById(R.id.textViewGrade);
         mScoreView = view.findViewById(R.id.textViewScore);
         mScoreProgressBar = view.findViewById(R.id.progressBarScore);
         mScoreView.setText(mScore + "/10000 XP");
+        mGradeView.setText("Grade: " + mGrade);
         mScoreProgressBar.setProgress(mScore);
     }
 
@@ -168,7 +171,7 @@ public class UserFragment extends Fragment {
            Double latitute=p.getLatitude();
            Double longitude=p.getLongitude();
            String newligne=System.getProperty("line.separator");
-           String item=title+newligne+"Coord : " +latitute+"|"+longitude;
+           String item=title+newligne+"Lat: " +latitute+ "\nLong: "+longitude;
            System.out.println("test list : "+item);
            itemList.add(item);
         }

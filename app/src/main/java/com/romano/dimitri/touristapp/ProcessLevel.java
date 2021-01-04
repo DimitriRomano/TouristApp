@@ -16,6 +16,11 @@ public class ProcessLevel {
     private int[] levels;
     private User user;
 
+    public ProcessLevel(){
+        type_point();
+        level_point();
+    }
+
     public ProcessLevel(User user){
         this.user = user;
         type_point();
@@ -75,11 +80,10 @@ public class ProcessLevel {
      * to his "visit" list or if he deleted it. */
     public int givePoint(User user, ArrayList<Place> place) {
         int userPoint = user.getScore();
-        for(int i=0; i<place.size(); i++){
-            String locationType = place.get(i).getType();
-            if(type_point.containsKey(locationType)){
-                userPoint += type_point.get(locationType);
-            }
+        String locationType = place.get(place.size()-1).getType();
+        if(type_point.containsKey(locationType)){
+            userPoint += type_point.get(locationType);
+
         }
         return userPoint;
     }
