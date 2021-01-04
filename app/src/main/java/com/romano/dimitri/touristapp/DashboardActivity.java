@@ -3,9 +3,11 @@ package com.romano.dimitri.touristapp;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.romano.dimitri.touristapp.model.User;
@@ -76,9 +78,14 @@ public class DashboardActivity extends AppCompatActivity {
         }
 
 
-        //UserFragment fragU = (UserFragment) getSupportFragmentManager();
-        //fragU.setPseudo();
+    }
 
 
+    public void logOut(View view){
+        //set off auto connexion
+        mPreferencesLog.edit().putBoolean(PREF_CONNEXION,false).apply();
+        Intent i = new Intent(this,MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
     }
 }
