@@ -41,6 +41,7 @@ teaching us everything to make this application.
                                                            ♦ Register (after entering his account information, a new account
                                                              will be created [added to database] and the next activity will
                                                              be DashboardActivity).
+							   ♦ We use an intent to go to the mediastore to get an image for the user if we want
      DashboardActivity -> This activity will show to the user his panels and a google maps map.
                           It is regrouping two fragments to do the Dashboard panel.
                           UserFragment => UserFragment is the user panel, and will contain ○ His image
@@ -85,3 +86,7 @@ All our sources are linked to : https://developer.android.com/
 				https://stackoverflow.com (lot of ressources)
 				https://guides.codepath.com/android/creating-and-using-fragments
 				https://developers.google.com/maps/documentation/android-sdk/marker?hl=fr													and... Manos Katsomallos and Dimitris Kotzinos for the TP and Lectures.
+• Service : We use a service that allow each time onLocationChanged is call to check which place is the nearest from our current Location , the service is an intentService because each call is independante , in the service after the nearest location is found, from where we are , we create a notification that show the title of the place and the distance. When we click on the notification an intent is sent to a broadcast receiver ( inner broadcast on MapsFragment ) after that we auto zoom to the place we clicked.
+
+•Sensors : The main used is positionSensor because our application is base on the map in a large part.
+
