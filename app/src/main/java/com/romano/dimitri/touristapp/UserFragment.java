@@ -186,7 +186,7 @@ public class UserFragment extends Fragment {
         dialog.show();
     }
     /*
-    caption displays the map legend in a popup window
+    caption displays the map legend in a popup window when the button Caption is clicked
      */
     public void caption(View view){
         Dialog dialog = new Dialog(this.getContext());
