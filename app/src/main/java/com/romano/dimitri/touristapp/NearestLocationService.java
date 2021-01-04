@@ -71,7 +71,7 @@ public class NearestLocationService extends IntentService {
         return smallestDist;
     }
 
-
+    //method to
     public void notificationSend(){
         String CHANNEL_ID = "chan_location_1";
 
@@ -85,6 +85,7 @@ public class NearestLocationService extends IntentService {
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
 
+        //set notification content
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this,CHANNEL_ID)
                 .setContentTitle("Nearest Location")
                 .setContentText( closestPlace.getTitle() + " " + closestDistance + " m"  )
@@ -93,10 +94,11 @@ public class NearestLocationService extends IntentService {
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-
+        //show notification
         notificationManager.notify(0, builder.build());
     }
 
+    //create channel and set the importance
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
