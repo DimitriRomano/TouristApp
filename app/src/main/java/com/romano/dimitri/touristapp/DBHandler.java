@@ -119,10 +119,6 @@ public class DBHandler extends SQLiteOpenHelper {
             }
             //vérification de l'ajout des places
             List<Place> placeList=sInstance.getAllRows();
-            for(Place p:placeList) {
-                System.out.println("test BD");
-                System.out.println(p.toString());
-            }
         }
         return sInstance;
     }
@@ -145,6 +141,32 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(DBHandler.COL_IMAGE,user.getImage());
 
         db.insert(TABLE_USER,null, cv);
+        db.close();
+
+
+    }
+
+    /*
+       updateUser update the user account to the database depending on the information he gave us.
+       @param userPseudo       The user pseudo which will be replaced by the actual one.
+       @param userEmail        The user email which will be replaced by the actual one.
+       @param userScore        The user score which will be replaced by the actual one.
+       @param userPassword     The user password which will be replaced by the actual one.
+       @param userAge          The user age which will be replaced by the actual one.
+       @param userImage        The user image which will be replaced by the actual one.
+   */
+    public void updateUser(User user){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(DBHandler.COL_PSEUDO,user.getPseudo());
+        cv.put(DBHandler.COL_EMAIL,user.getEmail());
+        cv.put(DBHandler.COL_SCORE,user.getScore());
+        cv.put(DBHandler.COL_AGE,user.getAge());
+        cv.put(DBHandler.COL_IMAGE,user.getImage());
+
+        db.update(TABLE_USER,cv, COL_PSEUDO + "='" + user.getPseudo() + "'", null);
         db.close();
 
 
@@ -247,7 +269,6 @@ public class DBHandler extends SQLiteOpenHelper {
      */
     public void addPlaceDB(Place place){
         SQLiteDatabase db = this.getWritableDatabase();
-        System.out.println("add : " + place.toString());
         ContentValues cv = new ContentValues();
         cv.put(DBHandler.COL_TITLE,place.getTitle());
         cv.put(DBHandler.COL_TYPE,place.getType());
@@ -295,21 +316,18 @@ public class DBHandler extends SQLiteOpenHelper {
                 String str;
                 while((str=br.readLine())!=null){
                     Place place=new Place();
-                    System.out.println(str);
                     String parts[]=str.split(delimiter);
                     place.setTitle(parts[0]);
                     place.setType(parts[1]);
                     place.setLatitude(Double.parseDouble(parts[2]));
                     place.setLongitude(Double.parseDouble(parts[3]));
                     place.setDescription(parts[4]);
-                    System.out.println(place.toString());
                     places.add(place);
                 }
                 br.close();
                 return places;
             }
             else{
-                System.out.println("echec");
                 return null;
             }
         }
@@ -341,7 +359,6 @@ public class DBHandler extends SQLiteOpenHelper {
                 p.setLatitude(cursor.getDouble(3));
                 p.setLongitude(cursor.getDouble(4));
                 p.setDescription(cursor.getString(5));
-                System.out.println("Test affichage :" + p.toString());
 
                 // Add row to list
                 place.add(p);
@@ -402,22 +419,18 @@ public class DBHandler extends SQLiteOpenHelper {
             selectQuery = "SELECT " + COL_ID + ", " + COL_TITLE + "," + COL_TYPE + ", " + COL_LATITUDE
                     + ", " + COL_LONGITUDE + "," + COL_DESCRIPTION +" FROM " + TABLE_VISITED + " NATURAL JOIN " + TABLE_PLACE + " WHERE " + TABLE_VISITED + "." + COL_PSEUDO_VISITED + " = '"
                     + pseudo + "' ";
-            System.out.println("VISITED");
         }
         else{
             selectQuery = "SELECT " + COL_ID +", " + COL_TITLE + ", " + COL_TYPE + ", " + COL_LATITUDE + ", " + COL_LONGITUDE + ", " + COL_DESCRIPTION +
                     " FROM " + TABLE_PLACE + " EXCEPT " + "SELECT " + COL_ID +", " + COL_TITLE + ", " + COL_TYPE + ", "
                     + COL_LATITUDE + ", " + COL_LONGITUDE + ", " + COL_DESCRIPTION +  " FROM " + TABLE_VISITED + " NATURAL JOIN " + TABLE_PLACE + " WHERE "
                     + TABLE_VISITED + "." + COL_PSEUDO_VISITED + " = '" + pseudo +"' ";
-            System.out.println("NOT VISITED");
         }
 
 
         Cursor cursor = db.rawQuery(selectQuery, null);
-        System.out.println("Before selection");
         // Loop through all the rows and addi the to the list
         if (cursor.moveToFirst()) {
-            System.out.println("entered the cursor");
             do {
                 Place p=new Place();
                 p.setId(cursor.getInt(0));
@@ -431,7 +444,6 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
-        System.out.println("After selection");
 
         return place;
     }
