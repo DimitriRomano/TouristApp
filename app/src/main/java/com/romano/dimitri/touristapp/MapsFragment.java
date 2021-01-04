@@ -21,7 +21,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -124,15 +123,17 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the location provider
                 Log.d(TAG, "Location changed" + location.getLongitude() + " " + location.getLatitude());
-                //Toast.makeText(getActivity(), "Location changed, updating map...",
-                //Toast.LENGTH_SHORT).show();
+
                 mCurrentLocalisation = location;
                 if (mMap != null && btnActivation==true) {
                     updateMap();
                 }
                 if(location != null){
-                    Intent i = new Intent(getActivity(),LocationReceiver.class);
+                    Intent i = new Intent(getActivity(), NearestLocationService.class);
                     i.putExtra("currentLocation",location);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("listNotVisitedPlaces",placesAL);
+                    i.putExtras(bundle);
                     getActivity().startService(i);
                 }
             }
@@ -331,7 +332,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
             e.printStackTrace();
         }
         try {
-            network_enabled = mLocationManager.isProviderEnabled(LocationManager. NETWORK_PROVIDER ) ;
+            network_enabled = mLocationManager.isProviderEnabled(mLocationManager.NETWORK_PROVIDER ) ;
         } catch (Exception e) {
             e.printStackTrace() ;
         }
