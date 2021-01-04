@@ -35,6 +35,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.romano.dimitri.touristapp.model.Place;
+import com.romano.dimitri.touristapp.model.User;
 
 import java.util.ArrayList;
 
@@ -46,13 +47,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     private String mLocationProvider;
     private LocationManager mLocationManager;
     private FloatingActionButton current_location_btn;
-    private GoogleMap mMap;
+    private GoogleMap mMap, mMapValidated;
     private LocationListener locationListener;
     private ArrayList<Place> placesAL, alreadyVisitedPlacesAL;
     private DBHandler db;
     private SupportMapFragment mapFragment;
     private int placePositionAL;
     private String mPseudo;
+    private User mUser;
     private ProcessLevel processLevel;
 
     private static final String TAG = "MapFragment";
@@ -98,9 +100,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         super.onViewCreated(view, savedInstanceState);
 
         mPseudo = requireArguments().getString("pseudo");
-
         placesAL = db.placeVisitedUser(mPseudo, false);
         alreadyVisitedPlacesAL = db.placeVisitedUser(mPseudo, true);
+        mUser = db.getUser(mPseudo);
+        processLevel = new ProcessLevel(alreadyVisitedPlacesAL, mUser);
+
         mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
@@ -223,47 +227,61 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                                         .defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
                         break;
                 }
+                mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                    public void onInfoWindowClick(Marker marker) {
+                        float[] distance = new float[1];
+                        String snippetContent = marker.getSnippet();
+                        String[] splittedSnippet = snippetContent.split(":");
+                        int score = 0;
+                        boolean alreadyValidated = false;
+
+
+                        Location.distanceBetween(marker.getPosition().latitude, marker.getPosition().longitude, mCurrentLocalisation.getLatitude(), mCurrentLocalisation.getLongitude(), distance);
+                        for (int j = 0; j < alreadyVisitedPlacesAL.size(); j++) {
+                            LatLng pos = new LatLng(alreadyVisitedPlacesAL.get(j).getLatitude(), alreadyVisitedPlacesAL.get(j).getLongitude());
+                            if (pos.equals(marker.getPosition())) {
+                                alreadyValidated = true;
+                            }
+                        }
+                        if (alreadyValidated == false) {
+                            if (distance[0] <= 500) {
+                                marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                                db.addVisit(mPseudo, Integer.parseInt(splittedSnippet[1]));
+                                Toast.makeText(getActivity(), "Congrats, " + marker.getTitle() + " is now validated !", Toast.LENGTH_SHORT).show();
+                                placesAL = db.placeVisitedUser(mPseudo, false);
+                                alreadyVisitedPlacesAL = db.placeVisitedUser(mPseudo, true);
+                                System.out.println("Le score de " + mPseudo + " est : " + score);
+                                score = processLevel.givePoint(mUser, alreadyVisitedPlacesAL);
+                                System.out.println("Le nvx score de " + mPseudo + " est : " + score);
+                                mUser.setScore(score);
+                                db.updateUser(mUser);
+                            } else {
+                                Toast.makeText(getActivity(), "You are too far from this location, please get closer.", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(getActivity(), marker.getTitle() + " is already validated !", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
             else{
                 mMap.addMarker(new MarkerOptions().position(placeLatLng)
                         .title(arrayListPlaces.get(placePositionAL).getTitle())
                         .snippet(arrayListPlaces.get(placePositionAL).getDescription() + " ID :" + arrayListPlaces.get(placePositionAL).getId() + ":" +
-                        arrayListPlaces.get(placePositionAL).getType())
+                                arrayListPlaces.get(placePositionAL).getType())
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
             }
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(5.0f));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(placeLatLng));
-            mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-                public void onInfoWindowClick(Marker marker) {
-                    float[] distance = new float[1];
-                    String snippetContent = marker.getSnippet();
-                    String[] splittedSnippet = snippetContent.split(":");
-
-                    Location.distanceBetween(marker.getPosition().latitude,marker.getPosition().longitude,mCurrentLocalisation.getLatitude(),mCurrentLocalisation.getLongitude(),distance);
-
-                    if(!marker.getTitle().contains("Current location")){
-                        if(distance[0] <= 500){
-                            marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                            db.addVisit(mPseudo, Integer.parseInt(splittedSnippet[1]));
-                            Toast.makeText(getActivity(),"Congrats, " + marker.getTitle() + " is now validated !",Toast.LENGTH_SHORT).show();
-                            placesAL = db.placeVisitedUser(mPseudo, false);
-                            alreadyVisitedPlacesAL = db.placeVisitedUser(mPseudo, true);
-
-                        }
-                        else{
-                            Toast.makeText(getActivity(),"You are too far from this location, please get closer.",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }
-            });
-           /*mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(Marker marker) {
-                    marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+                    System.out.println(marker.getTitle());
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 15));
                     return false;
                 }
-            });*/
+            });
             mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
                 // Use default InfoWindow frame
                 @Override
@@ -309,9 +327,15 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
             } else {
                 LatLng pin = new LatLng(mCurrentLocalisation.getLatitude(), mCurrentLocalisation.getLongitude());
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(pin));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pin, 13));
                 mMap.addMarker(new MarkerOptions().position(pin).title("Current location"));
-            }
+                mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                    public void onInfoWindowClick(Marker marker) {
+                        Toast.makeText(getActivity(), "You can't validate your own location", Toast.LENGTH_SHORT).show();
 
+                    }
+                });
+            }
         }
     }
 

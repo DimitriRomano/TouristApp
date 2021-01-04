@@ -45,15 +45,15 @@ public class ProcessLevel {
     private void level_point(){
         HashMap<Integer, String> grades = new HashMap<Integer, String>();
         int[] levels = {0, 500, 1500, 3000, 6000, 7000, 8000, 9000, 10000};
-        grades.put(1, "Tourist");
-        grades.put(2, "Confirmed Tourist");
-        grades.put(3, "Traveler");
-        grades.put(4, "Confirmed Traveler");
-        grades.put(5, "Explorator");
-        grades.put(6, "Confirmed Explorator");
-        grades.put(7, "Prospector");
-        grades.put(8, "Lara Croft");
-        grades.put(9, "Indiana Jones");
+        grades.put(0, "Tourist");
+        grades.put(1, "Confirmed Tourist");
+        grades.put(2, "Traveler");
+        grades.put(3, "Confirmed Traveler");
+        grades.put(4, "Explorator");
+        grades.put(5, "Confirmed Explorator");
+        grades.put(6, "Prospector");
+        grades.put(7, "Lara Croft");
+        grades.put(8, "Indiana Jones");
         this.grades = grades;
         this.levels = levels;
     }
@@ -61,35 +61,27 @@ public class ProcessLevel {
     public String getUserGrade(int mPoints){
         int nearest = 0;
         int index = 1;
-        System.out.println("Your points: " + mPoints);
-        System.out.println(levels.length);
         for (int i=0; i< this.levels.length; i++){
-            System.out.println(levels[i]);
-            if(mPoints > levels[i]){
+            if(mPoints >= levels[i]){
                 nearest = levels[i];
-                System.out.println("Nearest: " + nearest);
                 index = i;
             }
         }
-        System.out.println("Index " + index + "; Nearest " + grades.get(index));
         return grades.get(index);
     }
 
     /* This method is going to check in which location the user is going to be
      *  depending on the place's type, and if the user has either added this place
-     * to his "visit" list or if he deleted it.
-     * 1 : The user wants to add the location to his "visit" list
-     * 0 : The user wants to delete the location from his "visit" list */
-    private int givePoint(User user, Place place) {
+     * to his "visit" list or if he deleted it. */
+    public int givePoint(User user, ArrayList<Place> place) {
         int userPoint = user.getScore();
-        String locationType = place.getType();
-
-        if(type_point.containsValue(locationType)){
-            return userPoint + type_point.get(locationType);
+        for(int i=0; i<place.size(); i++){
+            String locationType = place.get(i).getType();
+            if(type_point.containsKey(locationType)){
+                userPoint += type_point.get(locationType);
+            }
         }
-        else{
-            return userPoint;
-        }
+        return userPoint;
     }
 
     private void progressBarProcess(){
