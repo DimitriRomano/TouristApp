@@ -71,11 +71,11 @@ teaching us everything to make this application.
                           A floating button is set to log out and go back to the MainActivity where you will either log in or register yourself.
                           (An intent is set to do so).
 
-     For the intents we have used two different types of flags such as : ♦ FLAG_ACTIVITY_CLEAR_TASK (This flag will cause any existing task that would be associated with the 
-																																																																											activity to be cleared before the activity is started. )
-      																																																																			♦ FLAG_ACTIVITY_NEW_TASK (This flag will cause any existing task that would be associated with the 
-																																																																											activity to be cleared before the activity is started. That is, the activity becomes the new root of
-																																																																											an otherwise empty task, and any old activities are finished.)
+     For the intents we have used two different types of flags such as : ♦ FLAG_ACTIVITY_CLEAR_TASK (This flag will cause any existing task that would be associated with
+     									   the activity to be cleared before the activity is started.)
+									 ♦ FLAG_ACTIVITY_NEW_TASK (This flag will cause any existing task that would be associated with the 
+									   activity to be cleared before the activity is started. That is, the activity becomes the new root of
+									   an otherwise empty task, and any old activities are finished.)
 																																																																									
 																																																																									
 All our sources are linked to : https://developer.android.com/ 
