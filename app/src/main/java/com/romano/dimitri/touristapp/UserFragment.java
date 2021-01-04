@@ -98,7 +98,9 @@ public class UserFragment extends Fragment {
         mAge = requireArguments().getInt("age");
         mImage = requireArguments().getString("image");
         mImageSet=requireArguments().getBoolean("imageSet");
+
         db = DBHandler.getInstance(this.getContext());
+        //retrieve places are already visited by the user
         alreadyVisitedarrayListPlace = db.placeVisitedUser(mPseudo, true);
 
         mGradeView = view.findViewById(R.id.textViewGrade);
@@ -107,8 +109,9 @@ public class UserFragment extends Fragment {
         mScoreView = view.findViewById(R.id.textViewScore);
         mAgeView = view.findViewById(R.id.textViewAge);
         mImageProfile = view.findViewById(R.id.imageUser);
-
         alreadyVisited=view.findViewById(R.id.alreadyVisitedButton);
+        captionButton=view.findViewById(R.id.captionButton);
+
         alreadyVisited.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,7 +119,6 @@ public class UserFragment extends Fragment {
             }
         });
 
-        captionButton=view.findViewById(R.id.captionButton);
         captionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,13 +138,19 @@ public class UserFragment extends Fragment {
         }
         calculateScore(view);
     }
-
+    /*
+    SetScore updates the score of the user registered in the database
+    contained in the progress bar
+     */
     public void setScore(){
         int newScore = db.getUser(mPseudo).getScore();
         mScore = newScore;
         mScoreView.setText(mScore + "/10000 XP");
     }
-
+    /*
+    calculateScore allows to calculate the user's score
+    from the places he has visited, to update his grade and progress bar
+     */
     public void calculateScore(View view){
         mScore = db.getUser(mPseudo).getScore();
         mGrade = proLevel.getUserGrade(mScore);
@@ -170,8 +178,7 @@ public class UserFragment extends Fragment {
            String title=p.getTitle();
            Double latitute=p.getLatitude();
            Double longitude=p.getLongitude();
-           String newligne=System.getProperty("line.separator");
-           String item=title+newligne+"Lat: " +latitute+ "\nLong: "+longitude;
+           String item=title+"\nLat: " +latitute+ "\nLong: "+longitude;
            System.out.println("test list : "+item);
            itemList.add(item);
         }
