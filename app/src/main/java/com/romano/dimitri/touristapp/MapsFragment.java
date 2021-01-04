@@ -69,7 +69,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     private ProcessLevel processLevel;
 
     public static final String TAG = "MapFragment";
-    private static final int LOCALISATION_REQUEST = 30;
     private static final int MULTIPLE_LOCATION_REQUEST = 42;
 
 
@@ -181,6 +180,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         if(mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)==true && btnActivation==true){
             updateMap();
         }
+        //register the broadcast receiver ( local )
         IntentFilter filter = new IntentFilter(INTENT_FILTER);
         getActivity().registerReceiver(mNearestLocationReceiver,filter);
 
@@ -195,6 +195,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         if (mLocationManager != null) {
             mLocationManager.removeUpdates(locationListener);
         }
+        //remove the broadcast receiver
         getActivity().unregisterReceiver(mNearestLocationReceiver);
     }
 
@@ -361,6 +362,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         }
     }
 
+
     private void updateMap() {
         Log.d(TAG, "Updating map...");
         if (mMap != null) {
@@ -390,6 +392,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         updateMap();
     }
 
+    //method to check if provider are enable on check localisation button
     private void locationEnabled(){
         boolean gps_enabled = false;
         boolean network_enabled = false;
@@ -483,6 +486,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         }
     }
 
+    //inner declaration of the broadcast
     public class NearestLocationReceiver extends BroadcastReceiver {
 
         @Override
