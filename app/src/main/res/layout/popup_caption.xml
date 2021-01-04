@@ -49,8 +49,7 @@
         android:layout_marginLeft="81dp"
         android:layout_marginEnd="155dp"
         android:layout_marginRight="155dp"
-        android:layout_marginBottom="263dp"
-        android:gravity="center"
+        android:layout_marginBottom="257dp"
         android:text="Place visited" />
 
     <ImageView
@@ -75,8 +74,7 @@
         android:layout_marginLeft="81dp"
         android:layout_marginEnd="151dp"
         android:layout_marginRight="151dp"
-        android:layout_marginBottom="213dp"
-        android:gravity="center"
+        android:layout_marginBottom="207dp"
         android:text="Stadium" />
 
     <ImageView
@@ -101,8 +99,7 @@
         android:layout_marginLeft="81dp"
         android:layout_marginEnd="151dp"
         android:layout_marginRight="151dp"
-        android:layout_marginBottom="163dp"
-        android:gravity="center"
+        android:layout_marginBottom="158dp"
         android:text="Castle" />
 
     <ImageView
@@ -126,8 +123,7 @@
         android:layout_marginLeft="81dp"
         android:layout_marginEnd="152dp"
         android:layout_marginRight="152dp"
-        android:layout_marginBottom="114dp"
-        android:gravity="center"
+        android:layout_marginBottom="109dp"
         android:text="Stadium" />
 
     <ImageView
@@ -152,8 +148,7 @@
         android:layout_marginLeft="81dp"
         android:layout_marginEnd="151dp"
         android:layout_marginRight="151dp"
-        android:layout_marginBottom="67dp"
-        android:gravity="center"
+        android:layout_marginBottom="60dp"
         android:text="Monument" />
 
     <ImageView
@@ -178,8 +173,7 @@
         android:layout_marginLeft="81dp"
         android:layout_marginEnd="147dp"
         android:layout_marginRight="147dp"
-        android:layout_marginBottom="18dp"
-        android:gravity="center"
+        android:layout_marginBottom="12dp"
         android:text="Museum" />
 
 </RelativeLayout>
