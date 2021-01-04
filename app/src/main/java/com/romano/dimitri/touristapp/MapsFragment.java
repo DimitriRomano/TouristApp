@@ -229,37 +229,41 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                 }
                 mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                     public void onInfoWindowClick(Marker marker) {
-                        float[] distance = new float[1];
+                        if((mCurrentLocalisation.getLatitude() == marker.getPosition().latitude && mCurrentLocalisation.getLongitude() == marker.getPosition().longitude) == false) {
+                            float[] distance = new float[1];
                         String snippetContent = marker.getSnippet();
                         String[] splittedSnippet = snippetContent.split(":");
                         int score = 0;
                         boolean alreadyValidated = false;
 
-
-                        Location.distanceBetween(marker.getPosition().latitude, marker.getPosition().longitude, mCurrentLocalisation.getLatitude(), mCurrentLocalisation.getLongitude(), distance);
-                        for (int j = 0; j < alreadyVisitedPlacesAL.size(); j++) {
-                            LatLng pos = new LatLng(alreadyVisitedPlacesAL.get(j).getLatitude(), alreadyVisitedPlacesAL.get(j).getLongitude());
-                            if (pos.equals(marker.getPosition())) {
-                                alreadyValidated = true;
+                            Location.distanceBetween(marker.getPosition().latitude, marker.getPosition().longitude, mCurrentLocalisation.getLatitude(), mCurrentLocalisation.getLongitude(), distance);
+                            for (int j = 0; j < alreadyVisitedPlacesAL.size(); j++) {
+                                LatLng pos = new LatLng(alreadyVisitedPlacesAL.get(j).getLatitude(), alreadyVisitedPlacesAL.get(j).getLongitude());
+                                if (pos.equals(marker.getPosition())) {
+                                    alreadyValidated = true;
+                                }
+                            }
+                            if (alreadyValidated == false) {
+                                if (distance[0] <= 500) {
+                                    marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                                    db.addVisit(mPseudo, Integer.parseInt(splittedSnippet[1]));
+                                    Toast.makeText(getActivity(), "Congrats, " + marker.getTitle() + " is now validated !", Toast.LENGTH_SHORT).show();
+                                    placesAL = db.placeVisitedUser(mPseudo, false);
+                                    alreadyVisitedPlacesAL = db.placeVisitedUser(mPseudo, true);
+                                    System.out.println("Le score de " + mPseudo + " est : " + score);
+                                    score = processLevel.givePoint(mUser, alreadyVisitedPlacesAL);
+                                    System.out.println("Le nvx score de " + mPseudo + " est : " + score);
+                                    mUser.setScore(score);
+                                    db.updateUser(mUser);
+                                } else {
+                                    Toast.makeText(getActivity(), "You are too far from this location, please get closer.", Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(getActivity(), marker.getTitle() + " is already validated !", Toast.LENGTH_SHORT).show();
                             }
                         }
-                        if (alreadyValidated == false) {
-                            if (distance[0] <= 500) {
-                                marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                                db.addVisit(mPseudo, Integer.parseInt(splittedSnippet[1]));
-                                Toast.makeText(getActivity(), "Congrats, " + marker.getTitle() + " is now validated !", Toast.LENGTH_SHORT).show();
-                                placesAL = db.placeVisitedUser(mPseudo, false);
-                                alreadyVisitedPlacesAL = db.placeVisitedUser(mPseudo, true);
-                                System.out.println("Le score de " + mPseudo + " est : " + score);
-                                score = processLevel.givePoint(mUser, alreadyVisitedPlacesAL);
-                                System.out.println("Le nvx score de " + mPseudo + " est : " + score);
-                                mUser.setScore(score);
-                                db.updateUser(mUser);
-                            } else {
-                                Toast.makeText(getActivity(), "You are too far from this location, please get closer.", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(getActivity(), marker.getTitle() + " is already validated !", Toast.LENGTH_SHORT).show();
+                        else{
+                            Toast.makeText(getActivity(), "You can't validate your own location", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -329,12 +333,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(pin));
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pin, 13));
                 mMap.addMarker(new MarkerOptions().position(pin).title("Current location"));
-                mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-                    public void onInfoWindowClick(Marker marker) {
-                        Toast.makeText(getActivity(), "You can't validate your own location", Toast.LENGTH_SHORT).show();
-
-                    }
-                });
             }
         }
     }
