@@ -83,7 +83,7 @@ teaching us everything to make this application.
 
 • Service : We use a service that allow each time onLocationChanged is call to check which place is the nearest from our current Location , the service is an intentService because each call is independante , in the service after the nearest location is found, from where we are , we create a notification that show the title of the place and the distance. When we click on the notification an intent is sent to a broadcast receiver ( inner broadcast on MapsFragment ) after that we auto zoom to the place we clicked.
 
-•Sensors : The main used is positionSensor because our application is base on the map in a large part.
+•Sensors : We only use one sensor and it is the location sensor because our application is base on the map in a large part.
 
 All our sources are linked to : https://developer.android.com/ 
 				https://youtube.com (lot of ressources)
