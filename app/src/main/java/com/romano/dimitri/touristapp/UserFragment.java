@@ -1,5 +1,6 @@
 package com.romano.dimitri.touristapp;
 
+import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -12,15 +13,16 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.romano.dimitri.touristapp.model.Place;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 
 public class UserFragment extends Fragment {
@@ -46,6 +48,7 @@ public class UserFragment extends Fragment {
 
     private Button alreadyVisited;
     private ArrayList<Place> alreadyVisitedarrayListPlace;
+    private Button captionButton;
 
     public UserFragment() {
         // Required empty public constructor
@@ -62,6 +65,7 @@ public class UserFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
+        db = DBHandler.getInstance(this.getContext());
         return inflater.inflate(R.layout.fragment_user, container, false);
     }
 
@@ -74,8 +78,6 @@ public class UserFragment extends Fragment {
         mAge = requireArguments().getInt("age");
         mImage = requireArguments().getString("image");
         mImageSet=requireArguments().getBoolean("imageSet");
-        db = DBHandler.getInstance(this.getContext());
-        alreadyVisitedarrayListPlace = db.placeVisitedUser(mPseudo, true);
 
         mGradeView = view.findViewById(R.id.textViewGrade);
         mPseudoView = view.findViewById(R.id.textViewPseudo);
@@ -83,7 +85,22 @@ public class UserFragment extends Fragment {
         mScoreView = view.findViewById(R.id.textViewScore);
         mAgeView = view.findViewById(R.id.textViewAge);
         mImageProfile = view.findViewById(R.id.imageUser);
+
         alreadyVisited=view.findViewById(R.id.alreadyVisitedButton);
+        alreadyVisited.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                visited(v);
+            }
+        });
+
+        captionButton=view.findViewById(R.id.captionButton);
+        captionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                caption(v);
+            }
+        });
 
         mPseudoView.setText(mPseudo);
         mEmailView.setText(mEmail);
@@ -109,10 +126,29 @@ public class UserFragment extends Fragment {
     }
 
     public void visited(View view){
-        Iterator<Place> iter=alreadyVisitedarrayListPlace.iterator();
-        while(iter.hasNext()){
-            System.out.println("test recup " + iter.next().toString());
+        Dialog dialog = new Dialog(this.getContext());
+        dialog.setContentView(R.layout.popup_places_visited);
+        // Create ListView
+        ListView listView = dialog.findViewById(R.id.listview);
+        alreadyVisitedarrayListPlace=db.placeVisitedUser(mPseudo,true);
+        ArrayList<String> itemList=new ArrayList<>();
+        for(Place p : alreadyVisitedarrayListPlace){
+           String title=p.getTitle();
+           Double latitute=p.getLatitude();
+           Double longitude=p.getLongitude();
+           String newligne=System.getProperty("line.separator");
+           String item=title+newligne+"Coord : " +latitute+"|"+longitude;
+           System.out.println("test list : "+item);
+           itemList.add(item);
         }
+        listView.setAdapter(new ArrayAdapter<>(this.getContext(), android.R.layout.simple_list_item_1,itemList));
+        dialog.show();
+    }
+
+    public void caption(View view){
+        Dialog dialog = new Dialog(this.getContext());
+        dialog.setContentView(R.layout.popup_caption);
+        dialog.show();
     }
     //mPseudoView = (TextView)getView().findViewById(R.id.textViewPseudo);
     //mScoreView = getView().findViewById(R.id.textViewScore);
