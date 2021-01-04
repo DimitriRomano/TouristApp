@@ -7,7 +7,7 @@
 
 @Author Aladdine BEN ROMDHANE aladdineben@outlook.com
 @Author Quitterie PILON       quitterie.p@outlook.fr
-@Author Dimitri ROMANO        dimitri.romano@etu.cyu.fr
+@Author Dimitri ROMANO        dimitri.romano09@gmail.com
 
 This application has been made in the context of a project in Developping Application
 class for the CY Cergy Paris Université. We would like to thank Manos Katsomallos for
