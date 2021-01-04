@@ -171,7 +171,7 @@
         android:layout_marginBottom="82dp"
         android:text="Already visited"
         android:onClick="visited"
-        app:backgroundTint="#555555" />
+        app:backgroundTint="#3DDC84" />
 
     <Button
         android:id="@+id/captionButton"
@@ -190,6 +190,7 @@
         android:layout_marginRight="151dp"
         android:layout_marginBottom="82dp"
         android:text="Caption"
+        android:onClick="caption"
         app:backgroundTint="#3DDC84" />
 
 </RelativeLayout>
