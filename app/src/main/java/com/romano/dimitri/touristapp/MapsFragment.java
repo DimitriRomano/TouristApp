@@ -291,7 +291,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                                 }
                             }
                             if (alreadyValidated == false) {
-                                if (distance[0] <= 500) {
+                                if (distance[0] <= 200) {
                                     marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                                     db.addVisit(mPseudo, Integer.parseInt(splittedSnippet[1]));
                                     Toast.makeText(getActivity(), "Congrats, " + marker.getTitle() + " is now validated !", Toast.LENGTH_SHORT).show();
