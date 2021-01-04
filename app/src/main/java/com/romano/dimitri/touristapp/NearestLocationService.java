@@ -89,7 +89,7 @@ public class NearestLocationService extends IntentService {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this,CHANNEL_ID)
                 .setContentTitle("Nearest Location")
                 .setContentText( closestPlace.getTitle() + " " + closestDistance + " m"  )
-                .setSmallIcon(R.drawable.common_google_signin_btn_icon_dark)
+                .setSmallIcon(R.drawable.ic_tourist_app_icon)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
