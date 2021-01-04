@@ -6,11 +6,15 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.Manifest;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -24,6 +28,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -54,7 +59,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     private String mPseudo;
     private ProcessLevel processLevel;
 
-    private static final String TAG = "MapFragment";
+    public static final String TAG = "MapFragment";
     private static final int LOCALISATION_REQUEST = 30;
     private static final int MULTIPLE_LOCATION_REQUEST = 42;
 
@@ -74,8 +79,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     // The minimum time between updates in milliseconds
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
 
+    public static final String INTENT_FILTER= "NEAREST_LOCATION_NOTIF";
+    NearestLocationReceiver mNearestLocationReceiver;
+
     // Declaring a Location Manager
     protected LocationManager locationManager;
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,7 +105,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        mNearestLocationReceiver = new NearestLocationReceiver();
         mPseudo = requireArguments().getString("pseudo");
 
         placesAL = db.placeVisitedUser(mPseudo, false);
@@ -150,6 +160,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
@@ -157,7 +168,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         if(mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)==true && btnActivation==true){
             updateMap();
         }
+        IntentFilter filter = new IntentFilter(INTENT_FILTER);
+        getActivity().registerReceiver(mNearestLocationReceiver,filter);
+
     }
+
 
     @Override
     public void onPause() {
@@ -167,7 +182,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         if (mLocationManager != null) {
             mLocationManager.removeUpdates(locationListener);
         }
-
+        getActivity().unregisterReceiver(mNearestLocationReceiver);
     }
 
     private void showAllPlaces(ArrayList<Place> arrayListPlaces, boolean alreadyVisited){
@@ -258,13 +273,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                     }
                 }
             });
-           /*mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                @Override
-                public boolean onMarkerClick(Marker marker) {
-                    marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-                    return false;
-                }
-            });*/
+
             mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
                 // Use default InfoWindow frame
                 @Override
@@ -302,15 +311,16 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
             showAllPlaces(alreadyVisitedPlacesAL, true);
             showAllPlaces(placesAL, false);
             Log.d(TAG, "my currentLocalisation : " + mCurrentLocalisation);
-
-            if (mCurrentLocalisation == null) {
-                if (lastLocation != null) {
-                    mCurrentLocalisation = lastLocation;
+            if(btnActivation == true) {
+                if (mCurrentLocalisation == null) {
+                    if (lastLocation != null) {
+                        mCurrentLocalisation = lastLocation;
+                    }
+                } else {
+                    LatLng pin = new LatLng(mCurrentLocalisation.getLatitude(), mCurrentLocalisation.getLongitude());
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(pin));
+                    mMap.addMarker(new MarkerOptions().position(pin).title("Current location"));
                 }
-            } else {
-                LatLng pin = new LatLng(mCurrentLocalisation.getLatitude(), mCurrentLocalisation.getLongitude());
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(pin));
-                mMap.addMarker(new MarkerOptions().position(pin).title("Current location"));
             }
 
         }
@@ -416,6 +426,20 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         }
     }
 
+    public class NearestLocationReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle intentExtras = intent.getExtras();
+            if (intentExtras != null) {
+                Place myPlace = (Place) intentExtras.get("closest_place");
+                if(mMap!=null){
+                    CameraUpdate zoomNearestLocation = CameraUpdateFactory.newLatLngZoom(new LatLng(myPlace.getLatitude(),myPlace.getLongitude()),15);
+                    mMap.animateCamera(zoomNearestLocation);
+                }
+            }
+        }
+    }
 
 
     /**
@@ -431,9 +455,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     public void onMapReady(GoogleMap googleMap) {
         LatLng france_center = new LatLng(46.468133, 2.849159);
         mMap = googleMap;
+        updateMap();
+        btnActivation =false;
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(france_center, (float) 5));
         //updateMap();
     }
+
 
 }
 
