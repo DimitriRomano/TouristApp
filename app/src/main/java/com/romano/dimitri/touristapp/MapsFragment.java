@@ -199,6 +199,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         getActivity().unregisterReceiver(mNearestLocationReceiver);
     }
 
+    /*
+        getMarkerIconFromDrawable is a method that we took from stackoverflow and will create a Canvas from our drawable ressource
+        to return a BitmapDescriptor interpretable by the icon method of GoogleMaps mMap.
+        @param drawable     Is the drawable ressource that we need to show in the marker.
+        @return BitmapDescriptor it will return the BitmapDescription and will be used to draw our image for our markers
+     */
     private BitmapDescriptor getMarkerIconFromDrawable(Drawable drawable) {
         Canvas canvas = new Canvas();
         Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
@@ -208,9 +214,18 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
+    /*
+        showAllPlaces is the method which will put all the markers depending on the place's type on the map (different drawable items).
+        @param arrayListPlaces  Set of places (here we will use it to show all the places which are not validated, and the validated ones)
+        @alreadyVisited         boolean who will know if the places are already visited or not
+            false: places who are not visited
+            true:  places who are visited
+     */
     private void showAllPlaces(ArrayList<Place> arrayListPlaces, boolean alreadyVisited){
         Drawable iconDrawable;
         BitmapDescriptor icon;
+        //This loop will run through all the places from our ArrayList to treat every single places and do an instruction depending on its types,
+        //title and if it is already visited or not.
         for(placePositionAL=0; placePositionAL<arrayListPlaces.size(); placePositionAL++){
             LatLng placeLatLng = new LatLng(arrayListPlaces.get(placePositionAL).getLatitude(), arrayListPlaces.get(placePositionAL).getLongitude());
             if(alreadyVisited == false) {
@@ -297,9 +312,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                                     Toast.makeText(getActivity(), "Congrats, " + marker.getTitle() + " is now validated !", Toast.LENGTH_SHORT).show();
                                     placesAL = db.placeVisitedUser(mPseudo, false);
                                     alreadyVisitedPlacesAL = db.placeVisitedUser(mPseudo, true);
-                                    System.out.println("Le score de " + mPseudo + " est : " + score);
                                     score = processLevel.givePoint(mUser, alreadyVisitedPlacesAL);
-                                    System.out.println("Le nvx score de " + mPseudo + " est : " + score);
                                     mUser.setScore(score);
                                     db.updateUser(mUser);
                                 } else {
@@ -328,7 +341,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
             mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(Marker marker) {
-                    System.out.println(marker.getTitle());
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 13));
                     return false;
                 }
@@ -362,7 +374,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         }
     }
 
-
+    /*
+        updateMap method will update the map everytime the user will click on the floating button to geolocate himself again.
+        It will clear the map and reprint every marker (visited, non visited and current location of the user).
+     */
     private void updateMap() {
         Log.d(TAG, "Updating map...");
         if (mMap != null) {
