@@ -6,11 +6,15 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.Manifest;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -30,6 +34,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -50,20 +55,20 @@ import static android.content.Context.LOCATION_SERVICE;
 public class MapsFragment extends Fragment implements OnMapReadyCallback{
     private Location mCurrentLocalisation = null;
     private Location mLocation;
+    private String mLocationProvider;
     private LocationManager mLocationManager;
+    private FloatingActionButton current_location_btn;
+    private GoogleMap mMap;
     private LocationListener locationListener;
     private SupportMapFragment mapFragment;
     private DBHandler db;
-    private String mLocationProvider;
     private String mPseudo;
-    private GoogleMap mMap;
     private ArrayList<Place> placesAL, alreadyVisitedPlacesAL;
-    private FloatingActionButton current_location_btn;
     private int placePositionAL;
     private User mUser;
     private ProcessLevel processLevel;
 
-    private static final String TAG = "MapFragment";
+    public static final String TAG = "MapFragment";
     private static final int LOCALISATION_REQUEST = 30;
     private static final int MULTIPLE_LOCATION_REQUEST = 42;
 
@@ -83,8 +88,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     // The minimum time between updates in milliseconds
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
 
+    public static final String INTENT_FILTER= "NEAREST_LOCATION_NOTIF";
+    NearestLocationReceiver mNearestLocationReceiver;
+
     // Declaring a Location Manager
     protected LocationManager locationManager;
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -105,8 +115,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        mNearestLocationReceiver = new NearestLocationReceiver();
         mPseudo = requireArguments().getString("pseudo");
+
         placesAL = db.placeVisitedUser(mPseudo, false);
         alreadyVisitedPlacesAL = db.placeVisitedUser(mPseudo, true);
         mUser = db.getUser(mPseudo);
@@ -122,6 +133,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         current_location_btn = getActivity().findViewById(R.id.current_location_btn);
         current_location_btn.setOnClickListener(this::getSelfLocation);
 
+
         //set location provider
         mLocationProvider = LocationManager.GPS_PROVIDER;
 
@@ -134,15 +146,16 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the location provider
                 Log.d(TAG, "Location changed" + location.getLongitude() + " " + location.getLatitude());
-                //Toast.makeText(getActivity(), "Location changed, updating map...",
-                //Toast.LENGTH_SHORT).show();
                 mCurrentLocalisation = location;
                 if (mMap != null && btnActivation==true) {
                     updateMap();
                 }
                 if(location != null){
-                    Intent i = new Intent(getActivity(),LocationReceiver.class);
+                    Intent i = new Intent(getActivity(), NearestLocationService.class);
                     i.putExtra("currentLocation",location);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("listNotVisitedPlaces",placesAL);
+                    i.putExtras(bundle);
                     getActivity().startService(i);
                 }
             }
@@ -159,6 +172,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
@@ -166,7 +180,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         if(mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)==true && btnActivation==true){
             updateMap();
         }
+        IntentFilter filter = new IntentFilter(INTENT_FILTER);
+        getActivity().registerReceiver(mNearestLocationReceiver,filter);
+
     }
+
 
     @Override
     public void onPause() {
@@ -176,7 +194,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         if (mLocationManager != null) {
             mLocationManager.removeUpdates(locationListener);
         }
-
+        getActivity().unregisterReceiver(mNearestLocationReceiver);
     }
 
     private BitmapDescriptor getMarkerIconFromDrawable(Drawable drawable) {
@@ -290,7 +308,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                             }
                         }
                         else{
-                            Toast.makeText(getActivity(), "You can't validate your own location", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(),"You are too far from this location, please get closer.",Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -358,9 +376,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
             } else {
                 LatLng pin = new LatLng(mCurrentLocalisation.getLatitude(), mCurrentLocalisation.getLongitude());
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(pin));
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pin, 13));
                 mMap.addMarker(new MarkerOptions().position(pin).title("Current location"));
             }
+
         }
     }
 
@@ -380,7 +398,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
             e.printStackTrace();
         }
         try {
-            network_enabled = mLocationManager.isProviderEnabled(LocationManager. NETWORK_PROVIDER ) ;
+            network_enabled = mLocationManager.isProviderEnabled(mLocationManager.NETWORK_PROVIDER ) ;
         } catch (Exception e) {
             e.printStackTrace() ;
         }
@@ -464,7 +482,20 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         }
     }
 
+    public class NearestLocationReceiver extends BroadcastReceiver {
 
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle intentExtras = intent.getExtras();
+            if (intentExtras != null) {
+                Place myPlace = (Place) intentExtras.get("closest_place");
+                if(mMap!=null){
+                    CameraUpdate zoomNearestLocation = CameraUpdateFactory.newLatLngZoom(new LatLng(myPlace.getLatitude(),myPlace.getLongitude()),15);
+                    mMap.animateCamera(zoomNearestLocation);
+                }
+            }
+        }
+    }
 
     /**
      * Manipulates the map once available.
@@ -479,9 +510,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     public void onMapReady(GoogleMap googleMap) {
         LatLng france_center = new LatLng(46.468133, 2.849159);
         mMap = googleMap;
+        updateMap();
+        btnActivation =false;
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(france_center, (float) 5));
         //updateMap();
     }
-
 }
 
