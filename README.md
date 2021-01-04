@@ -79,8 +79,7 @@ teaching us everything to make this application.
 																																																																									
 																																																																									
 All our sources are linked to : https://developer.android.com/ 
-																																https://youtube.com (lot of ressources)
-																																https://stackoverflow.com (lot of ressources)
-																																https://guides.codepath.com/android/creating-and-using-fragments
-																																https://developers.google.com/maps/documentation/android-sdk/marker?hl=fr
-																																and... Manos Katsomallos and Dimitris Kotzinos for the TP and Lectures.
+				https://youtube.com (lot of ressources)
+				https://stackoverflow.com (lot of ressources)
+				https://guides.codepath.com/android/creating-and-using-fragments
+				https://developers.google.com/maps/documentation/android-sdk/marker?hl=fr													and... Manos Katsomallos and Dimitris Kotzinos for the TP and Lectures.
