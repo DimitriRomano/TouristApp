@@ -76,8 +76,10 @@ teaching us everything to make this application.
 									 ♦ FLAG_ACTIVITY_NEW_TASK (This flag will cause any existing task that would be associated with the 
 									   activity to be cleared before the activity is started. That is, the activity becomes the new root of
 									   an otherwise empty task, and any old activities are finished.)
-																																																																									
-																																																																									
+									   
+• Threads : A thread has been used in the UserFragment to allow the progress bar, the score and the grade to constantly check for changes in the database to possibily actualize
+	    the data that is being shown to the user.
+
 All our sources are linked to : https://developer.android.com/ 
 				https://youtube.com (lot of ressources)
 				https://stackoverflow.com (lot of ressources)
