@@ -328,7 +328,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                 @Override
                 public boolean onMarkerClick(Marker marker) {
                     System.out.println(marker.getTitle());
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 15));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 13));
                     return false;
                 }
             });
@@ -376,7 +376,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                 }
             } else {
                 LatLng pin = new LatLng(mCurrentLocalisation.getLatitude(), mCurrentLocalisation.getLongitude());
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(pin));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pin, 13));
                 mMap.addMarker(new MarkerOptions().position(pin).title("Current location"));
             }
 

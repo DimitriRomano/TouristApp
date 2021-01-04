@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity  {
                     Toast.makeText(getApplicationContext(),"Login and password don't match",Toast.LENGTH_LONG).show();
                 }
                 else{
-                    Toast.makeText(getApplicationContext(),"successful log : " + mLoginInput.getText().toString(),Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"You sucessfully connected! Welcome " + mLoginInput.getText().toString(),Toast.LENGTH_LONG).show();
                     mPreferencesLog.edit().putBoolean(PREF_CONNEXION,true).putString(PREF_PSEUDO,mLoginInput.getText().toString()).commit();
                     Intent i = new Intent(MainActivity.this, DashboardActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
