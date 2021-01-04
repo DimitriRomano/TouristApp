@@ -117,8 +117,6 @@ public class DBHandler extends SQLiteOpenHelper {
             while(iter.hasNext()){
                 sInstance.addPlaceDB(iter.next());
             }
-            //vérification de l'ajout des places
-            List<Place> placeList=sInstance.getAllRows();
         }
         return sInstance;
     }
@@ -279,25 +277,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
 
     }
-    /*
-        public Place getPlace(int id){
-            SQLiteDatabase db=this.getReadableDatabase();
-            Place place = new Place();
 
-            String selectQuery = "SELECT " + COL_ID + " FROM " + TABLE_PLACE + " WHERE " + COL_ID + " = '" + id +"' ";
-            Cursor cursor = db.query(TABLE_PLACE,new String[]{COL_ID,COL_TITLE,COL_TYPE,COL_LATITUDE,COL_LONGITUDE,COL_DESCRIPTION},COL_ID + " =  ? "  ,new String[]{String.valueOf(id)},null,null,null);
-            cursor.moveToFirst();
-            place.setId(cursor.getInt(0));
-            place.setTitle(cursor.getString(1));
-            place.setType(cursor.getString(2));
-            place.setLatitude(cursor.getDouble(3));
-            place.setLongitude(cursor.getDouble(4));
-            place.setDescription(cursor.getString(5));
-            cursor.close();
-            db.close();
-            return place;
-        }
-    */
     /*
         getPlacesFile allow us to recover all the data from our raw file "places.txt" to create our objects
         so we can look forward to store it into the database.
@@ -375,34 +355,6 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     /*
-       getVisited shows all the Places that a user has visited, from his username (pseudo)
-       in the System.out.
-       @param pseudo           The name of the user
-    */
-    public void getVisited(String pseudo){
-        String selectQuery = "SELECT " + COL_ID + ", " + COL_TITLE + "," + COL_TYPE + ", " + COL_LATITUDE
-                + ", " + COL_LONGITUDE + "," + COL_DESCRIPTION +" FROM " + TABLE_VISITED + " NATURAL JOIN " + TABLE_PLACE + " WHERE " + TABLE_VISITED + "." + COL_PSEUDO_VISITED + " = '"
-                + pseudo + "' ";
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-        // Loop through all the rows and addi the to the list
-        if (cursor.moveToFirst()) {
-            do {
-                Place p=new Place();
-                p.setId(cursor.getInt(0));
-                p.setTitle(cursor.getString(1));
-                p.setType(cursor.getString(2));
-                p.setLatitude(cursor.getDouble(3));
-                p.setLongitude(cursor.getDouble(4));
-                p.setDescription(cursor.getString(5));
-                System.out.println("Visited place: " + p.toString());
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        db.close();
-    }
-
-    /*
         placeVisitedUser allow us to recover the data of the places the user visited and didn't visited.
         @param pseudo           The name of the user
         @param selectVisited    Boolean to let us know which data we want to recover
@@ -461,6 +413,5 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(DBHandler.COL_PSEUDO_VISITED,pseudo);
         db.insert(TABLE_VISITED,null, cv);
         db.close();
-        getVisited(pseudo);
     }
 }

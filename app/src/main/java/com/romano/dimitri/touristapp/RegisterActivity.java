@@ -50,9 +50,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_register);
         db = DBHandler.getInstance(this);
         Log.i("Register Activity", "Entered");
-        //check permission
 
-        //permission already granted
+
+
         //set views
         mPseudoInput = findViewById(R.id.editTextPseudo);
         mEmailInput = findViewById(R.id.editTextEmail);
@@ -60,6 +60,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         mAgeInput = findViewById(R.id.editTextAge);
         mImageInput = findViewById(R.id.uploadedImage);
         uploadButton=findViewById(R.id.Upload);
+        //check permission to access device's storage
+        //permission already granted
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             mImageInput.setOnClickListener(new View.OnClickListener() {
@@ -86,10 +88,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             imageUri = data.getData();
             String[] filePath ={MediaStore.Images.Media.DATA};
             Cursor cursor = this.getContentResolver().query(imageUri,filePath,null,null,null);
+            //normally one row only
             cursor.moveToFirst();
             int column =cursor.getColumnIndex(filePath[0]);
             imgPath=cursor.getString(column);
-            System.out.println("imgPath : "+imgPath);
             cursor.close();
             Bitmap mImage = BitmapFactory.decodeFile(imgPath);
             mImageInput.setImageBitmap(mImage);
@@ -145,13 +147,15 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         String uPsw = mPasswordInput.getText().toString();
         int uAge = Integer.parseInt(mAgeInput.getText().toString());
         User u;
-        System.out.println("RE"+imageSet);
+
         if(imageSet==true){
+            //If user downloaded a picture
             u=new User(uPseudo,uEmail,uAge,imgPath);
         }
         else {
             u = new User(uPseudo, uEmail, uAge);
         }
+        //insert new user in database
         db.addUser(u,uPsw);
         Intent backLog = new Intent();
         backLog.putExtra("result",mPseudoInput.getText().toString());
@@ -170,11 +174,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
                 // If request is cancelled, the result arrays are empty
                 if (results.length > 0 && results[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission was granted, yay! Do something useful
+                    // Permission was granted
                     Toast.makeText(this, "Permission granted to access device's storage", Toast.LENGTH_SHORT).show();
                 } else {
-                    // Permission was denied, boo! Disable the
-                    // functionality that depends on this permission
+                    // Permission was denied. Disabling of the button upload
                     uploadButton.setEnabled(false);
                     Toast.makeText(this, "Permission denied to access device's storage", Toast.LENGTH_SHORT).show();
                 }

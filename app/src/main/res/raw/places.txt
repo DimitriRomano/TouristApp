@@ -20,7 +20,7 @@ Cathédrale de Metz;Church;49.12089759262284;6.177513984467961;Cathédrale gothi
 Cathédrale Saint-Corentin de Quimper;Church;47.99661592210373;-4.100531416184151;Cathédrale gothique dont la construction débuta en 1239, avec grandes flèches jumelles et vitraux.
 Le Parc des Princes;Stadium;48.841436;2.253049;Stade sur 2 niveaux pour l'équipe de foot du Paris Saint-Germain, événements sportifs/musicaux et visites.
 Orange Vélodrome;Stadium; 43.704;7.191;Stade de l'Olympique de Marseille, rénové et reconnaissable à son toit ondulé.
-Stade de France;Stadium;48.967766921726884;2.3750683129749457;Stade de 81 000 places assises accueillant matchs internationaux de football et rugby, et grands concerts.
+Stade de France;Stadium;48.9245578710641;2.360153769510337;Stade de 81 000 places assises accueillant matchs internationaux de football et rugby, et grands concerts.
 Groupama Stadium;Stadium;45.76613291691427;4.981642730771472;Stade du club de football de l'Olympique lyonnais avec près de 60 000 places, accueillant aussi des concerts.
 Matmut ATLANTIQUE;Stadium;44.89787476563813;-0.5586251729867973;Stade multifonctions, inauguré le 18 mai 2015 sous le nom de Nouveau stade de Bordeaux.
 Stade Geoffroy Guichard;Stadium;45.46104387299941;4.392447039876111;Stade de l'AS Saint-Étienne datant des années 1930 accueillant également des matchs de rugby et des concerts.

@@ -71,6 +71,7 @@ public class UserFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        // retrieve user's information
         mGrade = requireArguments().getString("grade");
         mScore = requireArguments().getInt("score");
         mPseudo = requireArguments().getString("pseudo");
@@ -125,12 +126,17 @@ public class UserFragment extends Fragment {
         mScoreProgressBar.setProgress(score);
     }
 
+    /*
+    visited displays the title and coordinates of the places
+    visited by a user in a popup window when the button ALREADY VISITED  is clicked
+     */
     public void visited(View view){
         Dialog dialog = new Dialog(this.getContext());
         dialog.setContentView(R.layout.popup_places_visited);
-        // Create ListView
         ListView listView = dialog.findViewById(R.id.listview);
+        //retrieve a list of places that user has not visited
         alreadyVisitedarrayListPlace=db.placeVisitedUser(mPseudo,true);
+
         ArrayList<String> itemList=new ArrayList<>();
         for(Place p : alreadyVisitedarrayListPlace){
            String title=p.getTitle();
@@ -144,13 +150,12 @@ public class UserFragment extends Fragment {
         listView.setAdapter(new ArrayAdapter<>(this.getContext(), android.R.layout.simple_list_item_1,itemList));
         dialog.show();
     }
-
+    /*
+    caption displays the map legend in a popup window
+     */
     public void caption(View view){
         Dialog dialog = new Dialog(this.getContext());
         dialog.setContentView(R.layout.popup_caption);
         dialog.show();
     }
-    //mPseudoView = (TextView)getView().findViewById(R.id.textViewPseudo);
-    //mScoreView = getView().findViewById(R.id.textViewScore);
-
 }
