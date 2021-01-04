@@ -98,13 +98,19 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             imageSet=true;
         }
     }
-
+    /*
+    Upload allows you to retrieve a profile image
+     */
     public void upload(View view){
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(galleryIntent, PICK_IMAGE);
 
     }
-
+    /*
+    Register allows to add a new user in the database thanks to the elements filled by this one
+    This method checks if the nickname entered is not already used in the database, as well as the e-mail address.
+     It also checks if all fields are filled in.
+     */
     public void register(View view) {
         if(isEmpty(mPseudoInput)){
             mPseudoInput.setError("Pseudo is required");
