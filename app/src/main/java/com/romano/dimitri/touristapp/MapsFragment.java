@@ -12,6 +12,11 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -29,6 +34,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -44,16 +50,16 @@ import static android.content.Context.LOCATION_SERVICE;
 public class MapsFragment extends Fragment implements OnMapReadyCallback{
     private Location mCurrentLocalisation = null;
     private Location mLocation;
-    private String mLocationProvider;
     private LocationManager mLocationManager;
-    private FloatingActionButton current_location_btn;
-    private GoogleMap mMap, mMapValidated;
     private LocationListener locationListener;
-    private ArrayList<Place> placesAL, alreadyVisitedPlacesAL;
-    private DBHandler db;
     private SupportMapFragment mapFragment;
-    private int placePositionAL;
+    private DBHandler db;
+    private String mLocationProvider;
     private String mPseudo;
+    private GoogleMap mMap;
+    private ArrayList<Place> placesAL, alreadyVisitedPlacesAL;
+    private FloatingActionButton current_location_btn;
+    private int placePositionAL;
     private User mUser;
     private ProcessLevel processLevel;
 
@@ -90,8 +96,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_maps, container, false);
         db = DBHandler.getInstance(this.getContext());
-        return inflater.inflate(R.layout.fragment_maps, container, false);
+        return v;
 
     }
 
@@ -114,7 +121,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         //set button for self location
         current_location_btn = getActivity().findViewById(R.id.current_location_btn);
         current_location_btn.setOnClickListener(this::getSelfLocation);
-
 
         //set location provider
         mLocationProvider = LocationManager.GPS_PROVIDER;
@@ -173,50 +179,71 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
     }
 
+    private BitmapDescriptor getMarkerIconFromDrawable(Drawable drawable) {
+        Canvas canvas = new Canvas();
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        canvas.setBitmap(bitmap);
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        drawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
     private void showAllPlaces(ArrayList<Place> arrayListPlaces, boolean alreadyVisited){
+        Drawable iconDrawable;
+        BitmapDescriptor icon;
         for(placePositionAL=0; placePositionAL<arrayListPlaces.size(); placePositionAL++){
             LatLng placeLatLng = new LatLng(arrayListPlaces.get(placePositionAL).getLatitude(), arrayListPlaces.get(placePositionAL).getLongitude());
             if(alreadyVisited == false) {
                 switch (arrayListPlaces.get(placePositionAL).getType()) {
                     case "Stadium":
+                        iconDrawable = getResources().getDrawable(R.drawable.ic_stadium);
+                        icon = getMarkerIconFromDrawable(iconDrawable);
                         mMap.addMarker(new MarkerOptions().position(placeLatLng)
                                 .title(arrayListPlaces.get(placePositionAL).getTitle())
                                 .snippet(arrayListPlaces.get(placePositionAL).getDescription() + " ID :" + arrayListPlaces.get(placePositionAL).getId() + ":" +
-                                        arrayListPlaces.get(placePositionAL).getType())
-                                .icon(BitmapDescriptorFactory
-                                        .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                                        arrayListPlaces.get(placePositionAL).getType()).icon(icon));
+                                /*.icon(BitmapDescriptorFactory
+                                        .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));*/
                         break;
                     case "Museum":
+                        iconDrawable = getResources().getDrawable(R.drawable.ic_museum);
+                        icon = getMarkerIconFromDrawable(iconDrawable);
                         mMap.addMarker(new MarkerOptions().position(placeLatLng)
                                 .title(arrayListPlaces.get(placePositionAL).getTitle())
                                 .snippet(arrayListPlaces.get(placePositionAL).getDescription() + " ID :" + arrayListPlaces.get(placePositionAL).getId() + ":" +
-                                        arrayListPlaces.get(placePositionAL).getType())
-                                .icon(BitmapDescriptorFactory
-                                        .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+                                        arrayListPlaces.get(placePositionAL).getType()).icon(icon));
+                                /*.icon(BitmapDescriptorFactory
+                                        .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));*/
                         break;
                     case "Castle":
+                        iconDrawable = getResources().getDrawable(R.drawable.ic_castle);
+                        icon = getMarkerIconFromDrawable(iconDrawable);
                         mMap.addMarker(new MarkerOptions().position(placeLatLng)
                                 .title(arrayListPlaces.get(placePositionAL).getTitle())
                                 .snippet(arrayListPlaces.get(placePositionAL).getDescription() + " ID :" + arrayListPlaces.get(placePositionAL).getId() + ":" +
-                                        arrayListPlaces.get(placePositionAL).getType())
-                                .icon(BitmapDescriptorFactory
-                                        .defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+                                        arrayListPlaces.get(placePositionAL).getType()).icon(icon));
+                                /*.icon(BitmapDescriptorFactory
+                                        .defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));*/
                         break;
                     case "Church":
+                        iconDrawable = getResources().getDrawable(R.drawable.ic_church);
+                        icon = getMarkerIconFromDrawable(iconDrawable);
                         mMap.addMarker(new MarkerOptions().position(placeLatLng)
                                 .title(arrayListPlaces.get(placePositionAL).getTitle())
                                 .snippet(arrayListPlaces.get(placePositionAL).getDescription() + " ID :" + arrayListPlaces.get(placePositionAL).getId() + ":" +
-                                        arrayListPlaces.get(placePositionAL).getType())
-                                .icon(BitmapDescriptorFactory
-                                        .defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
+                                        arrayListPlaces.get(placePositionAL).getType()).icon(icon));
+                                /*.icon(BitmapDescriptorFactory
+                                        .defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));*/
                         break;
                     case "Monument":
+                        iconDrawable = getResources().getDrawable(R.drawable.ic_monument);
+                        icon = getMarkerIconFromDrawable(iconDrawable);
                         mMap.addMarker(new MarkerOptions().position(placeLatLng)
                                 .title(arrayListPlaces.get(placePositionAL).getTitle())
                                 .snippet(arrayListPlaces.get(placePositionAL).getDescription() + " ID :" + arrayListPlaces.get(placePositionAL).getId() + ":" +
-                                        arrayListPlaces.get(placePositionAL).getType())
-                                .icon(BitmapDescriptorFactory
-                                        .defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                                        arrayListPlaces.get(placePositionAL).getType()).icon(icon));
+                                //.icon(BitmapDescriptorFactory
+                                //        .defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
                         break;
                     default:
                         mMap.addMarker(new MarkerOptions().position(placeLatLng)

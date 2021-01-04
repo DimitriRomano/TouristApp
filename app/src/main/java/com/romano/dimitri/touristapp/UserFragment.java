@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +52,6 @@ public class UserFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,13 +60,32 @@ public class UserFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user, container, false);
+        View v = inflater.inflate(R.layout.fragment_user, container, false);
+
+        mGradeView = v.findViewById(R.id.textViewGrade);
+        mPseudoView = v.findViewById(R.id.textViewPseudo);
+        mEmailView = v.findViewById(R.id.textViewEmail);
+        mScoreView = v.findViewById(R.id.textViewScore);
+        mAgeView = v.findViewById(R.id.textViewAge);
+        mImageProfile = v.findViewById(R.id.imageUser);
+        alreadyVisited= v.findViewById(R.id.alreadyVisitedButton);
+        return v;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        final Handler refreshHandler = new Handler();
+        Runnable runnable = new Runnable(){
+
+            @Override
+            public void run() {
+                calculateScore(view);
+                refreshHandler.postDelayed(this, 1 * 1000);
+            }
+        };
+        refreshHandler.postDelayed(runnable, 1 * 1000);
+
         mGrade = requireArguments().getString("grade");
         mScore = requireArguments().getInt("score");
         mPseudo = requireArguments().getString("pseudo");
@@ -76,14 +95,6 @@ public class UserFragment extends Fragment {
         mImageSet=requireArguments().getBoolean("imageSet");
         db = DBHandler.getInstance(this.getContext());
         alreadyVisitedarrayListPlace = db.placeVisitedUser(mPseudo, true);
-
-        mGradeView = view.findViewById(R.id.textViewGrade);
-        mPseudoView = view.findViewById(R.id.textViewPseudo);
-        mEmailView = view.findViewById(R.id.textViewEmail);
-        mScoreView = view.findViewById(R.id.textViewScore);
-        mAgeView = view.findViewById(R.id.textViewAge);
-        mImageProfile = view.findViewById(R.id.imageUser);
-        alreadyVisited=view.findViewById(R.id.alreadyVisitedButton);
 
         mPseudoView.setText(mPseudo);
         mEmailView.setText(mEmail);
@@ -98,23 +109,17 @@ public class UserFragment extends Fragment {
         calculateScore(view);
     }
 
-    public void setScore(){ mPseudoView.setText(mScore);}
+    public void setScore(){
+        int newScore = db.getUser(mPseudo).getScore();
+        mScore = newScore;
+        mScoreView.setText(mScore + "/10000 XP");
+    }
 
     public void calculateScore(View view){
+        mScore = db.getUser(mPseudo).getScore();
         mScoreView = view.findViewById(R.id.textViewScore);
-        int score = mScore;
-        System.out.println("Score " + score);
         mScoreProgressBar = view.findViewById(R.id.progressBarScore);
-        mScoreProgressBar.setProgress(score);
+        mScoreView.setText(mScore + "/10000 XP");
+        mScoreProgressBar.setProgress(mScore);
     }
-
-    public void visited(View view){
-        Iterator<Place> iter=alreadyVisitedarrayListPlace.iterator();
-        while(iter.hasNext()){
-            System.out.println("test recup " + iter.next().toString());
-        }
-    }
-    //mPseudoView = (TextView)getView().findViewById(R.id.textViewPseudo);
-    //mScoreView = getView().findViewById(R.id.textViewScore);
-
 }

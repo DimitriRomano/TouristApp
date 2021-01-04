@@ -35,7 +35,6 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
 
         mPreferencesLog = getSharedPreferences(PREF,MODE_PRIVATE);
-
         //initialise db
         mDB = DBHandler.getInstance(this);
 
@@ -50,11 +49,6 @@ public class DashboardActivity extends AppCompatActivity {
             imageSet=true;
         }
         Log.d(TAG, "Pseudo: " + pseudoUser + "; Score: " + currentScore + "; Age: " + userAge +"; Email: " + emailUser);
-
-        //test to know which session we are with
-        /*if(mPreferencesLog.contains(PREF_CONNEXION) && mPreferencesLog.contains(PREF_PSEUDO)){
-            Toast.makeText(getApplicationContext(),"session "+ mPreferencesLog.getString(PREF_PSEUDO,null),Toast.LENGTH_LONG).show();
-        }*/
 
         //init 2 fragments with FragmentManager
         if(savedInstanceState == null){
@@ -74,11 +68,5 @@ public class DashboardActivity extends AppCompatActivity {
                     .add(R.id.fragment_map_container_view, MapsFragment.class, bundleUser)
                     .commit();
         }
-
-
-        //UserFragment fragU = (UserFragment) getSupportFragmentManager();
-        //fragU.setPseudo();
-
-
     }
 }
