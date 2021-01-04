@@ -1,9 +1,9 @@
-• ████████╗░█████╗░██╗░░░██╗██████╗░██╗░██████╗████████╗  ░█████╗░██████╗░██████╗░
-• ╚══██╔══╝██╔══██╗██║░░░██║██╔══██╗██║██╔════╝╚══██╔══╝  ██╔══██╗██╔══██╗██╔══██╗
-• ░░░██║░░░██║░░██║██║░░░██║██████╔╝██║╚█████╗░░░░██║░░░  ███████║██████╔╝██████╔╝
-• ░░░██║░░░██║░░██║██║░░░██║██╔══██╗██║░╚═══██╗░░░██║░░░  ██╔══██║██╔═══╝░██╔═══╝░
-• ░░░██║░░░╚█████╔╝╚██████╔╝██║░░██║██║██████╔╝░░░██║░░░  ██║░░██║██║░░░░░██║░░░░░
-• ░░░╚═╝░░░░╚════╝░░╚═════╝░╚═╝░░╚═╝╚═╝╚═════╝░░░░╚═╝░░░  ╚═╝░░╚═╝╚═╝░░░░░╚═╝░░░░░
+ ████████╗░█████╗░██╗░░░██╗██████╗░██╗░██████╗████████╗  ░█████╗░██████╗░██████╗░
+ ╚══██╔══╝██╔══██╗██║░░░██║██╔══██╗██║██╔════╝╚══██╔══╝  ██╔══██╗██╔══██╗██╔══██╗
+ ░░░██║░░░██║░░██║██║░░░██║██████╔╝██║╚█████╗░░░░██║░░░  ███████║██████╔╝██████╔╝
+ ░░░██║░░░██║░░██║██║░░░██║██╔══██╗██║░╚═══██╗░░░██║░░░  ██╔══██║██╔═══╝░██╔═══╝░
+ ░░░██║░░░╚█████╔╝╚██████╔╝██║░░██║██║██████╔╝░░░██║░░░  ██║░░██║██║░░░░░██║░░░░░
+ ░░░╚═╝░░░░╚════╝░░╚═════╝░╚═╝░░╚═╝╚═╝╚═════╝░░░░╚═╝░░░  ╚═╝░░╚═╝╚═╝░░░░░╚═╝░░░░░
 
 @Author Aladdine BEN ROMDHANE aladdineben@outlook.com
 @Author Quitterie PILON       quitterie.p@outlook.fr
@@ -39,6 +39,17 @@ teaching us everything to make this application.
                                                            ♦ Register (after entering his account information, a new account
                                                              will be created [added to database] and the next activity will
                                                              be DashboardActivity).
-     
+     DashboardActivity -> This activity will show to the user his panels and a google maps map.
+                        UserFragment => UserFragment is the user panel, and will contain ○ His image
+                                                                                         ○ His pseudo
+                                                                                         ○ His age
+                                                                                         ○ His email
+                                                                                         ○ His score
+                                                                                         ○ His progression
+                                                                                         ○ Two buttons
+                                                                                            - Caption (a little caption to help
+                                                                                              understand the map)
+                                                                                            - Already visited (a list of places
+                                                                                              already visited)
                                                              
                                                             
