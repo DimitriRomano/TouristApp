@@ -81,12 +81,13 @@ teaching us everything to make this application.
 • Threads : A thread has been used in the UserFragment to allow the progress bar, the score and the grade to constantly check for changes in the database to possibily actualize
 	    the data that is being shown to the user.
 
+• Service : We use a service that allow each time onLocationChanged is call to check which place is the nearest from our current Location , the service is an intentService because each call is independante , in the service after the nearest location is found, from where we are , we create a notification that show the title of the place and the distance. When we click on the notification an intent is sent to a broadcast receiver ( inner broadcast on MapsFragment ) after that we auto zoom to the place we clicked.
+
+•Sensors : The main used is positionSensor because our application is base on the map in a large part.
+
 All our sources are linked to : https://developer.android.com/ 
 				https://youtube.com (lot of ressources)
 				https://stackoverflow.com (lot of ressources)
 				https://guides.codepath.com/android/creating-and-using-fragments
 				https://developers.google.com/maps/documentation/android-sdk/marker?hl=fr													and... Manos Katsomallos and Dimitris Kotzinos for the TP and Lectures.
-• Service : We use a service that allow each time onLocationChanged is call to check which place is the nearest from our current Location , the service is an intentService because each call is independante , in the service after the nearest location is found, from where we are , we create a notification that show the title of the place and the distance. When we click on the notification an intent is sent to a broadcast receiver ( inner broadcast on MapsFragment ) after that we auto zoom to the place we clicked.
-
-•Sensors : The main used is positionSensor because our application is base on the map in a large part.
 
