@@ -23,8 +23,12 @@ import java.util.ArrayList;
 
 
 public class NearestLocationService extends IntentService {
+    //current location receive
     Location currentLocation;
+    //list of place not visited
     ArrayList<Place> notVisitedPlace;
+
+    float closestDistance ;
     Place closestPlace = null;
 
 
@@ -41,8 +45,8 @@ public class NearestLocationService extends IntentService {
         Log.d(TAG,"Receive location to check nearest");
         currentLocation = (Location)intent.getExtras().get("currentLocation");
         notVisitedPlace = (ArrayList<Place>)intent.getExtras().getSerializable("listNotVisitedPlaces");
-        float dist = nearestLocation();
-        if(dist != -1){
+        closestDistance = nearestLocation();
+        if(closestDistance != -1){
             //Log.d(TAG,"closest dest from current location " + closestPlace.getTitle() + "distance de " + dist  );
             createNotificationChannel();
             notificationSend();
@@ -50,6 +54,7 @@ public class NearestLocationService extends IntentService {
         //Log.d(TAG,""+ currentLocation.getLongitude() + " " + currentLocation.getLatitude() + " " + notVisitedPlace.get(0).getTitle() );
     }
 
+    //method to get the smallest distance with current location
     private float nearestLocation(){
         float smallestDist = -1 ;
         for (Place place : notVisitedPlace){
@@ -69,15 +74,6 @@ public class NearestLocationService extends IntentService {
 
     public void notificationSend(){
         String CHANNEL_ID = "chan_location_1";
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this).setChannelId(CHANNEL_ID)
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Receive nearest loc")
-                .setContentText("\"nearest location from you : \" + closestPlace.getTitle() ")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setStyle(new NotificationCompat.BigTextStyle().bigText("Much longer text that cannot fit one line .."));
-
-
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
@@ -86,12 +82,12 @@ public class NearestLocationService extends IntentService {
         if(closestPlace!=null){
             intent.putExtra("closest_place",closestPlace);
         }
-        //intent.setAction("com.romano.dimitri.touristapp.NEAREST_LOCATION_NOTIF");
+
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this,CHANNEL_ID)
                 .setContentTitle("Nearest Location")
-                .setContentText("nearest location from you : " + closestPlace.getTitle())
+                .setContentText( closestPlace.getTitle() + " " + closestDistance + " m"  )
                 .setSmallIcon(R.drawable.common_google_signin_btn_icon_dark)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
